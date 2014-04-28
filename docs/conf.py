@@ -43,7 +43,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PayPlug e-commerce library'
+project = u'PayPlug PHP library'
 copyright = u'2014, PayPlug'
 
 # The version info for the project you're documenting, acts as replacement for

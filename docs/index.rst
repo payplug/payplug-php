@@ -168,7 +168,7 @@ order          String  Order ID provided when creating the payment URL.
 -------------- ------- -
 customData     String  Custom data provided when creating the payment URL.
 -------------- ------- -
-origin         String  Information about your website version (e.g., 'My Website 1.2'), provided when creating the payment URL, with additional data sent by the library itself.
+origin         String  Information about your website version (e.g., 'My Website 1.2 payplug-php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
 ============== ======= =
 
 
