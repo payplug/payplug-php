@@ -48,3 +48,11 @@ class ParametersNotSetException extends PayplugException
 {
 }
 
+/**
+ * This exception is thrown whenever you are trying to generate a payment url
+ * without providing a required parameter.
+ */
+class MissingRequiredParameterException extends PayplugException
+{
+}
+

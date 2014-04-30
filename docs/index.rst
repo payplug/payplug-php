@@ -31,7 +31,7 @@ Installation
 
 Download `payplug_php`__ and unpack the tarball in your environment.
 
-__ https://bitbucket.org/payplug/payplug_php/downloads#tag-downloads
+__ https://bitbucket.org/payplug/payplug_php/get/master.tar.gz
 
 **Configuration**
 
@@ -56,8 +56,7 @@ Create a file called ``payment.php`` that will generate a payment URL and direct
    :linenos:
 
    require_once("PATH_TO_PAYPLUG/payplug-php/lib/Payplug.php");
-   $parameters = Parameters::loadFromFile("PATH_TO_PAYPLUG/parameters.json");
-   Payplug::setConfig($parameters);
+   Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
    $paymentUrl = PaymentUrl::generateUrl(array(
                                          'amount' => 999,

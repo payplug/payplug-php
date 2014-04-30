@@ -26,12 +26,20 @@ class PaymentUrl {
         $signature;
 
         // If the merchant's parameters have not been set
-        if ( ! $config) {
+        if (! $config) {
             // Something bad will happen
             throw new ParametersNotSetException();
         }
-        //TODO: check if all mandatory parameter are set and set other to default value if needed
-        if ( ! preg_match("/^(http|https):\/\//i", $params['ipnUrl'])) {
+        if (! isset($params['amount'])) {
+            throw new MissingRequiredParameterException("Missing required parameter: amount");
+        }
+        if (! isset($params['currency'])) {
+            throw new MissingRequiredParameterException("Missing required parameter: currency");
+        }
+        if (! isset($params['ipnUrl'])) {
+            throw new MissingRequiredParameterException("Missing required parameter: ipnUrl");
+        }
+        if (! preg_match("/^(http|https):\/\//i", $params['ipnUrl'])) {
             throw new MalformedURLException($params['ipnUrl'] . " doesn't starts with 'http://' or 'https://'");
         }
         if ($params['returnUrl'] != null && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
