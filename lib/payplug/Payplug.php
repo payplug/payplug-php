@@ -95,5 +95,9 @@ class Payplug {
     public static function setConfig($parameters) {
         self::$parameters = $parameters;
     }
+
+    public static function setConfigFromFile($path) {
+        self::$parameters = Parameters::loadFromFile($path);
+    }
 }
 

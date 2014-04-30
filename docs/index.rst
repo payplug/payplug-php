@@ -85,8 +85,7 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
    :linenos:
 
    require_once("PATH_TO_PAYPLUG/payplug-php/lib/Payplug.php");
-   $parameters = Parameters::loadFromFile("PATH_TO_PAYPLUG/parameters.json");
-   Payplug::setConfig($parameters);
+   Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
    try {     
        $ipn = new IPN();
