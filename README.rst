@@ -43,8 +43,8 @@ Here's how simple it is to create a payment request :
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug::setConfig(Parameters::loadFromFile("path/to/file"));
 
-    // Creating a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.mywebsite.com/callbackURL"
-    $paymentRequest = new PaymentUrl(999, "EUR", "http://www.mywebsite.com/callbackURL");
+    // Creating a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.org/callbackURL"
+    $paymentRequest = new PaymentUrl(999, "EUR", "http://www.example.org/callbackURL");
 
     $paymentUrl = $paymentRequest->generateUrl();
 
