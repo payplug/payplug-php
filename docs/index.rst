@@ -41,6 +41,7 @@ Create a file called ``setup.php`` and insert the following lines to set-up the 
 
 .. code-block:: php
    :linenos:
+   <?php
 
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    $parameters = Payplug::loadParameters(“your@email.com”, “password”);
@@ -54,6 +55,7 @@ Create a file called ``payment.php`` that will generate a payment URL and direct
 
 .. code-block:: php
    :linenos:
+   <?php
 
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
@@ -82,6 +84,7 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 
 .. code-block:: php
    :linenos:
+   <?php
 
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");

@@ -28,6 +28,7 @@ __ https://bitbucket.org/payplug/payplug_php/downloads#tag-downloads
 To get started, add the following to your PHP script :
 
 .. sourcecode :: php
+    <?php
 
     require_once("/path/to/payplug_php/lib/Payplug.php");
 
@@ -37,6 +38,7 @@ Usage
 Here's how simple it is to create a payment request :
 
 .. sourcecode :: php
+    <?php
 
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug::setConfig(Parameters::loadFromFile("path/to/file"));
