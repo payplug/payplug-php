@@ -44,7 +44,7 @@ Create a file called ``setup.php`` and insert the following lines to set-up the 
    <?php
 
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
-   $parameters = Payplug::loadParameters(“your@email.com”, “password”);
+   $parameters = Payplug::loadParameters("your@email.com", “password”);
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
 
