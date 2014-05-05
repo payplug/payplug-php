@@ -29,7 +29,7 @@ To get started, add the following to your PHP script :
 
 .. sourcecode :: php
 
-    require_once("/path/to/payplug-php/lib/Payplug.php");
+    require_once("/path/to/payplug_php/lib/Payplug.php");
 
 Usage
 =====

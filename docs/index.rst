@@ -11,7 +11,7 @@ The PayPlug PHP library enables developers to install the PayPlug online payment
 **Payment process**
 
 1. Your website generates a dynamic payment URL by passing the payment parameters (e.g., amount, customer ID, return URL) into the PHP library
-2. Redirect your customer to that URL, which points to an secure online payment page (see an example on https://www.payplug.fr/exemple)
+2. Redirect your customer to that URL, which points to a secure online payment page (see an example on https://www.payplug.fr/exemple)
 3. Once the payment goes through, PayPlug redirects your customer towards the return URL you specified
 4. Simultaneously, PayPlug sends an Instant Payment Notification (IPN) to your server, inlcuding all transaction data, to confirm that the payment was processed.
 
@@ -42,7 +42,7 @@ Create a file called ``setup.php`` and insert the following lines to set-up the 
 .. code-block:: php
    :linenos:
 
-   require_once("PATH_TO_PAYPLUG/payplug-php/lib/Payplug.php");
+   require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    $parameters = Payplug::loadParameters(“your@email.com”, “password”);
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
@@ -55,7 +55,7 @@ Create a file called ``payment.php`` that will generate a payment URL and direct
 .. code-block:: php
    :linenos:
 
-   require_once("PATH_TO_PAYPLUG/payplug-php/lib/Payplug.php");
+   require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
    $paymentUrl = PaymentUrl::generateUrl(array(
@@ -83,7 +83,7 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 .. code-block:: php
    :linenos:
 
-   require_once("PATH_TO_PAYPLUG/payplug-php/lib/Payplug.php");
+   require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
    try {     
@@ -166,7 +166,7 @@ order          String  Order ID provided when creating the payment URL.
 -------------- ------- -
 customData     String  Custom data provided when creating the payment URL.
 -------------- ------- -
-origin         String  Information about your website version (e.g., 'My Website 1.2 payplug-php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
+origin         String  Information about your website version (e.g., 'My Website 1.2 payplug_php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
 ============== ======= =
 
 
@@ -179,7 +179,7 @@ Frequently asked questions
 In order to run tests you have to install **PHPUnit**. Then just do the following to run the test suite:
 ::
 
-    phpunit PATH_TO_PAYPLUG/payplug-php/tests/
+    phpunit PATH_TO_PAYPLUG/payplug_php/tests/
 
 **How to test a payment?**
 
