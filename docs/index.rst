@@ -170,6 +170,10 @@ origin         String  Information about your website version (e.g., 'My Website
 Frequently asked questions
 --------------------------
 
+**How to test a payment?**
+
+We do not have a sandbox environment. However, we suggest you run actual transactions and then refund them via the PayPlug portal (we will even refund transaction fees). This will allow you to test out your integration in real conditions without any charge.
+
 **How to run unit testing on my configuration?**
 
 In order to run tests you have to install **PHPUnit**. Then just do the following to run the test suite:
@@ -177,6 +181,4 @@ In order to run tests you have to install **PHPUnit**. Then just do the followin
 
     phpunit PATH_TO_PAYPLUG/payplug_php/tests/
 
-**How to test a payment?**
 
-We do not have a sandbox environment. However, we suggest you run actual transactions and then refund them via the PayPlug portal (we will even refund transaction fees). This will allow you to test out your integration in real conditions without any charge.
