@@ -37,14 +37,14 @@ __ https://bitbucket.org/payplug/payplug_php/get/master.tar.gz
 
 PayPlug generates a set of unique parameters and keys for each user account, which needs to be saved in on your server by following these configuration instructions.
 
-Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``your@email.com`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment.
+Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment.
 
 .. code-block:: php
    :linenos:
-   <?php
 
+   <?php
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
-   $parameters = Payplug::loadParameters("your@email.com", “password”);
+   $parameters = Payplug::loadParameters("merchant@example.org", "password");
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
 
@@ -55,16 +55,16 @@ Create a file called ``payment.php`` that will generate a payment URL and direct
 
 .. code-block:: php
    :linenos:
-   <?php
 
+   <?php
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
    $paymentUrl = PaymentUrl::generateUrl(array(
                                          'amount' => 999,
                                          'currency' => 'EUR',
-                                         'ipnUrl' => 'http://www.mywebsite.com/ipn.php',
-                                         'email' => 'john.doe@example.com',
+                                         'ipnUrl' => 'http://www.example.org/ipn.php',
+                                         'email' => 'john.doe@client.example',
                                          'firstName' => 'John',
                                          'lastName' => 'Doe'
                                          ));
@@ -84,8 +84,8 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 
 .. code-block:: php
    :linenos:
-   <?php
 
+   <?php
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
@@ -94,9 +94,9 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 
        $message = "IPN received for ".$ipn->firstName." ".$ipn->lastName.
                   ." for an amount of ".$ipn->amount." EUR";
-       mail("admin@example.org","IPN Received",$message);
+       mail("merchant@example.org","IPN Received",$message);
    } catch (InvalidSignatureException $e) {
-       mail("admin@example.org","IPN Failed","The signature was invalid");
+       mail("merchant@example.org","IPN Failed","The signature was invalid");
    }
 
 Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advize you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
