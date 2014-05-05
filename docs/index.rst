@@ -78,7 +78,7 @@ Instant Payment Notification (IPN)
 
 After every successful payment or refund, PayPlug sends an Instant Payment Notification (IPN) as an HTTP POST request to the URL you provided in the ``ipnUrl`` field.
 
-Create a file called ``ipn.php`` that will be requested after each payment. The IPN must be sent to a publicly accessible URL on your site.
+Create a file called ``ipn.php`` that will be requested after each payment. The IPN must be sent to a publicly accessible URL on your site. The following example will send a mail to the administrator each time an IPN is received
 
 .. code-block:: php
    :linenos:
@@ -86,23 +86,16 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
-   try {     
+   try {
        $ipn = new IPN();
-       
-       $state = $ipn->state;
-       $idTransaction = $ipn->idTransaction;
-       $amount = $ipn->amount;
-       $email = $ipn->email;
-       $firstName = $ipn->firstName;
-       $lastName = $ipn->lastName;
-       $order = $ipn->order;
-       $customer = $ipn->customer; 
-       $customData = $ipn->customData;
-       $origin = $ipn->origin;             
+
+       $message = "IPN received for ".$ipn->firstName." ".$ipn->lastName.
+                  ." for an amount of ".$ipn->amount." EUR";
+       mail("admin@example.org","IPN Received",$message);
    } catch (InvalidSignatureException $e) {
-       echo 'The signature is invalid';
+       mail("admin@example.org","IPN Failed","The signature was invalid");
    }
-   
+
 Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advize you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
 
 Finally, we recommend you create an ``IPN`` object to store all notifications received. This will help you retrieve the information in the future.
