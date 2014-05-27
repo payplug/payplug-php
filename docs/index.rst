@@ -13,7 +13,7 @@ The PayPlug PHP library enables developers to install the PayPlug online payment
 1. Your website generates a dynamic payment URL by passing the payment parameters (e.g., amount, customer ID, return URL) into the PHP library
 2. Redirect your customer to that URL, which points to a secure online payment page (see an example on https://www.payplug.fr/exemple)
 3. Once the payment goes through, PayPlug redirects your customer towards the return URL you specified
-4. Simultaneously, PayPlug sends an Instant Payment Notification (IPN) to your server, inlcuding all transaction data, to confirm that the payment was processed.
+4. Simultaneously, PayPlug sends an Instant Payment Notification (IPN) to your server, including all transaction data, to confirm that the payment was processed.
 
 **Security & encryption**
 
@@ -35,7 +35,7 @@ __ https://bitbucket.org/payplug/payplug_php/get/master.tar.gz
 
 **Configuration**
 
-PayPlug generates a set of unique parameters and keys for each user account, which needs to be saved in on your server by following these configuration instructions.
+PayPlug generates a set of unique parameters and keys for each user account, which needs to be saved on your server by following these configuration instructions.
 
 Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment.
 
@@ -93,13 +93,13 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
        $ipn = new IPN();
 
        $message = "IPN received for ".$ipn->firstName." ".$ipn->lastName
-                . " for an amount of ".$ipn->amount." EUR";
+                . " for an amount of ".($ipn->amount)/100." EUR";
        mail("merchant@example.org","IPN Received",$message);
    } catch (InvalidSignatureException $e) {
        mail("merchant@example.org","IPN Failed","The signature was invalid");
    }
 
-Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advize you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
+Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advise you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
 
 Finally, we recommend you create an ``IPN`` object to store all notifications received. This will help you retrieve the information in the future.
 
