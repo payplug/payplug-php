@@ -64,7 +64,7 @@ Create a file called ``payment.php`` that will generate a payment URL and direct
                                          'amount' => 999,
                                          'currency' => 'EUR',
                                          'ipnUrl' => 'http://www.example.org/ipn.php',
-                                         'email' => 'john.doe@client.example',
+                                         'email' => 'john.doe@example.fr', /* Your customer mail address */
                                          'firstName' => 'John',
                                          'lastName' => 'Doe'
                                          ));
