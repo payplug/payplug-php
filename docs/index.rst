@@ -48,6 +48,11 @@ Create a file called ``setup.php`` and insert the following lines to set-up the 
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
 
+You need to execute this code at least once, that is, open your web browser and go to ``http://example.org/setup.php`` (the URL where you saved the above code). Verify that everythings went well by looking at the file ``parameters.json``.
+
+If you encounter the error ``Warning: file_put_contents(./parameters.json): failed to open stream: Permission denied in PATH_TO_PAYPLUG/lib/payplug/Parameters.php on line 53``, it is likely that you have a permission issue. Open a terminal and try ``chmod +777 .`` (note the trailing dot, it is important).
+
+
 Creating a payment
 ------------------
 
