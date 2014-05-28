@@ -47,19 +47,34 @@ class PaymentUrl {
         }
 
         /* Generation of the <data> parameter */
-        $url_params = http_build_query(array(
-            "amount" => $params['amount'],
-            "currency" => $params['currency'],
-            "custom_data" => $params['customData'],
-            "customer" => $params['customer'],
-            "email" => $params['email'],
-            "first_name" => $params['firstName'],
-            "ipn_url" => $params['ipnUrl'],
-            "last_name" => $params['lastName'],
-            "order" => $params['order'],
-            "origin" => $params['origin'] . " payplug-php" . Payplug::VERSION . " PHP" . phpversion(),
-            "return_url" => $params['returnUrl']
-        ));
+        $remap_params=array(
+            /* our key => payplug key */
+            "amount" => 'amount',
+            "currency" => 'currency',
+            "customData" => 'custom_data',
+            "customer" => 'customer',
+            "email" => 'email',
+            "firstName" => 'first_name',
+            "ipnUrl" => 'ipn_url',
+            "lastName" => 'last_name',
+            "order" => 'order',
+            "origin" => 'origin',
+            "returnUrl" => 'return_url',
+        );
+        $payment_params=array();
+
+        /* Remaps $params keys to the one expected by Payplug payment page
+         * That is, transform array('amount'=>100,'firstName'=>'bob')
+         * to                 array('amount'=>100,'first_name'=>'bob')
+         */
+        foreach ($remap_params as $our_key => $payplug_key){
+            if (isset($params[$our_key]))
+                $payment_params[$payplug_key] = $params[$our_key];
+            if ($our_key == 'origin')
+                $payment_params[$payplug_key] = (isset($params[$our_key]) ? $params[$our_key] : "")." payplug-php ".Payplug::VERSION." PHP ".phpversion();
+        }
+
+        $url_params = http_build_query($payment_params);
         $data = urlencode(base64_encode($url_params));
 
         /* Generation of the <signature> parameter */
