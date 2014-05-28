@@ -42,7 +42,7 @@ class PaymentUrl {
         if (! preg_match("/^(http|https):\/\//i", $params['ipnUrl'])) {
             throw new MalformedURLException($params['ipnUrl'] . " doesn't starts with 'http://' or 'https://'");
         }
-        if ($params['returnUrl'] != null && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
+        if ( isset($params['returnUrl']) && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
             throw new MalformedURLException($params['returnUrl'] . " doesn't starts with 'http://' or 'https://'");
         }
 
