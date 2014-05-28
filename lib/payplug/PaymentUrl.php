@@ -5,17 +5,8 @@
  */
 class PaymentUrl {
 
-    public $amount;
-    public $currency;
-    public $customData;
-    public $customer;
-    public $email;
-    public $firstName;
-    public $ipnUrl;
-    public $lastName;
-    public $order;
-    public $origin;
-    public $returnUrl;
+
+    public static $phpVersion; /* Here to be overriden by unit tests */
 
     /**
      * The method which actually generates the URL.
@@ -45,6 +36,9 @@ class PaymentUrl {
         if ( isset($params['returnUrl']) && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
             throw new MalformedURLException($params['returnUrl'] . " doesn't starts with 'http://' or 'https://'");
         }
+        if (empty(PaymentUrl::$phpVersion)) { /* If we aren't running a unit test */
+            PaymentUrl::$phpVersion = phpVersion();
+        }
 
         /* Generation of the <data> parameter */
         $remap_params=array(
@@ -71,7 +65,7 @@ class PaymentUrl {
             if (isset($params[$our_key]))
                 $payment_params[$payplug_key] = $params[$our_key];
             if ($our_key == 'origin')
-                $payment_params[$payplug_key] = (isset($params[$our_key]) ? $params[$our_key] : "")." payplug-php ".Payplug::VERSION." PHP ".phpversion();
+                $payment_params[$payplug_key] = (isset($params[$our_key]) ? $params[$our_key] : "")." payplug-php ".Payplug::VERSION." PHP ".PaymentUrl::$phpVersion;
         }
 
         $url_params = http_build_query($payment_params);
