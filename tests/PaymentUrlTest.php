@@ -5,9 +5,16 @@ require_once(__DIR__ . "/../lib/Payplug.php");
 class PaymentUrlTest extends PHPUnit_Framework_TestCase {
 
     protected static $paymentUrl;
+    protected static $data;
 
     public static function setUpBeforeClass() {
-        self::$paymentUrl = new PaymentUrl(4200, "EUR", "http://www.monsite.com/ipn");
+        Payplug::setConfigFromFile(__DIR__."/PaymentUrlTest_parameters.json");
+        self::$data = array(
+            'amount' => 4200,
+            'currency' => "EUR",
+            'ipnUrl' => "http://www.monsite.com/ipn",
+        );
+        self::$paymentUrl = PaymentUrl::generateUrl(self::$data);
     }
 
     public static function tearDownAfterClass() 
@@ -31,7 +38,7 @@ class PaymentUrlTest extends PHPUnit_Framework_TestCase {
      * @expectedException ParametersNotSetException
      */
     public function testGenerateUrlParametersNotSetException() {
-        self::$paymentUrl->generateUrl();
+        PaymentUrl::generateUrl();
     }
 
     /**
