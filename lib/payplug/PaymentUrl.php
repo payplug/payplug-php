@@ -5,17 +5,8 @@
  */
 class PaymentUrl {
 
-    public $amount;
-    public $currency;
-    public $customData;
-    public $customer;
-    public $email;
-    public $firstName;
-    public $ipnUrl;
-    public $lastName;
-    public $order;
-    public $origin;
-    public $returnUrl;
+
+    public static $phpVersion; /* Here to be overriden by unit tests */
 
     /**
      * The method which actually generates the URL.
@@ -42,24 +33,42 @@ class PaymentUrl {
         if (! preg_match("/^(http|https):\/\//i", $params['ipnUrl'])) {
             throw new MalformedURLException($params['ipnUrl'] . " doesn't starts with 'http://' or 'https://'");
         }
-        if ($params['returnUrl'] != null && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
+        if ( isset($params['returnUrl']) && ! preg_match("/^(http|https):\/\//i", $params['returnUrl'])) {
             throw new MalformedURLException($params['returnUrl'] . " doesn't starts with 'http://' or 'https://'");
+        }
+        if (empty(PaymentUrl::$phpVersion)) { /* If we aren't running a unit test */
+            PaymentUrl::$phpVersion = phpVersion();
         }
 
         /* Generation of the <data> parameter */
-        $url_params = http_build_query(array(
-            "amount" => $params['amount'],
-            "currency" => $params['currency'],
-            "custom_data" => $params['customData'],
-            "customer" => $params['customer'],
-            "email" => $params['email'],
-            "first_name" => $params['firstName'],
-            "ipn_url" => $params['ipnUrl'],
-            "last_name" => $params['lastName'],
-            "order" => $params['order'],
-            "origin" => $params['origin'] . " payplug-php" . Payplug::VERSION . " PHP" . phpversion(),
-            "return_url" => $params['returnUrl']
-        ));
+        $remap_params=array(
+            /* our key => payplug key */
+            "amount" => 'amount',
+            "currency" => 'currency',
+            "customData" => 'custom_data',
+            "customer" => 'customer',
+            "email" => 'email',
+            "firstName" => 'first_name',
+            "ipnUrl" => 'ipn_url',
+            "lastName" => 'last_name',
+            "order" => 'order',
+            "origin" => 'origin',
+            "returnUrl" => 'return_url',
+        );
+        $payment_params=array();
+
+        /* Remaps $params keys to the one expected by Payplug payment page
+         * That is, transform array('amount'=>100,'firstName'=>'bob')
+         * to                 array('amount'=>100,'first_name'=>'bob')
+         */
+        foreach ($remap_params as $our_key => $payplug_key){
+            if (isset($params[$our_key]))
+                $payment_params[$payplug_key] = $params[$our_key];
+            if ($our_key == 'origin')
+                $payment_params[$payplug_key] = (isset($params[$our_key]) ? $params[$our_key] : "")." payplug-php ".Payplug::VERSION." PHP ".PaymentUrl::$phpVersion;
+        }
+
+        $url_params = http_build_query($payment_params);
         $data = urlencode(base64_encode($url_params));
 
         /* Generation of the <signature> parameter */
