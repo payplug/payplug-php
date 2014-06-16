@@ -126,6 +126,8 @@ currency *     String  Transaction currency. Only ``EUR`` is allowed at the mome
 -------------- ------- -
 ipnUrl *       String  URL pointing to the ``ipn.php`` page, to which PayPlug will send payment and refund notifications. This URL must be accessible from anywhere on the Internet (usually not the case in ``localhost`` environments).
 -------------- ------- -
+cancelUrl      String  URL pointing to your payment cancelation page, to which PayPlug will redirect your customer if he cancels the payment.
+-------------- ------- -
 returnUrl      String  URL pointing to your payment confirmation page, to which PayPlug will redirect your customer after the payment.
 -------------- ------- -
 email          String  The customer's email address.
