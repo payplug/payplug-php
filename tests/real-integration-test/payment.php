@@ -5,12 +5,6 @@ require_once("../../lib/Payplug.php");
 $parametersFile = __DIR__ . "/params.json";
 $parameters;
 
-$amount = (float) $_POST["amount"] * 100;
-$email = $_POST["email"];
-$firstName = $_POST["firstName"];
-$lastName = $_POST["lastName"];
-$ipnUrl = $_POST["ipnUrl"];
-
 /* Loads parameters (from PayPlug if needed) */
 if ( ! file_exists($parametersFile)) {
     try {
@@ -31,18 +25,23 @@ else {
 Payplug::setConfig($parameters);
 
 /* Creates a payment request */
+$params = array();
 $paymentUrl;
 $payment = new PaymentUrl($amount, "EUR", $ipnUrl);
 
-$payment->customData = "29";
-$payment->customer = "2";
-$payment->email = $email;
-$payment->firstName = $firstName;
-$payment->lastName = $lastName;
-$payment->order = "42";
-
 try {
-    $paymentUrl = $payment->generateUrl();
+    $paymentUrl = $payment->generateUrl(array(
+        "amount" => (float) $_POST["amount"] * 100,
+        "cancelUrl" => "http://www.monsite.com/cancel-url",
+        "currency" => "EUR",
+        "customData" => "29",
+        "customer" => "2",
+        "email" => $_POST["email"],
+        "firstName" => $_POST["firstName"],
+        "ipnUrl" => $_POST["ipnUrl"],
+        "lastName" => $_POST["lastName"],
+        "order" => "42"
+    ));
 
     header("Location: $paymentUrl");
     exit();

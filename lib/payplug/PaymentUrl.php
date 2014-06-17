@@ -44,6 +44,7 @@ class PaymentUrl {
         $remap_params=array(
             /* our key => payplug key */
             "amount" => 'amount',
+            "cancelUrl" => 'cancel_url',
             "currency" => 'currency',
             "customData" => 'custom_data',
             "customer" => 'customer',
