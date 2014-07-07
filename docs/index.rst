@@ -81,28 +81,6 @@ The fields ``amount``, ``currency`` and ``ipnUrl`` are required. Note that if an
 
 The complete list of accepted fields is available in the reference_ section.
 
-Integrating the payment page within your website
-------------------------------------------------
-
-To improve the user experience during the payment process, you can choose to insert the PayPlug payment page inside your website. In that case, your user will see a "lightbox" in your website instead of being re-directed to the payment page in another window.
-
-You can enable the integrated payment page in a single line of Javascript, by simply calling the ``Payplug.showPayment()`` function of ``payplug.js``.
-
-.. warning::
-    If you want to integrate the payment page within your website, it becomes your responsibility to secure your server with a **secure HTTPS connection** and to **respect PCI standards**. For more information on SSL and PCI compliance, visit http://support.payplug.fr/.
-
-Example
-
-.. code-block:: html
-   :linenos:
-
-   <script type="text/javascript" src="http://www.payplug.fr/static/button/scripts/payplug.js"></script>
-   <script type="text/javascript">
-   Payplug.showPayment(url);
-   </script>
-
-The ``url`` is the url computed by your server (see the :ref:`create_a_payment` section). For security reason you cannot generate this url directly in Javascript.
-
 Instant Payment Notification (IPN)
 ----------------------------------
 
