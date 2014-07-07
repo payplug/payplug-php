@@ -17,7 +17,7 @@ The PayPlug PHP library enables developers to install the PayPlug online payment
 
 **Security & encryption**
 
-The PHP library enables secure data transmission via public/private RSA key encryption obtained with the OpenSSL library. In addition, credit card data is encrypted and processed exclusively on PCI DSS servers operated by Payline. This protocol guarantees a SSL-level security without requiring to setup an SSL certificate on the merchant's website.
+The PHP library enables secure data transmission via public/private RSA key encryption obtained with the OpenSSL library. In addition, credit card data is encrypted and processed exclusively on PCI DSS servers operated by Payline except ATOS. This protocol guarantees a SSL-level security without requiring to setup an SSL certificate on the merchant's website.
 
 Installation
 ------------
