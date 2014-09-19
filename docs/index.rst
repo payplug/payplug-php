@@ -37,15 +37,15 @@ __ https://bitbucket.org/payplug/payplug_php/get/master.tar.gz
 
 PayPlug generates a set of unique parameters and keys for each user account, which needs to be saved on your server by following these configuration instructions.
 
-Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment. You must also specify the third parameter ``$is_test`` by a boolean value (true or false), true if you want to test PayPlug or false if you want to do reals transactions.
+Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment. You must also specify the third parameter ``$isTest`` by a boolean value (true or false), true if you want to test PayPlug or false if you want to do reals transactions.
 
 .. code-block:: php
    :linenos:
 
    <?php
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
-   $is_test = true;
-   $parameters = Payplug::loadParameters("merchant@example.org", "password", $is_test);
+   $isTest = true;
+   $parameters = Payplug::loadParameters("merchant@example.org", "password", $isTest);
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
 
@@ -57,7 +57,7 @@ Sandbox
 ------------
 PayPlug has created a sandbox environment for testing transactions with no reals fees. You can simply enable or disable the test mode with the third parameter in the loadParameters() method seen just in previous section.
 
-When you have sign up and sign in on PayPlug, you are connected in TEST mode, you can instantly begining to test Payplug solution. All of your transactions will not be charged. Only when your account will be verified, that you will be able to reload your configuration with variable ``$is_test = false;`` for switching from TEST to LIVE mode for making reals transactions.
+When you have sign up and sign in on PayPlug, you are connected in TEST mode, you can instantly begining to test PayPlug solution. All of your transactions will not be charged. Only when your account will be verified, that you will be able to reload your configuration with variable ``$isTest = false;`` for switching from TEST to LIVE mode for making reals transactions.
 
 Important: When you want to switch to LIVE or TEST mode, don't forget to start again **Configuration** from installation_ section.
 
