@@ -116,6 +116,8 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 
 Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advise you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
 
+If you make payments in Sandbox (TEST mode), the field ``is_sandbox`` in IPN will be ``true``.
+
 Finally, we recommend you create an ``IPN`` object to store all notifications received. This will help you retrieve the information in the future.
 
 The complete list of fields sent in the IPN is available in the reference_ section.
@@ -180,6 +182,8 @@ order          String  Order ID provided when creating the payment URL.
 customData     String  Custom data provided when creating the payment URL.
 -------------- ------- -
 origin         String  Information about your website version (e.g., 'My Website 1.2 payplug_php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
+-------------- ------- -
+isSandbox      Boolean If value is ``true``, the payment was done in Sandbox (TEST) mode.
 ============== ======= =
 
 

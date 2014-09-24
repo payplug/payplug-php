@@ -16,6 +16,7 @@ class IPN {
     public $order;
     public $origin;
     public $state;
+    public $isSandbox;
 
     public function __construct($headers = null, $body = null) {
         $config = Payplug::getConfig();
@@ -60,6 +61,7 @@ class IPN {
         $this->order = $data['order'];
         $this->origin = $data['origin'];
         $this->state = $data['state'];
+        $this->isSandbox = $data['is_sandbox'];
     }
 }
 
