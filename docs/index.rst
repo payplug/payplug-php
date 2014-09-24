@@ -116,7 +116,7 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
 
 Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advise you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
 
-If you make payments in Sandbox (TEST mode), the field ``is_sandbox`` in IPN will be ``true``.
+If you make payments in Sandbox (TEST mode), the field ``isSandbox`` in IPN will be ``true``.
 
 Finally, we recommend you create an ``IPN`` object to store all notifications received. This will help you retrieve the information in the future.
 
