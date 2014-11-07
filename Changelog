@@ -1,0 +1,12 @@
+# Payplug PHP changelog
+
+List of the most important changes in every version.
+
+## v1.0
+
+- Add possibility to test transactions on test environment (Sandbox)
+
+## Older versions
+
+There are only few commits. Full listing is available at https://bitbucket.org/payplug/payplug_php/commits/branch/master
+
