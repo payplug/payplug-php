@@ -5,7 +5,7 @@
  */
 class Payplug {
 
-    const VERSION = "0.9";
+    const VERSION = "1.1";
 
     /**
      * The merchant's parameters which will be used to generate payment URLS.
@@ -20,9 +20,12 @@ class Payplug {
      * Connects to Payplug, and retrieves the e-commerce parameters associated
      * to the account `email`.
      */
-    public static function loadParameters($email, $password) {
+    public static function loadParameters($email, $password, $is_test=false) {
         $answer;
         $configUrl = 'https://www.payplug.fr/portal/ecommerce/autoconfig';
+        if ($is_test === true) {
+            $configUrl = 'https://www.payplug.fr/portal/test/ecommerce/autoconfig';
+        }
         $curlErrNo;
         $curlErrMsg;
         $httpCode;
