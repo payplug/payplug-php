@@ -16,6 +16,7 @@ class IPN {
     public $order;
     public $origin;
     public $state;
+    public $isTest;
 
     public function __construct($headers = null, $body = null) {
         $config = Payplug::getConfig();
@@ -41,7 +42,7 @@ class IPN {
         $signature = base64_decode($headers['PAYPLUG-SIGNATURE']);
         $publicKey = openssl_pkey_get_public($config->payplugPublicKey);
 
-        $isValid = openssl_verify($body, $signature, $publicKey, OPENSSL_ALGO_SHA1);
+        $isValid = (openssl_verify($body, $signature, $publicKey, OPENSSL_ALGO_SHA1) === 1);
 
         if ( ! $isValid) {
             throw new InvalidSignatureException();
@@ -60,6 +61,7 @@ class IPN {
         $this->order = $data['order'];
         $this->origin = $data['origin'];
         $this->state = $data['state'];
+        $this->isTest = $data['is_test'];
     }
 }
 

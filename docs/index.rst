@@ -17,7 +17,7 @@ The PayPlug PHP library enables developers to install the PayPlug online payment
 
 **Security & encryption**
 
-The PHP library enables secure data transmission via public/private RSA key encryption obtained with the OpenSSL library. In addition, credit card data is encrypted and processed exclusively on PCI DSS servers operated by Payline. This protocol guarantees a SSL-level security without requiring to setup an SSL certificate on the merchant's website.
+The PHP library enables secure data transmission via public/private RSA key encryption obtained with the OpenSSL library. In addition, credit card data is encrypted and processed exclusively on PCI DSS servers operated by Payline except ATOS. This protocol guarantees a SSL-level security without requiring to setup an SSL certificate on the merchant's website.
 
 Installation
 ------------
@@ -37,20 +37,29 @@ __ https://bitbucket.org/payplug/payplug_php/get/master.tar.gz
 
 PayPlug generates a set of unique parameters and keys for each user account, which needs to be saved on your server by following these configuration instructions.
 
-Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment.
+Create a file called ``setup.php`` and insert the following lines to set-up the PayPlug library. Make sure to replace ``merchant@example.org`` and ``password`` with your PayPlug login information, and to replace ``PATH_TO_PAYPLUG`` with the correct path for your environment. You must also specify the third parameter ``$isTest`` by a boolean value (true or false), true if you want to test PayPlug or false if you want to do real transactions. By default, ``$isTest` is set to ``false``.
 
 .. code-block:: php
    :linenos:
 
    <?php
    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
-   $parameters = Payplug::loadParameters("merchant@example.org", "password");
+   $isTest = true;
+   $parameters = Payplug::loadParameters("merchant@example.org", "password", $isTest);
    $parameters->saveInFile("PATH_TO_PAYPLUG/parameters.json");
 
 
-You need to execute this code at least once, that is, open your web browser and go to ``http://example.org/setup.php`` (the URL where you saved the above code). Verify that everythings went well by looking at the file ``parameters.json``.
+You need to execute this code every time you wish to switch payment mode (LIVE / TEST), for example by opening your web browser and accessing ``http://yoursite.com/setup.php`` (the URL where you saved the above code). Verify that everythings went well by looking at the file ``parameters.json`` and identifying the parameter ``paymentBaseUrl`` with the URI that should started by ``/test`` for TEST (Sandbox) mode.
 
 If you encounter the error ``Warning: file_put_contents(./parameters.json): failed to open stream: Permission denied in PATH_TO_PAYPLUG/lib/payplug/Parameters.php on line 53``, it is likely that you have a permission issue. Open a terminal and try ``chmod +777 .`` (note the trailing dot, it is important).
+
+TEST (Sandbox) Mode
+------------
+PayPlug has created a sandbox environment for testing transactions without making real payments. You can simply enable or disable the test mode by loading the appropriate parameter ``$isTest`` in the installation_ section.
+
+When you sign up to PayPlug, you can only use the TEST mode. Once your account is verified, you will be able to configure your site with the LIVE mode (``https://www.payplug.fr/portal/ecommerce/autoconfig``) to make real transactions.
+
+Important: When you want to switch to LIVE or TEST mode, don't forget to run the **Configuration** step again from installation_ section.
 
 .. _create_a_payment:
 
@@ -81,28 +90,6 @@ The fields ``amount``, ``currency`` and ``ipnUrl`` are required. Note that if an
 
 The complete list of accepted fields is available in the reference_ section.
 
-Integrating the payment page within your website
-------------------------------------------------
-
-To improve the user experience during the payment process, you can choose to insert the PayPlug payment page inside your website. In that case, your user will see a "lightbox" in your website instead of being re-directed to the payment page in another window.
-
-You can enable the integrated payment page in a single line of Javascript, by simply calling the ``Payplug.showPayment()`` function of ``payplug.js``.
-
-.. warning::
-    If you want to integrate the payment page within your website, it becomes your responsibility to secure your server with a **secure HTTPS connection** and to **respect PCI standards**. For more information on SSL and PCI compliance, visit http://support.payplug.fr/.
-
-Example
-
-.. code-block:: html
-   :linenos:
-
-   <script type="text/javascript" src="http://www.payplug.fr/static/button/scripts/payplug.js"></script>
-   <script type="text/javascript">
-   Payplug.showPayment(url);
-   </script>
-
-The ``url`` is the url computed by your server (see the :ref:`create_a_payment` section). For security reason you cannot generate this url directly in Javascript.
-
 Instant Payment Notification (IPN)
 ----------------------------------
 
@@ -128,6 +115,8 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
    }
 
 Note that if you have not received the IPN when your client is directed to the confirmation page ``returnUrl``, we advise you to consider that the order is not confirmed to prevent the user to pay again. You should receive the IPN within a few minutes.
+
+If you make payments in TEST (Sandbox) mode, the field ``isTest`` of the IPN will be ``true``.
 
 Finally, we recommend you create an ``IPN`` object to store all notifications received. This will help you retrieve the information in the future.
 
@@ -193,6 +182,8 @@ order          String  Order ID provided when creating the payment URL.
 customData     String  Custom data provided when creating the payment URL.
 -------------- ------- -
 origin         String  Information about your website version (e.g., 'My Website 1.2 payplug_php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
+-------------- ------- -
+isTest         Boolean If value is ``true``, the payment was done in Sandbox (TEST) mode.
 ============== ======= =
 
 
@@ -202,7 +193,7 @@ Frequently asked questions
 
 **How to test a payment?**
 
-We do not have a sandbox environment. However, we suggest you run actual transactions and then refund them via the PayPlug portal (we will even refund transaction fees). This will allow you to test out your integration in real conditions without any charge.
+A Sandbox mode is available for testing transactions since V1.0 of the Payplug PHP library. See the `TEST (Sandbox) Mode`_ section to find out more.
 
 **How to run unit testing on my configuration?**
 
