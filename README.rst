@@ -30,8 +30,8 @@ To get started, add the following to your PHP script :
 .. sourcecode :: php
 
     <?php
-    require_once("/path/to/payplug_php/lib/Payplug.php");
-
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
+    
 Usage
 =====
 
@@ -40,13 +40,20 @@ Here's how simple it is to create a payment request :
 .. sourcecode :: php
 
     <?php
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
+
     // Loads your account's parameters that you've previously downloaded and saved
-    Payplug::setConfig(Parameters::loadFromFile("path/to/file"));
+    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
 
     // Creating a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.org/callbackURL"
-    $paymentRequest = new PaymentUrl(999, "EUR", "http://www.example.org/callbackURL");
-
-    $paymentUrl = $paymentRequest->generateUrl();
+    $paymentUrl = PaymentUrl::generateUrl(array(
+                                         'amount' => 999,
+                                         'currency' => 'EUR',
+                                         'ipnUrl' => 'http://www.example.org/ipn.php',
+                                         'email' => 'john.doe@example.fr', /* Your customer mail address */
+                                         'firstName' => 'John',
+                                         'lastName' => 'Doe'
+                                         ));
 
     // Redirects the user to the payment page
     header("Location: $paymentUrl");
