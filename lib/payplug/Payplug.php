@@ -5,7 +5,7 @@
  */
 class Payplug {
 
-    const VERSION = "1.0";
+    const VERSION = "1.0.1beta";
 
     /**
      * The merchant's parameters which will be used to generate payment URLS.
@@ -35,7 +35,9 @@ class Payplug {
 
         curl_setopt($process, CURLOPT_HEADER, true);
         curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($process, CURLOPT_SSLVERSION, 3);
+        curl_setopt($process, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+        curl_setopt($process, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($process, CURLOPT_SSL_VERIFYHOST, true);
         curl_setopt($process, CURLOPT_USERPWD, $email . ':' . $password);
 
         $answer = curl_exec($process);
