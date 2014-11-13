@@ -108,7 +108,7 @@ Create a file called ``ipn.php`` that will be requested after each payment. The 
        $ipn = new IPN();
 
        $message = "IPN received for ".$ipn->firstName." ".$ipn->lastName
-                . " for an amount of ".($ipn->amount)/100." EUR";
+                . " for an amount of ".(($ipn->amount)/100)." EUR";
        mail("merchant@example.org","IPN Received",$message);
    } catch (InvalidSignatureException $e) {
        mail("merchant@example.org","IPN Failed","The signature was invalid");
