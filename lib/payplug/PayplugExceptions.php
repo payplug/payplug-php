@@ -9,6 +9,15 @@ class PayplugException extends Exception
 
 /**
  * This exception is thrown whenever you attempt to load your parameters
+ * from Payplug but you have not activate your account. You must only use in
+ * test mode.
+ */
+class ForbiddenCredentialsException extends PayplugException
+{
+}
+
+/**
+ * This exception is thrown whenever you attempt to load your parameters
  * from Payplug but have provided a wrong email and/or password.
  */
 class InvalidCredentialsException extends PayplugException

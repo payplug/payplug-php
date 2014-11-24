@@ -5,7 +5,7 @@
  */
 class Payplug {
 
-    const VERSION = "1.0.1beta";
+    const VERSION = "1.1.1";
 
     /**
      * The merchant's parameters which will be used to generate payment URLS.
@@ -84,6 +84,10 @@ class Payplug {
             // Wrong email and/or password
             elseif ($httpCode == 401) {
                 throw new InvalidCredentialsException();
+            }
+            // Access Forbidden if account is not activate
+            elseif ($httpCode == 403) {
+                throw new ForbiddenCredentialsException($body->message);
             }
             // I wonder what this could be
             else {
