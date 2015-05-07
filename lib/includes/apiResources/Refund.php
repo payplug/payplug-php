@@ -38,13 +38,7 @@ class PayPlug_Refund extends PayPlug_APIResource
             $data
         );
 
-        // TODO handle errors
-
-        if (substr($response['httpStatus'], 0, 1) === '2') {
-            return PayPlug_Refund::fromAttributes($response['httpResponse']);
-        }
-
-        return null;
+        return PayPlug_Refund::fromAttributes($response['httpResponse']);
     }
 
     /**
@@ -75,13 +69,7 @@ class PayPlug_Refund extends PayPlug_APIResource
             )
         );
 
-        // TODO handle errors
-
-        if (substr($response['httpStatus'], 0, 1) === '2') {
-            return PayPlug_Refund::fromAttributes($response['httpResponse']);
-        }
-
-        return null;
+        return PayPlug_Refund::fromAttributes($response['httpResponse']);
     }
 
     /**
@@ -105,16 +93,11 @@ class PayPlug_Refund extends PayPlug_APIResource
             PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment))
         );
 
-        // TODO handle errors
-
-        if (substr($response['httpStatus'], 0, 1) === '2') {
-            $refunds = array();
-            foreach ($response['httpResponse'] as &$refund) {
-                $refunds[] = PayPlug_Refund::fromAttributes($refund);
-            }
-            return $refunds;
+        $refunds = array();
+        assert(array_key_exists('data', $refunds));
+        foreach ($response['httpResponse']['data'] as &$refund) {
+            $refunds[] = PayPlug_Refund::fromAttributes($refund);
         }
-
-        return null;
+        return $refunds;
     }
 }

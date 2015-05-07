@@ -5,7 +5,12 @@
  */
 class PayPlug_ClientConfiguration
 {
+    /**
+     * @var PayPlug_ClientConfiguration|null The default configuration that should
+     * be used when no configuration is provided.
+     */
     private static $_defaultConfiguration = null;
+
     private $_liveToken;
     private $_testToken;
     private $_isTestMode;
@@ -26,10 +31,12 @@ class PayPlug_ClientConfiguration
      * Initializes a PayPlug_ClientConfiguration and sets it as the new default global configuration.
      * It also performs some checks before saving the configuration.
      *
+     * <pre>
      * Expected array format for argument $configuration :
      * $configuration['LIVE_TOKEN'] = 'YOUR LIVE TOKEN'
      *               ['TEST_TOKEN'] = 'YOUR TEST TOKEN'
      *               ['TEST_MODE_ENABLE'] = true for test mode, false for live mode
+     * </pre>
      *
      * @param array $configuration the configuration parameters
      * @return PayPlug_ClientConfiguration the new client configuration

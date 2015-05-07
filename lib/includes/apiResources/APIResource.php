@@ -3,7 +3,7 @@
 /**
  * Interface designed to force resources to implement a factory
  */
-interface PayPlug_IResourceFactory
+interface PayPlug_IAPIResourceFactory
 {
     /**
      * @param array $attributes the default attributes.
@@ -15,7 +15,7 @@ interface PayPlug_IResourceFactory
 /**
  * A simple API resource
  */
-abstract class PayPlug_APIResource implements PayPlug_IResourceFactory
+abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
 {
     /**
      * The resource attributes

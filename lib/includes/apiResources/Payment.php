@@ -67,12 +67,7 @@ class PayPlug_Payment extends PayPlug_APIResource
             PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => $paymentId))
         );
 
-        if ($response['httpStatus'] === 200)
-        {
-            return PayPlug_Payment::fromAttributes($response['httpResponse']);
-        }
-
-        return null;
+        return PayPlug_Payment::fromAttributes($response['httpResponse']);
     }
 
     /**
@@ -94,10 +89,6 @@ class PayPlug_Payment extends PayPlug_APIResource
             $data
         );
 
-        if (substr($response['httpStatus'], 0, 1) === '2') {
-            return PayPlug_Payment::fromAttributes($response['httpResponse']);
-        }
-
-        return null;
+        return PayPlug_Payment::fromAttributes($response['httpResponse']);
     }
 }

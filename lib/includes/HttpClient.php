@@ -9,6 +9,9 @@ class PayPlug_HttpClient
     const VERSION = '1.0.0';
     private $_configuration;
 
+    /**
+     * @param PayPlug_ClientConfiguration $configuration the client configuration
+     */
     public function __construct(PayPlug_ClientConfiguration $configuration)
     {
         $this->_configuration = $configuration;
