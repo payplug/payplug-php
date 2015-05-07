@@ -1,7 +1,7 @@
 Welcome to PayPlug e-commerce library's documentation!
 ======================================================
 
-This is the documentation of PayPlug's e-commerce library. It is designed to
+This is the documentation of PayPlug's e-commerce PHP library. It is designed to
 help developers to use PayPlug as payment solution in a simple, yet robust way.
 
 Prerequisites
@@ -30,32 +30,48 @@ To get started, add the following to your PHP script :
 .. sourcecode :: php
 
     <?php
-    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/PayPlug.php");
     
 Usage
 =====
 
-Here's how simple it is to create a payment request :
+Here's how simple it is to create a payment request:
 
 .. sourcecode :: php
 
     <?php
-    require_once("PATH_TO_PAYPLUG/payplug_php/lib/Payplug.php");
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/PayPlug.php");
 
     // Loads your account's parameters that you've previously downloaded and saved
-    Payplug::setConfigFromFile("PATH_TO_PAYPLUG/parameters.json");
+    PayPlug_ClientConfiguration::initialize(array(
+        'LIVE_TOKEN'        => 'YOUR_LIVE_TOKEN',
+        'TEST_TOKEN'        => 'YOUR_TEST_TOKEN',
+        'TEST_MODE_ENABLED' => true // Or false if you want to perform real transactions
+        )
+    );
 
-    // Creating a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.org/callbackURL"
-    $paymentUrl = PaymentUrl::generateUrl(array(
-                                         'amount' => 999,
-                                         'currency' => 'EUR',
-                                         'ipnUrl' => 'http://www.example.org/ipn.php',
-                                         'email' => 'john.doe@example.fr', /* Your customer mail address */
-                                         'firstName' => 'John',
-                                         'lastName' => 'Doe'
-                                         ));
+    // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.org/callbackURL"
+    $payment = PayPlug_Payment::create(array(
+            'amount'            => 999,
+            'currency'          => 'EUR',
+            'customer'          => array(
+                'email'         => 'john.doe@example.com',
+                'first_name'    => 'John',
+                'last_name'     => 'Doe'
+            ),
+            'hosted_payment'    => array(
+                'notification_url'  => 'http://www.example.org/callbackURL',
+                'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
+                'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
+            ),
+            'force_3ds'         => false
+    ));
 
-    // Redirects the user to the payment page
+    // You will be able to find how the payment object is built in the documentation.
+    // For instance, if you want to get an URL to the payment page, you get do:
+    $paymentUrl = $payment->getAttribute('hosted_payment')->getAttribute('payment_url');
+
+    // Then, you can redirect the user to the payment page
     header("Location: $paymentUrl");
     exit();
 
