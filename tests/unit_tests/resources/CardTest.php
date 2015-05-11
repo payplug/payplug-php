@@ -13,10 +13,10 @@ class CardUnitTest extends PHPUnit_Framework_TestCase {
             'brand'     => 'Visa'
         ));
 
-        $this->assertEquals('1234', $card->getAttribute('last4'));
-        $this->assertEquals('FR',   $card->getAttribute('country'));
-        $this->assertEquals(2022, $card->getAttribute('exp_year'));
-        $this->assertEquals(12,   $card->getAttribute('exp_month'));
-        $this->assertEquals('Visa', $card->getAttribute('brand'));
+        $this->assertEquals('1234', $card->last4);
+        $this->assertEquals('FR',   $card->country);
+        $this->assertEquals(2022, $card->exp_year);
+        $this->assertEquals(12,   $card->exp_month);
+        $this->assertEquals('Visa', $card->brand);
     }
 }

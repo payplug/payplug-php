@@ -11,20 +11,19 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
      * @param string $message the exception message
      * @param string $httpResponse the http response content
      * @param int $code the exception code
-     * @param Exception $previous previous exception
      */
-    public function __construct($message, $httpResponse = null, $code = 0, Exception $previous = null)
+    public function __construct($message, $httpResponse = null, $code = 0)
     {
         $this->_httpResponse = $httpResponse;
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} It also appends the HTTP response to the returned string.
      */
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}; HTTP Response: {$this->_httpResponse}\n";
+        return parent::__toString() . "; HTTP Response: {$this->_httpResponse}\n";
     }
 
     /**

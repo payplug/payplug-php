@@ -28,15 +28,15 @@ class PaymentFunctionalTest extends \PHPUnit_Framework_TestCase {
             'force_3ds'         => false
         ), $this->_configuration);
 
-        $this->assertNotEmpty($payment->getAttribute('id'));
-        $this->assertFalse($payment->getAttribute('is_live'));
-        $this->assertEquals(4200, $payment->getAttribute('amount'));
-        $this->assertEquals('nleroux@payplug.com', $payment->getAttribute('customer')->getAttribute('email'));
-        $this->assertEquals('John', $payment->getAttribute('customer')->getAttribute('first_name'));
-        $this->assertEquals('Doe', $payment->getAttribute('customer')->getAttribute('last_name'));
-        $this->assertEquals('https://www.payplug.com/?notification', $payment->getAttribute('hosted_payment')->getAttribute('notification_url'));
-        $this->assertEquals('https://www.payplug.com/?return', $payment->getAttribute('hosted_payment')->getAttribute('return_url'));
-        $this->assertEquals('https://www.payplug.com/?cancel', $payment->getAttribute('hosted_payment')->getAttribute('cancel_url'));
+        $this->assertNotEmpty($payment->id);
+        $this->assertFalse($payment->is_live);
+        $this->assertEquals(4200, $payment->amount);
+        $this->assertEquals('nleroux@payplug.com', $payment->customer->email);
+        $this->assertEquals('John', $payment->customer->first_name);
+        $this->assertEquals('Doe', $payment->customer->last_name);
+        $this->assertEquals('https://www.payplug.com/?notification', $payment->hosted_payment->notification_url);
+        $this->assertEquals('https://www.payplug.com/?return', $payment->hosted_payment->return_url);
+        $this->assertEquals('https://www.payplug.com/?cancel', $payment->hosted_payment->cancel_url);
     }
 
     public function testCanRetrieveAPayment()
@@ -56,12 +56,12 @@ class PaymentFunctionalTest extends \PHPUnit_Framework_TestCase {
             ),
             'force_3ds'         => false
         ), $this->_configuration);
-        $getPayment = PayPlug_Payment::retrieve($payment->getAttribute('id'), $this->_configuration);
+        $getPayment = PayPlug_Payment::retrieve($payment->id, $this->_configuration);
 
-        $this->assertEquals($getPayment->getAttribute('id'), $payment->getAttribute('id'));
+        $this->assertEquals($getPayment->id, $payment->id);
         $this->assertEquals(
-            $getPayment->getAttribute('customer')->getAttribute('email'),
-            $payment->getAttribute('customer')->getAttribute('email')
+            $getPayment->customer->email,
+            $payment->customer->email
         );
     }
 }

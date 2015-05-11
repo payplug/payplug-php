@@ -23,16 +23,16 @@ class PayPlug_Payment extends PayPlug_APIResource
         parent::initialize($attributes);
 
         if (isset($attributes['card'])) {
-            $this->setAttribute('card', PayPlug_Card::fromAttributes($attributes['card']));
+            $this->card = PayPlug_Card::fromAttributes($attributes['card']);
         }
         if (isset($attributes['customer'])) {
-            $this->setAttribute('customer', PayPlug_Customer::fromAttributes($attributes['customer']));
+            $this->customer = PayPlug_Customer::fromAttributes($attributes['customer']);
         }
         if (isset($attributes['hosted_payment'])) {
-            $this->setAttribute('hosted_payment', PayPlug_HostedPayment::fromAttributes($attributes['hosted_payment']));
+            $this->hosted_payment = PayPlug_HostedPayment::fromAttributes($attributes['hosted_payment']);
         }
         if (isset($attributes['failure'])) {
-            $this->setAttribute('failure', PayPlug_PaymentFailure::fromAttributes($attributes['failure']));
+            $this->failure = PayPlug_PaymentFailure::fromAttributes($attributes['failure']);
         }
     }
 
@@ -46,7 +46,7 @@ class PayPlug_Payment extends PayPlug_APIResource
     public function refund(array $data = null, PayPlug_ClientConfiguration $configuration = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) return null;
-        return PayPlug_Refund::create($this->getAttribute('id'), $data, $configuration);
+        return PayPlug_Refund::create($this->id, $data, $configuration);
     }
 
     /**

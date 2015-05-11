@@ -53,6 +53,7 @@ class PayPlug_HttpClient
             'Accept: application/json',
             'Content-Type: application/json',
             'User-Agent: PayPlug PHP Client ' . PayPlug_HttpClient::VERSION,
+            'X-PHP-Version: ' . phpversion(),
             'Authorization: Bearer ' . $this->_configuration->getToken()
         );
 
@@ -64,7 +65,13 @@ class PayPlug_HttpClient
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_CAINFO, $this->_configuration->getAPISSLCertificatePath());
+        if (!defined(CURL_SSLVERSION_TLSv1_2)) {
+            curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        }
+        else {
+            curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+        }
+        curl_setopt($curl, CURLOPT_CAINFO, dirname(__DIR__) . '/certs/cacert.pem');
         if (!empty($data)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
         }
@@ -76,7 +83,6 @@ class PayPlug_HttpClient
 
         // If there was an error
         if (substr($result['httpStatus'], 0, 1) !== '2') {
-            var_dump($result['httpResponse']);
             throw $this->getRequestException($result['httpResponse'], $result['httpStatus']);
         }
 

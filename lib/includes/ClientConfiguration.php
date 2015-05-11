@@ -96,17 +96,12 @@ class PayPlug_ClientConfiguration
         $this->_isTestMode = $isTestMode;
     }
 
-    /**
-     * @return string An absolute path to the API SSL certificate.
-     */
-    public function getAPISSLCertificatePath()
-    {
-        return dirname(__DIR__) . '/certs/PayPlug.ca';
-    }
 
     /**
+     * Gets the default "global" configuration.
+     *
      * @return PayPlug_ClientConfiguration The last client configuration
-     * @throws PayPlug_ConfigurationNotSetException
+     * @throws PayPlug_ConfigurationNotSetException when the global configuration was not set.
      */
     public static function getDefaultConfiguration()
     {

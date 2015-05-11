@@ -14,11 +14,11 @@ class HostedPaymentUnitTest extends PHPUnit_Framework_TestCase {
             'ipn_answer_code'   => 200,
         ));
 
-        $this->assertEquals('https://www.payplug.com/pay/test/7ZcMGi6KNnVT5H7o9hms9g', $hostedPayment->getAttribute('payment_url'));
-        $this->assertEquals('https://www.payplug.com/?notification', $hostedPayment->getAttribute('notification_url'));
-        $this->assertEquals('https://www.payplug.com/?return', $hostedPayment->getAttribute('return_url'));
-        $this->assertEquals('https://www.payplug.com/?cancel', $hostedPayment->getAttribute('cancel_url'));
-        $this->assertEquals(1410437806, $hostedPayment->getAttribute('paid_at'));
-        $this->assertEquals(200, $hostedPayment->getAttribute('ipn_answer_code'));
+        $this->assertEquals('https://www.payplug.com/pay/test/7ZcMGi6KNnVT5H7o9hms9g', $hostedPayment->payment_url);
+        $this->assertEquals('https://www.payplug.com/?notification', $hostedPayment->notification_url);
+        $this->assertEquals('https://www.payplug.com/?return', $hostedPayment->return_url);
+        $this->assertEquals('https://www.payplug.com/?cancel', $hostedPayment->cancel_url);
+        $this->assertEquals(1410437806, $hostedPayment->paid_at);
+        $this->assertEquals(200, $hostedPayment->ipn_answer_code);
     }
 }

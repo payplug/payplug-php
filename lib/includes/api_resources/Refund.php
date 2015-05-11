@@ -29,7 +29,7 @@ class PayPlug_Refund extends PayPlug_APIResource
             $configuration = PayPlug_ClientConfiguration::getDefaultConfiguration();
         }
         if ($payment instanceof PayPlug_Payment) {
-            $payment = $payment->getAttribute('id');
+            $payment = $payment->id;
         }
 
         $httpClient = new PayPlug_HttpClient($configuration);
@@ -55,7 +55,7 @@ class PayPlug_Refund extends PayPlug_APIResource
             $configuration = PayPlug_ClientConfiguration::getDefaultConfiguration();
         }
         if ($payment instanceof PayPlug_Payment) {
-            $payment = $payment->getAttribute('id');
+            $payment = $payment->id;
         }
 
         $httpClient = new PayPlug_HttpClient($configuration);
@@ -85,7 +85,7 @@ class PayPlug_Refund extends PayPlug_APIResource
             $configuration = PayPlug_ClientConfiguration::getDefaultConfiguration();
         }
         if ($payment instanceof PayPlug_Payment) {
-            $payment = $payment->getAttribute('id');
+            $payment = $payment->id;
         }
 
         $httpClient = new PayPlug_HttpClient($configuration);

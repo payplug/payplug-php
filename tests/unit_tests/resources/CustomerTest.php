@@ -15,12 +15,12 @@ class CustomerUnitTest extends PHPUnit_Framework_TestCase {
             'country'       => 'FR'
         ));
 
-        $this->assertEquals('john.doe@example.com', $customer->getAttribute('email'));
-        $this->assertEquals('John', $customer->getAttribute('first_name'));
-        $this->assertEquals('Doe', $customer->getAttribute('last_name'));
-        $this->assertEquals('rue abc', $customer->getAttribute('address1'));
-        $this->assertEquals('cba', $customer->getAttribute('address2'));
-        $this->assertEquals('12345', $customer->getAttribute('postcode'));
-        $this->assertEquals('FR', $customer->getAttribute('country'));
+        $this->assertEquals('john.doe@example.com', $customer->email);
+        $this->assertEquals('John', $customer->first_name);
+        $this->assertEquals('Doe', $customer->last_name);
+        $this->assertEquals('rue abc', $customer->address1);
+        $this->assertEquals('cba', $customer->address2);
+        $this->assertEquals('12345', $customer->postcode);
+        $this->assertEquals('FR', $customer->country);
     }
 }

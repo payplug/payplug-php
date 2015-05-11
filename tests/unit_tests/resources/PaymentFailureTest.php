@@ -10,7 +10,7 @@ class PaymentFailureUnitTest extends PHPUnit_Framework_TestCase {
             'message'   => 'The card is stolen.'
         ));
 
-        $this->assertEquals('card_stolen', $paymentFailure->getAttribute('code'));
-        $this->assertEquals('The card is stolen.', $paymentFailure->getAttribute('message'));
+        $this->assertEquals('card_stolen', $paymentFailure->code);
+        $this->assertEquals('The card is stolen.', $paymentFailure->message);
     }
 }

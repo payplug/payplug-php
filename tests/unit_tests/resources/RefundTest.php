@@ -14,11 +14,11 @@ class RefundUnitTest extends PHPUnit_Framework_TestCase {
             'created_at'    => 1410437760
         ));
 
-        $this->assertEquals('re_390312', $refund->getAttribute('id'));
-        $this->assertEquals('pay_490329', $refund->getAttribute('payment_id'));
-        $this->assertEquals('refund', $refund->getAttribute('object'));
-        $this->assertEquals(3300, $refund->getAttribute('amount'));
-        $this->assertEquals('EUR', $refund->getAttribute('currency'));
-        $this->assertEquals(1410437760, $refund->getAttribute('created_at'));
+        $this->assertEquals('re_390312', $refund->id);
+        $this->assertEquals('pay_490329', $refund->payment_id);
+        $this->assertEquals('refund', $refund->object);
+        $this->assertEquals(3300, $refund->amount);
+        $this->assertEquals('EUR', $refund->currency);
+        $this->assertEquals(1410437760, $refund->created_at);
     }
 }

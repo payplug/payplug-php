@@ -46,17 +46,22 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     /**
      * @param string $attribute the attribute of the resource to get
      * @return mixed The value of the attribute
+     * @throws PayPlug_UndefinedAttributeException
      */
-    public function getAttribute($attribute)
+    public function __get($attribute)
     {
-        return $this->_attributes[$attribute];
+        if (array_key_exists($attribute, $this->_attributes)) {
+            return $this->_attributes[$attribute];
+        }
+
+        throw new PayPlug_UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
     }
 
     /**
      * @param string $attribute the attribute key
      * @param mixed $value the new value of the attribute
      */
-    public function setAttribute($attribute, $value)
+    public function __set($attribute, $value)
     {
         $this->_attributes[$attribute] = $value;
     }

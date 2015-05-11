@@ -42,35 +42,35 @@ class PaymentUnitTest extends PHPUnit_Framework_TestCase {
             ),
         ));
 
-        $this->assertEquals('pay_490329', $payment->getAttribute('id'));
-        $this->assertEquals('payment', $payment->getAttribute('object'));
-        $this->assertEquals(true, $payment->getAttribute('is_live'));
-        $this->assertEquals(3300, $payment->getAttribute('amount'));
-        $this->assertEquals(0, $payment->getAttribute('amount_refunded'));
-        $this->assertEquals('EUR', $payment->getAttribute('currency'));
-        $this->assertEquals(1410437760, $payment->getAttribute('created_at'));
-        $this->assertEquals(true, $payment->getAttribute('is_paid'));
-        $this->assertEquals(false, $payment->getAttribute('is_refunded'));
-        $this->assertEquals(false, $payment->getAttribute('is_3ds'));
+        $this->assertEquals('pay_490329', $payment->id);
+        $this->assertEquals('payment', $payment->object);
+        $this->assertEquals(true, $payment->is_live);
+        $this->assertEquals(3300, $payment->amount);
+        $this->assertEquals(0, $payment->amount_refunded);
+        $this->assertEquals('EUR', $payment->currency);
+        $this->assertEquals(1410437760, $payment->created_at);
+        $this->assertEquals(true, $payment->is_paid);
+        $this->assertEquals(false, $payment->is_refunded);
+        $this->assertEquals(false, $payment->is_3ds);
 
-        $this->assertEquals('1800', $payment->getAttribute('card')->getAttribute('last4'));
-        $this->assertEquals('FR', $payment->getAttribute('card')->getAttribute('country'));
-        $this->assertEquals(2017, $payment->getAttribute('card')->getAttribute('exp_year'));
-        $this->assertEquals(9, $payment->getAttribute('card')->getAttribute('exp_month'));
-        $this->assertEquals('Mastercard', $payment->getAttribute('card')->getAttribute('brand'));
+        $this->assertEquals('1800', $payment->card->last4);
+        $this->assertEquals('FR', $payment->card->country);
+        $this->assertEquals(2017, $payment->card->exp_year);
+        $this->assertEquals(9, $payment->card->exp_month);
+        $this->assertEquals('Mastercard', $payment->card->brand);
 
-        $this->assertEquals('name@customer.net', $payment->getAttribute('customer')->getAttribute('email'));
-        $this->assertEquals('John', $payment->getAttribute('customer')->getAttribute('first_name'));
-        $this->assertEquals('Doe', $payment->getAttribute('customer')->getAttribute('last_name'));
+        $this->assertEquals('name@customer.net', $payment->customer->email);
+        $this->assertEquals('John', $payment->customer->first_name);
+        $this->assertEquals('Doe', $payment->customer->last_name);
 
-        $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $payment->getAttribute('hosted_payment')->getAttribute('payment_url'));
-        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $payment->getAttribute('hosted_payment')->getAttribute('ipn_url'));
-        $this->assertEquals('http://yourwebsite.com/payplug_return?someid=11235', $payment->getAttribute('hosted_payment')->getAttribute('return_url'));
-        $this->assertEquals('http://yourwebsite.com/payplug_cancel?someid=81321', $payment->getAttribute('hosted_payment')->getAttribute('cancel_url'));
-        $this->assertEquals(1410437806, $payment->getAttribute('hosted_payment')->getAttribute('paid_at'));
-        $this->assertEquals(200, $payment->getAttribute('hosted_payment')->getAttribute('ipn_answer_code'));
+        $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $payment->hosted_payment->payment_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $payment->hosted_payment->ipn_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_return?someid=11235', $payment->hosted_payment->return_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_cancel?someid=81321', $payment->hosted_payment->cancel_url);
+        $this->assertEquals(1410437806, $payment->hosted_payment->paid_at);
+        $this->assertEquals(200, $payment->hosted_payment->ipn_answer_code);
 
-        $this->assertNull($payment->getAttribute('failure')->getAttribute('code'));
-        $this->assertNull($payment->getAttribute('failure')->getAttribute('message'));
+        $this->assertNull($payment->failure->code);
+        $this->assertNull($payment->failure->message);
     }
 }

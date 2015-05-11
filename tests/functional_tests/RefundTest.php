@@ -28,13 +28,13 @@ class RefundFunctionalTest extends \PHPUnit_Framework_TestCase {
             'force_3ds'         => false
         ), $this->_configuration);
 
-        fwrite(STDOUT, "Please pay the test payment and press enter: " . $payment->getAttribute('hosted_payment')->getAttribute('payment_url'));
+        fwrite(STDOUT, "Please pay the test payment and press enter: " . $payment->hosted_payment->payment_url);
         fgets(fopen("php://stdin", "r"));
 
         $refund = $payment->refund(array(
             'amount'    => 100,
         ), $this->_configuration);
 
-        $this->assertEquals($payment->getAttribute('id'), $refund->getAttribute('payment_id'));
+        $this->assertEquals($payment->id, $refund->payment_id);
     }
 }

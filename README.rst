@@ -69,7 +69,7 @@ Here's how simple it is to create a payment request:
 
     // You will be able to find how the payment object is built in the documentation.
     // For instance, if you want to get an URL to the payment page, you get do:
-    $paymentUrl = $payment->getAttribute('hosted_payment')->getAttribute('payment_url');
+    $paymentUrl = $payment->hosted_payment->payment_url;
 
     // Then, you can redirect the user to the payment page
     header("Location: $paymentUrl");
