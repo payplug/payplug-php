@@ -2,12 +2,12 @@
 
 require_once 'lib/PayPlug.php';
 
-class HttpClientTest extends PHPUnit_Framework_TestCase {
+class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase {
     protected $_configuration;
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug_ClientConfiguration(TestsConfig::LIVE_TOKEN, TestsConfig::TEST_TOKEN, false);
+        $this->_configuration = new Payplug_ClientConfiguration(TestsConfig::LIVE_TOKEN, TestsConfig::TEST_TOKEN, true);
     }
 
     public function testCanRequestAPI()

@@ -8,5 +8,8 @@ PayPlug_ClientConfiguration::initialize(array(
     )
 );
 
-$refund = PayPlug_Refund::list_refunds('pay_2VxSaWaYHZXSYvskPPgK5o');
-var_dump($refund);
+$refund1 = PayPlug_Refund::create('pay_5iGE9e9mTMQLTMwsMbAQnu', array('amount' => 100));
+$refund2 = PayPlug_Refund::create('pay_5iGE9e9mTMQLTMwsMbAQnu', array('amount' => 100));
+$refunds = PayPlug_Refund::list_refunds('pay_5iGE9e9mTMQLTMwsMbAQnu');
+$refunds = PayPlug_Refund::list_refunds(PayPlug_Payment::retrieve('pay_5iGE9e9mTMQLTMwsMbAQnu'));
+var_dump($refunds);

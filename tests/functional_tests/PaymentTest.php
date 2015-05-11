@@ -2,7 +2,7 @@
 
 require_once 'lib/PayPlug.php';
 
-class PaymentTest extends \PHPUnit_Framework_TestCase {
+class PaymentFunctionalTest extends \PHPUnit_Framework_TestCase {
     protected $_configuration;
 
     protected function setUp()

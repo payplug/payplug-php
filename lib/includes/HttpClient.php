@@ -76,6 +76,7 @@ class PayPlug_HttpClient
 
         // If there was an error
         if (substr($result['httpStatus'], 0, 1) !== '2') {
+            var_dump($result['httpResponse']);
             throw $this->getRequestException($result['httpResponse'], $result['httpStatus']);
         }
 
