@@ -75,3 +75,15 @@ Here's how simple it is to create a payment request:
     header("Location: $paymentUrl");
     exit();
 
+Go further:
+===========
+Documentation:
+--------------
+You can generate the PHPDocumentation using PhpDocumentor. Download it and add it to your PATH.
+Run phpdoc inside lib/ directory and set the output to docs/ directory.
+
+    phpdoc -d lib/ -t docs/
+
+Tests:
+------
+See tests/README.rst.
