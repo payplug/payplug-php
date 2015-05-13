@@ -46,6 +46,10 @@ then
     TEST_GROUP="--group ${TEST_GROUP}"
 fi
 
+if [[ -n ${PHP_VERSION} ]]
+then
+    echo "*** Launching tests with php ${PHP_VERSION} ***"
+fi
 phpunit $TEST_GROUP --bootstrap tests/config.php tests
 return_code=$?
 

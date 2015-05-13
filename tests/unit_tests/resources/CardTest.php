@@ -21,6 +21,5 @@ class CardUnitTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2022, $card->exp_year);
         $this->assertEquals(12,   $card->exp_month);
         $this->assertEquals('Visa', $card->brand);
-        $this->assertTrue(false);
     }
 }
