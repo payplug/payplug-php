@@ -2,6 +2,9 @@
 
 require_once 'lib/PayPlug.php';
 
+/**
+ * @group unit
+ */
 class HostedPaymentUnitTest extends PHPUnit_Framework_TestCase {
     public function testCreateHostedPaymentFromAttributes()
     {
