@@ -1,10 +1,5 @@
 <?php
 
-set_include_path(implode(PATH_SEPARATOR, array(
-    '/home/nils/PHP/php-5.2.17/target/lib/php',
-    get_include_path()
-)));
-require_once 'PHPUnit.php';
 require_once 'lib/PayPlug.php';
 
 class APIRoutesUnitTest extends PHPUnit_Framework_TestCase {
