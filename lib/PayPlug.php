@@ -40,3 +40,8 @@ foreach(PayPlug_CONFIG::$REQUIRED_FUNCTIONS as $key => $value) {
         throw new PayPlug_DependencyException('This library requires ' . $value . '.');
     }
 }
+
+// Prior to PHP 5.5, CURL_SSLVERSION_TLSv1 didn't exist. Hence, we have to use a numeric value.
+if (!defined('CURL_SSLVERSION_TLSv1')) {
+    define('CURL_SSLVERSION_TLSv1', 1);
+}
