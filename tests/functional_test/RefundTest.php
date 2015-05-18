@@ -3,9 +3,10 @@
 require_once 'lib/PayPlug.php';
 
 /**
- * @group integration
+ * @group functional
  */
-class RefundFunctionalTest extends \PHPUnit_Framework_TestCase {
+class RefundFunctionalTest extends PHPUnit_Framework_TestCase
+{
     protected $_configuration;
 
     protected function setUp()

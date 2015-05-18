@@ -8,7 +8,7 @@ show_usage() {
     echo "OPTIONS:  -p|--php-version    The PHP version you want to run. E.g. '5.2.17'"
     echo "          -c|--curl-version   The curl version you want to run. E.g. '7.42.1'"
     echo "          -g|--group          The PHPUnit group of tests to launch ('unit'/'integration')."
-    echo "          -h|--help           Shows help."
+    echo "          -h|--help           Show this help message."
 }
 
 PHP_VERSIONS=

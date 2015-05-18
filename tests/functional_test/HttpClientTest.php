@@ -3,9 +3,10 @@
 require_once 'lib/PayPlug.php';
 
 /**
- * @group integration
+ * @group functional
  */
-class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase {
+class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase
+{
     protected $_configuration;
 
     protected function setUp()

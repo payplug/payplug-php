@@ -1,11 +1,10 @@
 <?php
 
-require_once 'lib/PayPlug.php';
-
 /**
  * @group unit
  */
-class RefundUnitTest extends PHPUnit_Framework_TestCase {
+class RefundTest extends PHPUnit_Framework_TestCase
+{
     public function testCreateRefundFromAttributes()
     {
         $refund = PayPlug_Refund::fromAttributes(array(

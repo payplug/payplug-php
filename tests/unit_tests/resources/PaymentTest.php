@@ -5,7 +5,8 @@ require_once 'lib/PayPlug.php';
 /**
  * @group unit
  */
-class PaymentUnitTest extends PHPUnit_Framework_TestCase {
+class PaymentTest extends PHPUnit_Framework_TestCase
+{
     public function testCreatePaymentFromAttributes()
     {
         $payment = PayPlug_Payment::fromAttributes(array(

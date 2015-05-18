@@ -1,8 +1,10 @@
 <?php
 
-require_once 'lib/PayPlug.php';
-
-class APIRoutesUnitTest extends PHPUnit_Framework_TestCase {
+/**
+ * @group unit
+ */
+class APIRoutesTest extends PHPUnit_Framework_TestCase
+{
     public function testThatRouteStartsWithBaseURL()
     {
         $route = PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::CREATE_PAYMENT);

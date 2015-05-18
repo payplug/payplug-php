@@ -46,35 +46,35 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
 /**
  * 400 Bad Request
  */
-class PayPlug_BadRequest extends PayPlug_HttpException
+class PayPlug_BadRequestException extends PayPlug_HttpException
 {
 }
 
 /**
  * 401 Unauthorized
  */
-class PayPlug_Unauthorized extends PayPlug_HttpException
+class PayPlug_UnauthorizedException extends PayPlug_HttpException
 {
 }
 
 /**
  * 403 Forbidden
  */
-class PayPlug_Forbidden extends PayPlug_HttpException
+class PayPlug_ForbiddenException extends PayPlug_HttpException
 {
 }
 
 /**
  * 404 Not Found
  */
-class PayPlug_NotFound extends PayPlug_HttpException
+class PayPlug_NotFoundException extends PayPlug_HttpException
 {
 }
 
 /**
  * 405 Not Allowed
  */
-class PayPlug_NotAllowed extends PayPlug_HttpException
+class PayPlug_NotAllowedException extends PayPlug_HttpException
 {
 }
 

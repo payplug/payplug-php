@@ -5,7 +5,8 @@ require_once 'lib/PayPlug.php';
 /**
  * @group unit
  */
-class HostedPaymentUnitTest extends PHPUnit_Framework_TestCase {
+class HostedPaymentTest extends PHPUnit_Framework_TestCase
+{
     public function testCreateHostedPaymentFromAttributes()
     {
         $hostedPayment = PayPlug_HostedPayment::fromAttributes(array(
@@ -14,7 +15,7 @@ class HostedPaymentUnitTest extends PHPUnit_Framework_TestCase {
             'return_url'        => 'https://www.payplug.com/?return',
             'cancel_url'        => 'https://www.payplug.com/?cancel',
             'paid_at'           => 1410437806,
-            'ipn_answer_code'   => 200,
+            'notification_answer_code'   => 200,
         ));
 
         $this->assertEquals('https://www.payplug.com/pay/test/7ZcMGi6KNnVT5H7o9hms9g', $hostedPayment->payment_url);
@@ -22,6 +23,6 @@ class HostedPaymentUnitTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('https://www.payplug.com/?return', $hostedPayment->return_url);
         $this->assertEquals('https://www.payplug.com/?cancel', $hostedPayment->cancel_url);
         $this->assertEquals(1410437806, $hostedPayment->paid_at);
-        $this->assertEquals(200, $hostedPayment->ipn_answer_code);
+        $this->assertEquals(200, $hostedPayment->notification_answer_code);
     }
 }

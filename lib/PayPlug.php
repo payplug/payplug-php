@@ -5,6 +5,7 @@ require_once 'includes/exceptions/PayPlugException.php';
 require_once 'includes/exceptions/ConfigurationNotSetException.php';
 require_once 'includes/exceptions/DependencyException.php';
 require_once 'includes/exceptions/PayPlugHttpException.php';
+require_once 'includes/exceptions/UndefinedAttributeException.php';
 
 require_once 'includes/APIRoutes.php';
 require_once 'includes/ClientConfiguration.php';

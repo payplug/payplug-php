@@ -1,6 +1,86 @@
 <?php
 
 /**
+ * Generified HttpRequest so that it can easily be mocked
+ */
+interface PayPlug_IHttpRequest
+{
+    /**
+     * Simple wrapper for curl_setopt
+     * @link http://php.net/manual/en/function.curl-setopt.php
+     */
+    function setopt($option, $value);
+
+    /**
+     * Simple wrapper for curl_exec
+     * @link http://php.net/manual/en/function.curl-exec.php
+     */
+    function exec();
+
+    /**
+     * Simple wrapper for curl_getinfo
+     * @link http://php.net/manual/en/function.curl-getinfo.php
+     */
+    function getinfo($option);
+
+    /**
+     * Simple wrapper for curl_close
+     * @link http://php.net/manual/en/function.curl-close.php
+     */
+    function close();
+}
+
+/**
+ * Implementation of {@link PayPlug_IHttpRequest} that uses curl
+ * @codeCoverageIgnore as this is not really testable
+ */
+class PayPlug_CurlRequest implements PayPlug_IHttpRequest
+{
+    private $_curl;
+
+    /**
+     * PayPlug_CurlRequest constructor
+     * Initializes a curl request
+     */
+    public function __construct()
+    {
+        $this->_curl = curl_init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setopt($option, $value)
+    {
+        curl_setopt($this->_curl, $option, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getinfo($option)
+    {
+        return curl_getinfo($this->_curl, $option);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exec()
+    {
+        return curl_exec($this->_curl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function close()
+    {
+        curl_close($this->_curl);
+    }
+}
+
+/**
  * An authenticated HTTP client for PayPlug's API.
  * @note This requires PHP's curl extension.
  */
@@ -21,22 +101,26 @@ class PayPlug_HttpClient
      * A GET request to the API
      * @param string $resource the path to the remote resource
      * @param array $data Request data
+     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
+     * @throws PayPlug_HttpException
      */
-    public function post($resource, $data = null)
+    public function post($resource, $data = null, PayPlug_IHttpRequest $request = null)
     {
-        return $this->request('POST', $resource, $data);
+        return $this->request('POST', $resource, $data, $request);
     }
 
     /**
      * A GET request to the API
      * @param string $resource the path to the remote resource
      * @param array $data Request data
+     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
+     * @throws PayPlug_HttpException
      */
-    public function get($resource, $data = null)
+    public function get($resource, $data = null, PayPlug_IHttpRequest $request = null)
     {
-        return $this->request('GET', $resource, $data);
+        return $this->request('GET', $resource, $data, $request);
     }
 
     /**
@@ -44,38 +128,46 @@ class PayPlug_HttpClient
      * @param string $httpVerb the HTTP verb (PUT, POST, GET, …)
      * @param string $resource the path to the resource queried
      * @param array $data request content
+     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
      * @throws PayPlug_HttpException
      */
-    private function request($httpVerb, $resource, array $data = null)
+    private function request($httpVerb, $resource, array $data = null, PayPlug_IHttpRequest $request = null)
     {
+        if ($request === null) {
+            $request = new PayPlug_CurlRequest();
+        }
+
+        $curl_version = curl_version(); // Do not move this inside $headers even if it is used only here.
+                                        // PHP < 5.4 doesn't support call()['value'] directly.
         $headers = array(
             'Accept: application/json',
             'Content-Type: application/json',
             'User-Agent: PayPlug PHP Client ' . PayPlug_HttpClient::VERSION,
             'X-PHP-Version: ' . phpversion(),
+            'X-Curl-Version: ' . $curl_version['version'],
             'Authorization: Bearer ' . $this->_configuration->getToken()
         );
 
         $curl = curl_init();
-        // curl_setopt($curl, CURLOPT_VERBOSE, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $httpVerb);
-        curl_setopt($curl, CURLOPT_URL, $resource);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_SSLVERSION,
+        // $request->setopt(CURLOPT_VERBOSE, true);
+        $request->setopt(CURLOPT_RETURNTRANSFER, true);
+        $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
+        $request->setopt(CURLOPT_URL, $resource);
+        $request->setopt(CURLOPT_HTTPHEADER, $headers);
+        $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
+        $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
+        $request->setopt(CURLOPT_SSLVERSION,
             defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_TLSv1
         );
-        curl_setopt($curl, CURLOPT_CAINFO, dirname(dirname(__FILE__)) . '/certs/cacert.pem');
+        $request->setopt(CURLOPT_CAINFO, dirname(dirname(__FILE__)) . '/certs/cacert.pem');
         if (!empty($data)) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+            $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }
 
         $result = array(
-            'httpResponse'  => curl_exec($curl),
-            'httpStatus'    => curl_getinfo($curl, CURLINFO_HTTP_CODE)
+            'httpResponse'  => $request->exec(),
+            'httpStatus'    => $request->getInfo(CURLINFO_HTTP_CODE)
         );
 
         // If there was an error
@@ -85,7 +177,7 @@ class PayPlug_HttpClient
 
         $result['httpResponse'] = json_decode($result['httpResponse'], true);
 
-        curl_close($curl);
+        $request->close();
 
         return $result;
     }
@@ -110,22 +202,22 @@ class PayPlug_HttpClient
 
         switch ($httpStatus) {
             case 400:
-                return new PayPlug_BadRequest('Bad request.', $httpResponse, $httpStatus);
+                return new PayPlug_BadRequestException('Bad request.', $httpResponse, $httpStatus);
                 break;
             case 401:
-                return new PayPlug_Unauthorized('Unauthorized. Please check your credentials.',
+                return new PayPlug_UnauthorizedException('Unauthorized. Please check your credentials.',
                     $httpResponse, $httpStatus);
                 break;
             case 403:
-                return new PayPlug_Forbidden('Forbidden error. You are not allowed to access this resource.',
+                return new PayPlug_ForbiddenException('Forbidden error. You are not allowed to access this resource.',
                     $httpResponse, $httpStatus);
                 break;
             case 404:
-                return new PayPlug_NotFound('The resource you requested could not be found.',
+                return new PayPlug_NotFoundException('The resource you requested could not be found.',
                     $httpResponse, $httpStatus);
                 break;
             case 405:
-                return new PayPlug_NotAllowed('The requested method is not supported by this resource.',
+                return new PayPlug_NotAllowedException('The requested method is not supported by this resource.',
                     $httpResponse, $httpStatus);
                 break;
         }

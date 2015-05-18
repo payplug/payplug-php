@@ -5,7 +5,8 @@ require_once 'lib/PayPlug.php';
 /**
  * @group unit
  */
-class PaymentFailureUnitTest extends PHPUnit_Framework_TestCase {
+class PaymentFailureTest extends PHPUnit_Framework_TestCase
+{
     public function testCreatePaymentFailureFromAttributes()
     {
         $paymentFailure = PayPlug_PaymentFailure::fromAttributes(array(
