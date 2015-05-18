@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/.phpbrew/bashrc
+source ${HOME}/.phpbrew/bashrc
 export PHPBREW_SET_PROMPT=1
 phpbrew off > /dev/null 2>&1
 
