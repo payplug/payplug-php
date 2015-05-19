@@ -2,6 +2,7 @@
 
 /**
  * @group unit
+ * @group ci
  */
 class APIRoutesTest extends PHPUnit_Framework_TestCase
 {

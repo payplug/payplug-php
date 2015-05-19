@@ -1,10 +1,8 @@
 <?php
 
-require_once 'lib/PayPlug.php';
-
 /**
  * @group functional
- * @group ignore
+ * @group ci
  */
 class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase
 {
@@ -12,13 +10,11 @@ class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug_ClientConfiguration(TestsConfig::LIVE_TOKEN, TestsConfig::TEST_TOKEN, true);
+        $this->_configuration = new Payplug_ClientConfiguration('', '', true);
     }
 
-    public function testCanRequestAPI()
+    public function testAPIRequest()
     {
-        $httpClient = new PayPlug_HttpClient($this->_configuration);
-        $response = $httpClient->get(PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::CREATE_PAYMENT));
-        $this->assertEquals($response['httpStatus'], 200);
+        //TODO
     }
 }

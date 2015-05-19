@@ -2,6 +2,7 @@
 
 /**
  * @group unit
+ * @group ci
  */
 class ClientConfigurationTest extends PHPUnit_Framework_TestCase
 {

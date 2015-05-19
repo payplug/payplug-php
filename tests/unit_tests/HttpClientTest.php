@@ -2,6 +2,7 @@
 
 /**
  * @group unit
+ * @group ci
  */
 class HttpClientTest extends PHPUnit_Framework_TestCase
 {

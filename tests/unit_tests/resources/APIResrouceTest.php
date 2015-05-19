@@ -17,6 +17,7 @@ class APIResourceMock extends PayPlug_APIResource
 
 /**
  * @group unit
+ * @group ci
  */
 class APIResourceTest extends PHPUnit_Framework_TestCase
 {
