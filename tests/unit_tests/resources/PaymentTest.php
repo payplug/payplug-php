@@ -1,12 +1,22 @@
 <?php
 
-require_once 'lib/PayPlug.php';
-
 /**
  * @group unit
  */
 class PaymentTest extends PHPUnit_Framework_TestCase
 {
+    private $_requestMock;
+    private $_configuration;
+
+    protected function setUp()
+    {
+        $this->_configuration = new PayPlug_ClientConfiguration('abc', 'cba', true);
+        PayPlug_ClientConfiguration::setDefaultConfiguration($this->_configuration);
+
+        $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
+        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
     public function testCreatePaymentFromAttributes()
     {
         $payment = PayPlug_Payment::fromAttributes(array(
@@ -76,5 +86,156 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($payment->failure->code);
         $this->assertNull($payment->failure->message);
+    }
+
+    public function testPaymentCreate()
+    {
+        function testPaymentCreate_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        // Anonymous functions not available with PHP 5.2 :(
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+        function testPaymentCreate_setopt($option, $value = null) {
+            switch($option) {
+                case CURLOPT_POSTFIELDS:
+                    $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                    return true;
+            }
+            return true;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback('testPaymentCreate_setopt'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentCreate_getinfo'));
+
+        $payment = PayPlug_Payment::create(array(
+            'amount'            => 999,
+            'currency'          => 'EUR',
+            'customer'          => array(
+                'email'         => 'john.doe@example.com',
+                'first_name'    => 'John',
+                'last_name'     => 'Doe'
+            ),
+            'hosted_payment'    => array(
+                'notification_url'  => 'http://www.example.org/callbackURL',
+                'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
+                'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
+            ),
+            'force_3ds'         => false
+        ));
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    public function testPaymentRetrieve()
+    {
+        function testPaymentRetrieve_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        // Anonymous functions not available with PHP 5.2 :(
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+        function testPaymentRetrieve_setopt($option, $value = null) {
+            switch($option) {
+                case CURLOPT_URL:
+                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                    return true;
+            }
+            return true;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentRetrieve_getinfo'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnCallback('testPaymentRetrieve_setopt'));
+
+        $payment = PayPlug_Payment::retrieve('a_payment_id');
+
+        $this->assertStringEndsWith('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
+
+    public function testPaymentRefundWhenPaymentIsInvalid()
+    {
+        $this->setExpectedException('PayPlug_InvalidPaymentException');
+
+        $payment = PayPlug_Payment::fromAttributes(array('fake' => 'payment'));
+        $payment->refund(array('amount' => 3300));
+    }
+
+    public function testPaymentRefund()
+    {
+        function testPaymentRefund_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        // Anonymous functions not available with PHP 5.2 :(
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+        function testPaymentRefund_setopt($option, $value = null) {
+            switch($option) {
+                case CURLOPT_URL:
+                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                    return true;
+            }
+            return true;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentRefund_getinfo'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnCallback('testPaymentRefund_setopt'));
+
+        $payment = PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $payment->refund(array('amount' => 3300));
+
+        $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
     }
 }

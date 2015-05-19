@@ -84,3 +84,10 @@ class PayPlug_NotAllowedException extends PayPlug_HttpException
 class PayPlug_PayPlugServerException extends PayPlug_HttpException
 {
 }
+
+/**
+ * Thrown when we expected the API to have a specific format, and we got something else.
+ */
+class PayPlug_UnexpectedAPIResponseException extends PayPlug_HttpException
+{
+}

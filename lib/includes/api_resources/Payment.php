@@ -41,11 +41,14 @@ class PayPlug_Payment extends PayPlug_APIResource
      * @param array $data the refund data
      * @param PayPlug_ClientConfiguration $configuration the client configuration
      * @return PayPlug_Refund|null the opened refund instance
-     * @throws PayPlug_ConfigurationNotSetException
+     * @throws PayPlug_InvalidPaymentException when the id of the payment is invalid
      */
     public function refund(array $data = null, PayPlug_ClientConfiguration $configuration = null)
     {
-        if (!array_key_exists('id', $this->getAttributes())) return null;
+        if (!array_key_exists('id', $this->getAttributes())) {
+            throw new PayPlug_InvalidPaymentException("This payment object has no id, and thus, can't be refunded.");
+        }
+
         return PayPlug_Refund::create($this->id, $data, $configuration);
     }
 

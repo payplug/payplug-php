@@ -4,7 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__
 require_once 'includes/exceptions/PayPlugException.php';
 require_once 'includes/exceptions/ConfigurationNotSetException.php';
 require_once 'includes/exceptions/DependencyException.php';
-require_once 'includes/exceptions/PayPlugHttpException.php';
+require_once 'includes/exceptions/HttpException.php';
+require_once 'includes/exceptions/InvalidPaymentException.php';
 require_once 'includes/exceptions/UndefinedAttributeException.php';
 
 require_once 'includes/APIRoutes.php';

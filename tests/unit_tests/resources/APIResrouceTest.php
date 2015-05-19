@@ -1,7 +1,5 @@
 <?php
 
-require_once 'lib/PayPlug.php';
-
 class APIResourceMock extends PayPlug_APIResource
 {
     static function fromAttributes(array $attributes)

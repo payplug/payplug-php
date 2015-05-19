@@ -78,6 +78,7 @@ class PayPlug_Refund extends PayPlug_APIResource
      * @param PayPlug_ClientConfiguration $configuration
      * @return PayPlug_Refund[]|null an array containing the refunds on success, null on error.
      * @throws PayPlug_ConfigurationNotSetException
+     * @throws PayPlug_UnexpectedAPIResponseException
      */
     public static function list_refunds($payment, PayPlug_ClientConfiguration $configuration = null)
     {
@@ -93,11 +94,18 @@ class PayPlug_Refund extends PayPlug_APIResource
             PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment))
         );
 
+        if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
+            throw new PayPlug_UnexpectedAPIResponseException(
+                "Expected API response to contain 'data' key referencing an array.",
+                $response['httpResponse']
+            );
+        }
+
         $refunds = array();
-        assert(array_key_exists('data', $refunds));
         foreach ($response['httpResponse']['data'] as &$refund) {
             $refunds[] = PayPlug_Refund::fromAttributes($refund);
         }
+
         return $refunds;
     }
 }

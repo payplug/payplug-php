@@ -4,6 +4,7 @@ require_once 'lib/PayPlug.php';
 
 /**
  * @group functional
+ * @group ignore
  */
 class RefundFunctionalTest extends PHPUnit_Framework_TestCase
 {

@@ -87,6 +87,12 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
 class PayPlug_HttpClient
 {
     const VERSION = '1.0.0';
+    /**
+     * @var null|PayPlug_IHttpRequest set the request wrapper. For test purpose only.
+     * You can set this to a mock of PayPlug_IHttpRequest, so that the request will not be performed.
+     */
+    public static $REQUEST_HANDLER = null;
+
     private $_configuration;
 
     /**
@@ -101,26 +107,24 @@ class PayPlug_HttpClient
      * A GET request to the API
      * @param string $resource the path to the remote resource
      * @param array $data Request data
-     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
      * @throws PayPlug_HttpException
      */
-    public function post($resource, $data = null, PayPlug_IHttpRequest $request = null)
+    public function post($resource, $data = null)
     {
-        return $this->request('POST', $resource, $data, $request);
+        return $this->request('POST', $resource, $data);
     }
 
     /**
      * A GET request to the API
      * @param string $resource the path to the remote resource
      * @param array $data Request data
-     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
      * @throws PayPlug_HttpException
      */
-    public function get($resource, $data = null, PayPlug_IHttpRequest $request = null)
+    public function get($resource, $data = null)
     {
-        return $this->request('GET', $resource, $data, $request);
+        return $this->request('GET', $resource, $data);
     }
 
     /**
@@ -128,17 +132,21 @@ class PayPlug_HttpClient
      * @param string $httpVerb the HTTP verb (PUT, POST, GET, …)
      * @param string $resource the path to the resource queried
      * @param array $data request content
-     * @param PayPlug_IHttpRequest $request The request object. Curl will be used as default.
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
      * @throws PayPlug_HttpException
      */
-    private function request($httpVerb, $resource, array $data = null, PayPlug_IHttpRequest $request = null)
+    private function request($httpVerb, $resource, array $data = null)
     {
-        if ($request === null) {
+        // @codeCoverageIgnoreStart
+        if (self::$REQUEST_HANDLER === null) {
             $request = new PayPlug_CurlRequest();
         }
+        // @codeCoverageIgnoreEnd
+        else {
+            $request = self::$REQUEST_HANDLER;
+        }
 
-        $curl_version = curl_version(); // Do not move this inside $headers even if it is used only here.
+        $curl_version = curl_version(); // Do not move this inside $headers even if it is used only there.
                                         // PHP < 5.4 doesn't support call()['value'] directly.
         $headers = array(
             'Accept: application/json',
@@ -176,6 +184,10 @@ class PayPlug_HttpClient
         }
 
         $result['httpResponse'] = json_decode($result['httpResponse'], true);
+
+        if ($result['httpResponse'] === null) {
+            throw new PayPlug_UnexpectedAPIResponseException('API response is not valid JSON.', $result['httpResponse']);
+        }
 
         $request->close();
 

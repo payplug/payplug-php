@@ -5,11 +5,15 @@
  */
 class HttpClientTest extends PHPUnit_Framework_TestCase
 {
+    private $_httpClient;
     private $_requestMock;
 
     protected function setUp()
     {
+        $this->_httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
+
         $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
+        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testPost()
@@ -31,8 +35,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testPost_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $result = $httpClient->post('somewhere', null, $this->_requestMock);
+        $result = $this->_httpClient->post('somewhere');
 
         $this->assertEquals(array('status' => 'ok'), $result['httpResponse']);
         $this->assertEquals(200, $result['httpStatus']);
@@ -57,8 +60,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testPost_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $result = $httpClient->get('somewhere_else', null, $this->_requestMock);
+        $result = $this->_httpClient->get('somewhere_else');
 
         $this->assertEquals(array('status' => 'ok'), $result['httpResponse']);
         $this->assertEquals(200, $result['httpStatus']);
@@ -85,8 +87,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError500_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testError400()
@@ -110,8 +111,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError400_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testError401()
@@ -135,8 +135,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError401_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testError403()
@@ -160,8 +159,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError403_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testError404()
@@ -185,8 +183,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError404_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testError405()
@@ -210,8 +207,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError405_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testErrorUnknown()
@@ -235,8 +231,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testError418_getinfo'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $httpClient->get('somewhere', null, $this->_requestMock);
+        $this->_httpClient->get('somewhere');
     }
 
     public function testNotEmptyData()
@@ -248,16 +243,18 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             }
             return null;
         }
-        
+
+        // Anonymous functions not available with PHP 5.2 :(
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
         function testNotEmptyData_setopt($option, $value = null) {
             switch($option) {
                 case CURLOPT_POSTFIELDS:
-                    $this->assertEquals(array("'foo': 'bar'"), json_decode($value));
+                    $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
                     return true;
             }
-            return null;
+
+            return true;
         }
-        
 
         $this->_requestMock
             ->expects($this->once())
@@ -269,13 +266,39 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
             ->will($this->returnCallback('testNotEmptyData_getinfo'));
         $this->_requestMock
             ->expects($this->any())
-            ->method('getinfo')
+            ->method('setopt')
             ->will($this->returnCallback('testNotEmptyData_setopt'));
 
-        $httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
-        $result = $httpClient->get('somewhere_else', array('foo' => 'bar'), $this->_requestMock);
+        $result = $this->_httpClient->get('somewhere_else', array('foo' => 'bar'));
 
+        $this->assertEquals(array('foo' => 'bar'), $GLOBALS['CURLOPT_POSTFIELDS_DATA']);
         $this->assertEquals(array('status' => 'ok'), $result['httpResponse']);
         $this->assertEquals(200, $result['httpStatus']);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    function testInvalidAPIResponse()
+    {
+        $this->setExpectedException('PayPlug_UnexpectedAPIResponseException');
+
+        function testInvalidAPIResponse_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('This is not JSON'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testInvalidAPIResponse_getinfo'));
+
+        $this->_httpClient->get('somewhere_else');
     }
 }
