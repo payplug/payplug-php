@@ -276,10 +276,6 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $result['httpStatus']);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
-        $curl_version = curl_version();
-        if ($curl_version['version'] === '7.25.0') {
-            $this->assertTrue(false);
-        }
     }
 
     function testInvalidAPIResponse()
