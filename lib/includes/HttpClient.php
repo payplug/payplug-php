@@ -154,8 +154,7 @@ class PayPlug_HttpClient
             'Authorization: Bearer ' . $this->_configuration->getToken()
         );
 
-        $curl = curl_init();
-        // $request->setopt(CURLOPT_VERBOSE, true);
+//        $request->setopt(CURLOPT_VERBOSE, true);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
         $request->setopt(CURLOPT_URL, $resource);
