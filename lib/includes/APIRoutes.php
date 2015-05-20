@@ -5,7 +5,7 @@
  */
 class PayPlug_APIRoutes
 {
-    const API_BASE_URL = 'http://localhost:8080';
+    const API_BASE_URL = 'https://api.payplug.com';
     const API_VERSION = 1;
 
     // Payments routes
