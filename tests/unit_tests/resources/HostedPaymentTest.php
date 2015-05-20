@@ -3,6 +3,7 @@
 /**
  * @group unit
  * @group ci
+ * @group recommended
  */
 class HostedPaymentTest extends PHPUnit_Framework_TestCase
 {

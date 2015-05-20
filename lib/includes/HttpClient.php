@@ -32,7 +32,6 @@ interface PayPlug_IHttpRequest
 
 /**
  * Implementation of {@link PayPlug_IHttpRequest} that uses curl
- * @codeCoverageIgnore as this is not really testable
  */
 class PayPlug_CurlRequest implements PayPlug_IHttpRequest
 {
@@ -137,11 +136,9 @@ class PayPlug_HttpClient
      */
     private function request($httpVerb, $resource, array $data = null)
     {
-        // @codeCoverageIgnoreStart
         if (self::$REQUEST_HANDLER === null) {
             $request = new PayPlug_CurlRequest();
         }
-        // @codeCoverageIgnoreEnd
         else {
             $request = self::$REQUEST_HANDLER;
         }
@@ -178,6 +175,8 @@ class PayPlug_HttpClient
             'httpStatus'    => $request->getInfo(CURLINFO_HTTP_CODE)
         );
 
+        $request->close();
+
         // If there was an error
         if (substr($result['httpStatus'], 0, 1) !== '2') {
             throw $this->getRequestException($result['httpResponse'], $result['httpStatus']);
@@ -188,8 +187,6 @@ class PayPlug_HttpClient
         if ($result['httpResponse'] === null) {
             throw new PayPlug_UnexpectedAPIResponseException('API response is not valid JSON.', $result['httpResponse']);
         }
-
-        $request->close();
 
         return $result;
     }

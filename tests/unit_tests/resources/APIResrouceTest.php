@@ -8,16 +8,12 @@ class APIResourceMock extends PayPlug_APIResource
         $object->initialize($attributes);
         return $object;
     }
-
-    public function getAttributesWrapper()
-    {
-        return $this->getAttributes();
-    }
 }
 
 /**
  * @group unit
  * @group ci
+ * @group recommended
  */
 class APIResourceTest extends PHPUnit_Framework_TestCase
 {
@@ -29,14 +25,6 @@ class APIResourceTest extends PHPUnit_Framework_TestCase
             'attr1' => 'val_attr1',
             'attr2' => 'val_attr2'
         ));
-    }
-
-    public function testCanGetAttributes()
-    {
-        $this->assertEquals(array(
-            'attr1' => 'val_attr1',
-            'attr2' => 'val_attr2'
-        ), $this->_myApiResource->getAttributesWrapper());
     }
 
     public function testThrowsExceptionWhenKeyDoesNotExist()

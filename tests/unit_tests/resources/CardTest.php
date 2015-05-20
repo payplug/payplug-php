@@ -3,6 +3,7 @@
 /**
  * @group unit
  * @group ci
+ * @group recommended
  */
 class CardTest extends PHPUnit_Framework_TestCase
 {
