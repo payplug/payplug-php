@@ -53,6 +53,22 @@ class PayPlug_Payment extends PayPlug_APIResource
     }
 
     /**
+     * List the refunds of this payment
+     * @param PayPlug_ClientConfiguration $configuration the client configuration
+     * @return null|PayPlug_Refund[] the array of refunds of this payment
+     * @throws PayPlug_InvalidPaymentException
+     * @throws PayPlug_UnexpectedAPIResponseException
+     */
+    public function listRefunds(PayPlug_ClientConfiguration $configuration = null)
+    {
+        if (!array_key_exists('id', $this->getAttributes())) {
+            throw new PayPlug_InvalidPaymentException("This payment object has no id, and thus, can't be refunded.");
+        }
+
+        return PayPlug_Refund::listRefunds($this->id, $configuration);
+    }
+
+    /**
      * Retrieves a Payment.
      * @param string $paymentId the payment ID
      * @param PayPlug_ClientConfiguration $configuration the client configuration

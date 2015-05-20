@@ -44,7 +44,7 @@ class PayPlug_Refund extends PayPlug_APIResource
     /**
      * Retrieves a refund object on a payment
      * @param string|PayPlug_Payment $payment the payment id or the payment object
-     * @param $refundId
+     * @param string $refundId the refund id
      * @param PayPlug_ClientConfiguration $configuration
      * @return null|PayPlug_APIResource|PayPlug_Refund
      * @throws PayPlug_ConfigurationNotSetException
@@ -76,11 +76,11 @@ class PayPlug_Refund extends PayPlug_APIResource
      * Lists the last refunds of a payment.
      * @param string|PayPlug_Payment $payment the payment id or the payment object
      * @param PayPlug_ClientConfiguration $configuration
-     * @return PayPlug_Refund[]|null an array containing the refunds on success, null on error.
+     * @return null|PayPlug_Refund[] an array containing the refunds on success, null on error.
      * @throws PayPlug_ConfigurationNotSetException
      * @throws PayPlug_UnexpectedAPIResponseException
      */
-    public static function list_refunds($payment, PayPlug_ClientConfiguration $configuration = null)
+    public static function listRefunds($payment, PayPlug_ClientConfiguration $configuration = null)
     {
         if ($configuration === null) {
             $configuration = PayPlug_ClientConfiguration::getDefaultConfiguration();

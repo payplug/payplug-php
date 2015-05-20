@@ -240,7 +240,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
             ->method('getinfo')
             ->will($this->returnCallback('testRefundsListThrowsExceptionOnWongAPIResponse_getinfo'));
 
-        PayPlug_Refund::list_refunds('a_payment_id');
+        PayPlug_Refund::listRefunds('a_payment_id');
     }
 
     public function testRefundsListFromPaymentId()
@@ -278,7 +278,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
             ->method('setopt')
             ->will($this->returnCallback('testRefundsListFromPaymentId_setopt'));
 
-        $refunds = PayPlug_Refund::list_refunds('a_payment_id');
+        $refunds = PayPlug_Refund::listRefunds('a_payment_id');
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));
@@ -326,7 +326,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
             ->method('setopt')
             ->will($this->returnCallback('testRefundRetrieveFromPaymentObject_setopt'));
 
-        $refunds = PayPlug_Refund::list_refunds(
+        $refunds = PayPlug_Refund::listRefunds(
             PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'))
         );
 

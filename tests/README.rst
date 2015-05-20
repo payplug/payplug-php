@@ -1,31 +1,36 @@
 How to run the tests
 ====================
-Prerequisite:
--------------
+Prerequisites:
+--------------
 Download composer and update dev dependencies.
+::
 
     php composer.phar update --require-dev
 
-Run all the tests:
-------------------
-Launch phpunit into tests/ directory with tests/config.php as boostrap file.
+Run the recommended tests:
+--------------------------
+It is recommended to launch these tests at least once to ensure this library will work properly on your configuration.
+::
 
-    vendor/phpunit/phpunit/phpunit --bootstrap tests/config.php tests
+    vendor/phpunit/phpunit/phpunit --group recommended --exclude-group ignore --bootstrap tests/config.php tests
 
 Run a specific test:
 --------------------
-You can run a specific test adding a filter to the preivous command.
+You can run a specific test adding a filter to the previous command.
+::
 
-    vendor/phpunit/phpunit/phpunit --filter CardUnitTest --bootstrap tests/config.php tests
+    vendor/phpunit/phpunit/phpunit --filter CardTest --group unit --exclude-group ignore --bootstrap tests/config.php tests
 
-Run only one type of test (unit tests or functional_tests)
-----------------------------------------------------------
-You probably have noticed that tests are annotated with @group annotation.
-For example, before unit tests, annotation "@group unit" is set.
-Therefore, you can run unit tests filtering by groups:
+Run specific groups of test
+---------------------------
+You can filter tests by groups:
+::
 
-    vendor/phpunit/phpunit/phpunit --group unit --bootstrap tests/config.php tests
+    # Run unit tests
+    vendor/phpunit/phpunit/phpunit --group unit --exclude-group ignore --bootstrap tests/config.php tests
 
-Likewise, you can run functional tests running this command:
+    # Run functional tests
+    vendor/phpunit/phpunit/phpunit --group functional --exclude-group ignore --bootstrap tests/config.php tests
 
-    vendor/phpunit/phpunit/phpunit --group functional --bootstrap tests/config.php tests
+    # Run unit tests and functional tests
+    vendor/phpunit/phpunit/phpunit --group unit,functional --exclude-group ignore --bootstrap tests/config.php tests

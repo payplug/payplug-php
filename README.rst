@@ -5,12 +5,12 @@ This is the documentation of PayPlug's e-commerce PHP library. It is designed to
 help developers to use PayPlug as payment solution in a simple, yet robust way.
 
 Prerequisites
-=============
+-------------
 
 PayPlug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL** to secure transactions. You also need **PHP 5.2** or newer.
 
 Installation
-============
+------------
 
 **Option 1)** clone the repository :
 ::
@@ -33,7 +33,7 @@ To get started, add the following to your PHP script :
     require_once("PATH_TO_PAYPLUG/payplug_php/lib/PayPlug.php");
     
 Usage
-=====
+-----
 
 Here's how simple it is to create a payment request:
 
@@ -76,14 +76,14 @@ Here's how simple it is to create a payment request:
     exit();
 
 Go further:
-===========
+-----------
 Documentation:
---------------
+++++++++++++++
 You can generate the PHPDocumentation using PhpDocumentor. Download it and add it to your PATH.
 Run phpdoc inside lib/ directory and set the output to docs/ directory.
 
     phpdoc -d lib/ -t docs/
 
 Tests:
-------
+++++++
 See tests/README.rst.

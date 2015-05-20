@@ -2,7 +2,6 @@
 
 /**
  * @group functional
- * @group ignore
  */
 class RefundFunctionalTest extends PHPUnit_Framework_TestCase
 {
@@ -31,7 +30,7 @@ class RefundFunctionalTest extends PHPUnit_Framework_TestCase
             'force_3ds'         => false
         ), $this->_configuration);
 
-        fwrite(STDOUT, "Please pay the test payment and press enter: " . $payment->hosted_payment->payment_url);
+        fwrite(STDOUT, "\nPay this test payment and press enter: " . $payment->hosted_payment->payment_url);
         fgets(fopen("php://stdin", "r"));
 
         $refund = $payment->refund(array(
@@ -39,5 +38,25 @@ class RefundFunctionalTest extends PHPUnit_Framework_TestCase
         ), $this->_configuration);
 
         $this->assertEquals($payment->id, $refund->payment_id);
+
+        $refund = $payment->refund(array(
+            'amount'    => 200,
+        ), $this->_configuration);
+
+        $this->assertEquals($payment->id, $refund->payment_id);
+
+        return $payment;
+    }
+
+    /**
+     * @depends testCanRefundAPayment
+     */
+    public function testCanListRefunds(PayPlug_Payment $payment)
+    {
+        $refunds = $payment->listRefunds($this->_configuration);
+        $this->assertEquals(2, count($refunds));
+        $this->assertTrue(($refunds[0]->amount === 100) || ($refunds[0]->amount === 200));
+        $this->assertTrue(($refunds[1]->amount === 100) || ($refunds[1]->amount === 200));
+        $this->assertFalse($refunds[0]->amount === $refunds[1]->amount);
     }
 }

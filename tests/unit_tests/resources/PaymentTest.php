@@ -240,4 +240,60 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
+
+    public function testPaymentListRefundsWhenPaymentIsInvalid()
+    {
+        $this->setExpectedException('PayPlug_InvalidPaymentException');
+
+        $payment = PayPlug_Payment::fromAttributes(array('fake' => 'payment'));
+        $payment->listRefunds();
+    }
+
+    public function testPaymentListRefunds()
+    {
+        function testPaymentListRefunds_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        // Anonymous functions not available with PHP 5.2 :(
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+        function testPaymentListRefunds_setopt($option, $value = null) {
+            switch($option) {
+                case CURLOPT_URL:
+                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                    return true;
+            }
+            return true;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"data":[{"id": "refund1"}, {"id": "refund2"}]}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnCallback('testPaymentListRefunds_setopt'));
+
+        $payment = PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $refunds = $payment->listRefunds();
+
+        $this->assertEquals(2, count($refunds));
+        $this->assertTrue($refunds[0]->id === 'refund1' || $refunds[0]->id === 'refund2');
+        $this->assertTrue($refunds[1]->id === 'refund1' || $refunds[1]->id === 'refund2');
+        $this->assertTrue($refunds[0]->id !== $refunds[1]->id);
+
+        $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
 }
