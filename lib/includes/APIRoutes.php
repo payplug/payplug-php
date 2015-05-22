@@ -5,8 +5,8 @@
  */
 class PayPlug_APIRoutes
 {
-//    const API_BASE_URL = 'https://api-dev.payplug.com';
-    const API_BASE_URL = 'https://api-preprod.payplug.com';
+    const API_BASE_URL = 'https://api-dev.payplug.com';
+//    const API_BASE_URL = 'https://api-preprod.payplug.com';
 //    const API_BASE_URL = 'https://api.payplug.com';
     const API_VERSION = 1;
 
