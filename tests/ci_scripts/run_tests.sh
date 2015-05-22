@@ -73,10 +73,19 @@ fi
 # This is in a variable to run in keep-alive mode.
 exit_code=0
 
+
 for php_version in "${PHP_VERSIONS[@]}"
 do
     phpbrew use "php-${php_version}"
     extensions_dir=$(php-config --extension-dir)
+    pecl channel-update pecl.php.net
+    if [[ "${php_version}" == "5.2.17" || "${php_version} == "5.3.29 ]]
+    then
+        pecl install xdebug-2.2.7
+    else
+        pecl install xdebug
+    fi
+    echo "zend_extension=$(php-config --extension-dir)/xdebug.so" >> ${HOME}/.phpbrew/php/php-${php_version}/etc/php.ini
 
     # If a Curl version was manually set
     if [[ -n ${FIXED_CURL_VERSION} ]]
@@ -99,7 +108,8 @@ do
         else
             # Eventually, launch the tests
             echo "*** Launching tests with php ${php_version} and curl ${curl_version} ***"
-            phpunit ${TEST_GROUP} --bootstrap tests/config.php tests
+            phpunit ${TEST_GROUP} --bootstrap tests/config.php \
+                    --coverage-clover coverage/php-${php_version}/curl-${curl_version}/coverage.xml tests
             last_exit_code=$?
             if [[ "$last_exit_code" != "0" ]]
             then
