@@ -1,10 +1,10 @@
 <phpunit bootstrap="config.php">
     <filter>
-        <whitelist>
+        <blacklist>
             <directory suffix=".php">..</directory>
             <exclude>
                 <directory suffix=".php">../lib</directory>
             </exclude>
-        </whitelist>
+        </blacklist>
     </filter>
 </phpunit>
