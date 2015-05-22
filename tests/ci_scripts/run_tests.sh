@@ -102,8 +102,7 @@ do
             # Generate coverage report if php and curl version matches
             if [[ "${PHP_VERSION_FOR_COVERAGE}" == "${php_version}" && "${CURL_VERSION_FOR_COVERAGE}" == "${curl_version}" ]]
             then
-                #COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
-                COVERAGE_CLI="--coverage-html coverage/"
+                COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
             else
                 COVERAGE_CLI=""
             fi
