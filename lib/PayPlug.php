@@ -3,6 +3,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__
 
 require_once 'includes/exceptions/PayPlugException.php';
 require_once 'includes/exceptions/ConfigurationNotSetException.php';
+require_once 'includes/exceptions/ConnectionException.php';
 require_once 'includes/exceptions/DependencyException.php';
 require_once 'includes/exceptions/HttpException.php';
 require_once 'includes/exceptions/InvalidPaymentException.php';
@@ -43,10 +44,10 @@ foreach(PayPlug_CONFIG::$REQUIRED_FUNCTIONS as $key => $value) {
     }
 }
 
-// Prior to PHP 5.5, CURL_SSLVERSION_TLSv1 didn't exist. Hence, we have to use a numeric value.
-if (!defined('CURL_SSLVERSION_TLSv1')) {
-    define('CURL_SSLVERSION_TLSv1', 1);
-}
+// Prior to PHP 5.5, CURL_SSLVERSION_TLSv1 and CURL_SSLVERSION_DEFAULT didn't exist. Hence, we have to use a numeric value.
 if (!defined('CURL_SSLVERSION_DEFAULT')) {
     define('CURL_SSLVERSION_DEFAULT', 0);
+}
+if (!defined('CURL_SSLVERSION_TLSv1')) {
+    define('CURL_SSLVERSION_TLSv1', 1);
 }

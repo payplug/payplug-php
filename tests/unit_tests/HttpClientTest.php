@@ -303,4 +303,46 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
         $this->_httpClient->get('somewhere_else');
     }
+
+
+
+    function testConnectionError()
+    {
+        $this->setExpectedException('PayPlug_ConnectionException');
+
+        function testConnectionError_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 0;
+            }
+            return null;
+        }
+
+        function testConnectionError_errno($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 0;
+            }
+            return null;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(false));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('errno')
+            ->will($this->returnValue(7)); // CURLE_COULDNT_CONNECT
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('error')
+            ->will($this->returnValue('Failed to connect() to host or proxy.'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testConnectionError_getinfo'));
+
+        $this->_httpClient->get('somewhere');
+    }
 }

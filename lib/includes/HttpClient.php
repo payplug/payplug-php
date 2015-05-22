@@ -28,6 +28,18 @@ interface PayPlug_IHttpRequest
      * @link http://php.net/manual/en/function.curl-close.php
      */
     function close();
+
+    /**
+     * Simple wrapper for curl_error
+     * @link http://php.net/manual/en/function.curl-close.php
+     */
+    function error();
+
+    /**
+     * Simple wrapper for curl_errno
+     * @link http://php.net/manual/en/function.curl-close.php
+     */
+    function errno();
 }
 
 /**
@@ -51,7 +63,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
      */
     public function setopt($option, $value)
     {
-        curl_setopt($this->_curl, $option, $value);
+        return curl_setopt($this->_curl, $option, $value);
     }
 
     /**
@@ -76,6 +88,22 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     public function close()
     {
         curl_close($this->_curl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function error()
+    {
+        return curl_error($this->_curl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function errno()
+    {
+        return curl_errno($this->_curl);
     }
 }
 
@@ -143,7 +171,6 @@ class PayPlug_HttpClient
      * @param array $data request content
      * @param bool $authenticated the request should be authenticated
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
-     * @throws PayPlug_HttpException
      * @throws PayPlug_UnexpectedAPIResponseException
      */
     private function request($httpVerb, $resource, array $data = null, $authenticated = true)
@@ -169,16 +196,17 @@ class PayPlug_HttpClient
         }
 
 //        $request->setopt(CURLOPT_VERBOSE, true);
+        $request->setopt(CURLOPT_FAILONERROR, true);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
         $request->setopt(CURLOPT_URL, $resource);
         $request->setopt(CURLOPT_HTTPHEADER, $headers);
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
-        $request->setopt(CURLOPT_CAINFO, dirname(dirname(__FILE__)) . '/certs/cacert.pem');
-        $request->setopt(CURLOPT_SSLVERSION,
-            defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_DEFAULT
-        );
+        $request->setopt(CURLOPT_CAINFO, realpath(dirname(__FILE__) . '/../certs/cacert.pem'));
+//        $request->setopt(CURLOPT_SSLVERSION,
+//            defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_DEFAULT
+//        );
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }
@@ -188,12 +216,25 @@ class PayPlug_HttpClient
             'httpStatus'    => $request->getInfo(CURLINFO_HTTP_CODE)
         );
 
+        // We must do this before closing curl
+        $errorCode = $request->errno();
+        $errorMessage = $request->error();
+
         $request->close();
 
-        // If there was an error
-        if (substr($result['httpStatus'], 0, 1) !== '2') {
-            throw $this->getRequestException($result['httpResponse'], $result['httpStatus']);
+        // If there was an error with curl
+        if ($result['httpResponse'] === false || $errorCode) {
+            $this->throwConnectionException($errorCode, $errorMessage);
+        //@codeCoverageIgnoreStart
+        // Unreachable bracket marked as executable by old versions of XDebug
+        } // If there was an HTTP error
+        //@codeCoverageIgnoreEnd
+        elseif (substr($result['httpStatus'], 0, 1) !== '2') {
+            $this->throwRequestException($result['httpResponse'], $result['httpStatus']);
+        //@codeCoverageIgnoreStart
+        // Unreachable bracket marked as executable by old versions of XDebug
         }
+        //@codeCoverageIgnoreEnd
 
         $result['httpResponse'] = json_decode($result['httpResponse'], true);
 
@@ -205,18 +246,31 @@ class PayPlug_HttpClient
     }
 
     /**
-     * Generates an exception from a given HTTP response and status.
+     * Throw an exception from a given curl error
+     * @param int $errorCode the curl error code
+     * @param string $errorMessage the error message
+     * @throws PayPlug_ConnectionException
+     */
+    private function throwConnectionException($errorCode, $errorMessage)
+    {
+        throw new PayPlug_ConnectionException(
+            'Connection to the API failed with the following message: ' . $errorMessage, $errorCode
+        );
+    }
+
+    /**
+     * Throws an exception from a given HTTP response and status.
      * @param string $httpResponse the HTTP response
      * @param int $httpStatus the HTTP status
-     * @return PayPlug_HttpException the generated exception from the request
+     * @throws PayPlug_HttpException the generated exception from the request
      */
-    private function getRequestException($httpResponse, $httpStatus)
+    private function throwRequestException($httpResponse, $httpStatus)
     {
         $exception = null;
 
         // Error 5XX
         if (substr($httpStatus, 0, 1) === '5') {
-            return new PayPlug_PayPlugServerException('Unexpected server error during the request.',
+            throw new PayPlug_PayPlugServerException('Unexpected server error during the request.',
                 $httpResponse,
                 $httpStatus
             );
@@ -224,26 +278,26 @@ class PayPlug_HttpClient
 
         switch ($httpStatus) {
             case 400:
-                return new PayPlug_BadRequestException('Bad request.', $httpResponse, $httpStatus);
+                throw new PayPlug_BadRequestException('Bad request.', $httpResponse, $httpStatus);
                 break;
             case 401:
-                return new PayPlug_UnauthorizedException('Unauthorized. Please check your credentials.',
+                throw new PayPlug_UnauthorizedException('Unauthorized. Please check your credentials.',
                     $httpResponse, $httpStatus);
                 break;
             case 403:
-                return new PayPlug_ForbiddenException('Forbidden error. You are not allowed to access this resource.',
+                throw new PayPlug_ForbiddenException('Forbidden error. You are not allowed to access this resource.',
                     $httpResponse, $httpStatus);
                 break;
             case 404:
-                return new PayPlug_NotFoundException('The resource you requested could not be found.',
+                throw new PayPlug_NotFoundException('The resource you requested could not be found.',
                     $httpResponse, $httpStatus);
                 break;
             case 405:
-                return new PayPlug_NotAllowedException('The requested method is not supported by this resource.',
+                throw new PayPlug_NotAllowedException('The requested method is not supported by this resource.',
                     $httpResponse, $httpStatus);
                 break;
         }
 
-        return new PayPlug_HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);
+        throw new PayPlug_HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);
     }
 }

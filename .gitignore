@@ -6,3 +6,4 @@ vendor/
 *.iml
 *.phar
 docs/
+coverage/
