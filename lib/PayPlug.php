@@ -47,3 +47,6 @@ foreach(PayPlug_CONFIG::$REQUIRED_FUNCTIONS as $key => $value) {
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
 }
+if (!defined('CURL_SSLVERSION_DEFAULT')) {
+    define('CURL_SSLVERSION_DEFAULT', 0);
+}

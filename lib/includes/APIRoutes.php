@@ -5,7 +5,9 @@
  */
 class PayPlug_APIRoutes
 {
-    const API_BASE_URL = 'https://api.payplug.com';
+    const API_BASE_URL = 'https://api-dev.payplug.com';
+//    const API_BASE_URL = 'https://api-preprod.payplug.com';
+//    const API_BASE_URL = 'https://api.payplug.com';
     const API_VERSION = 1;
 
     // Payments routes
@@ -16,6 +18,9 @@ class PayPlug_APIRoutes
     const CREATE_REFUND     = '/payments/{PAYMENT_ID}/refunds';
     const RETRIEVE_REFUND   = '/payments/{PAYMENT_ID}/refunds/{REFUND_ID}';
     const LIST_REFUNDS      = '/payments/{PAYMENT_ID}/refunds';
+
+    // Test route
+    public static $TEST;
 
     /**
      * @param string $route One of the routes defined above
@@ -30,3 +35,4 @@ class PayPlug_APIRoutes
         return self::API_BASE_URL . '/v' . self::API_VERSION . $route;
     }
 }
+PayPlug_APIRoutes::$TEST = PayPlug_APIRoutes::API_BASE_URL . '/test';

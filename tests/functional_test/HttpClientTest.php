@@ -16,8 +16,8 @@ class HttpClientFunctionalTest extends PHPUnit_Framework_TestCase
 
     public function testAPIRequest()
     {
-        $this->setExpectedException('PayPlug_UnauthorizedException');
         $httpClient = new PayPlug_HttpClient($this->_configuration);
-        $httpClient->get(PayPlug_APIRoutes::API_BASE_URL . '/test');
+        $response = $httpClient->testRemote();
+        $this->assertEquals(200, $response['httpStatus']);
     }
 }

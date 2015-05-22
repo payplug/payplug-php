@@ -2,7 +2,6 @@
 
 /**
  * @group functional
- * @group ignore
  */
 class PaymentFunctionalTest extends PHPUnit_Framework_TestCase
 {

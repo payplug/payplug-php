@@ -127,14 +127,26 @@ class PayPlug_HttpClient
     }
 
     /**
+     * Sends a test request to the remote API.
+     * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
+     * @throws PayPlug_HttpException
+     * @throws PayPlug_UnexpectedAPIResponseException
+     */
+    public function testRemote() {
+        return $this->request('GET', PayPlug_APIRoutes::$TEST, null, false);
+    }
+
+    /**
      * Perform a request
      * @param string $httpVerb the HTTP verb (PUT, POST, GET, …)
      * @param string $resource the path to the resource queried
      * @param array $data request content
+     * @param bool $authenticated the request should be authenticated
      * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
      * @throws PayPlug_HttpException
+     * @throws PayPlug_UnexpectedAPIResponseException
      */
-    private function request($httpVerb, $resource, array $data = null)
+    private function request($httpVerb, $resource, array $data = null, $authenticated = true)
     {
         if (self::$REQUEST_HANDLER === null) {
             $request = new PayPlug_CurlRequest();
@@ -150,9 +162,11 @@ class PayPlug_HttpClient
             'Content-Type: application/json',
             'User-Agent: PayPlug PHP Client ' . PayPlug_HttpClient::VERSION,
             'X-PHP-Version: ' . phpversion(),
-            'X-Curl-Version: ' . $curl_version['version'],
-            'Authorization: Bearer ' . $this->_configuration->getToken()
+            'X-Curl-Version: ' . $curl_version['version']
         );
+        if ($authenticated) {
+            $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
+        }
 
 //        $request->setopt(CURLOPT_VERBOSE, true);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
@@ -161,10 +175,10 @@ class PayPlug_HttpClient
         $request->setopt(CURLOPT_HTTPHEADER, $headers);
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
-        $request->setopt(CURLOPT_SSLVERSION,
-            defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_TLSv1
-        );
         $request->setopt(CURLOPT_CAINFO, dirname(dirname(__FILE__)) . '/certs/cacert.pem');
+        $request->setopt(CURLOPT_SSLVERSION,
+            defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_DEFAULT
+        );
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }

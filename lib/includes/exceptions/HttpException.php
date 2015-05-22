@@ -23,7 +23,7 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
      */
     public function __toString()
     {
-        return parent::__toString() . "; HTTP Response: {$this->_httpResponse}\n";
+        return parent::__toString() . "; HTTP Response: {$this->_httpResponse}";
     }
 
     /**
