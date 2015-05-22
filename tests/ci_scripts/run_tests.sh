@@ -11,11 +11,6 @@ show_usage() {
     echo "          -h|--help           Show this help message."
 }
 
-PHP_VERSIONS=
-CURL_VERSIONS=
-FIXED_CURL_VERSION=
-TEST_GROUP=
-
 ### Parse arguments ###
 while [[ $# > 1 ]]
 do
@@ -33,6 +28,14 @@ do
         TEST_GROUP="$2"
         shift
         ;;
+        -cp|--coverage-php)
+        PHP_VERSION_FOR_COVERAGE="$2"
+        shift
+        ;;
+        -cc|--coverage-curl)
+        CURL_VERSION_FOR_COVERAGE="$2"
+        shift
+        ;;
         -h|--help)
         show_usage
         exit 0
@@ -43,8 +46,6 @@ do
 
     shift
 done
-
-
 
 ### If PHP version was passed as parameter ###
 if [[ -n ${PHP_VERSIONS} ]]
@@ -98,10 +99,17 @@ do
             echo "Curl curl-${curl_version}.so does not exist for php-${php_version}."
             exit_code=1
         else
+            # Generate coverage report if php and curl version matches
+            if [[ "${PHP_VERSION_FOR_COVERAGE}" == "${php_version}" && "${CURL_VERSION_FOR_COVERAGE}" == "${curl_version}" ]]
+            then
+                COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
+            else
+                COVERAGE_CLI=""
+            fi
+
             # Eventually, launch the tests
             echo "*** Launching tests with php ${php_version} and curl ${curl_version} ***"
-            phpunit ${TEST_GROUP} --bootstrap tests/config.php \
-                    --coverage-clover coverage/php-${php_version}/curl-${curl_version}/coverage.xml tests
+            phpunit ${TEST_GROUP} --bootstrap tests/config.php ${COVERAGE_CLI} tests
             last_exit_code=$?
             if [[ "$last_exit_code" != "0" ]]
             then
