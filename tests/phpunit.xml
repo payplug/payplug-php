@@ -1,5 +1,10 @@
 <phpunit bootstrap="config.php">
-    <whitelist addUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">lib</directory>
-    </whitelist>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">..</directory>
+            <exclude>
+                <directory suffix=".php">../lib</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
