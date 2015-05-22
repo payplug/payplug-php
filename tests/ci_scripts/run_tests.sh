@@ -78,14 +78,6 @@ for php_version in "${PHP_VERSIONS[@]}"
 do
     phpbrew use "php-${php_version}"
     extensions_dir=$(php-config --extension-dir)
-    pecl channel-update pecl.php.net
-    if [[ "${php_version}" == "5.2.17" || "${php_version} == "5.3.29 ]]
-    then
-        pecl install xdebug-2.2.7
-    else
-        pecl install xdebug
-    fi
-    echo "zend_extension=$(php-config --extension-dir)/xdebug.so" >> ${HOME}/.phpbrew/php/php-${php_version}/etc/php.ini
 
     # If a Curl version was manually set
     if [[ -n ${FIXED_CURL_VERSION} ]]
