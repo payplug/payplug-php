@@ -102,14 +102,15 @@ do
             # Generate coverage report if php and curl version matches
             if [[ "${PHP_VERSION_FOR_COVERAGE}" == "${php_version}" && "${CURL_VERSION_FOR_COVERAGE}" == "${curl_version}" ]]
             then
-                COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
+                #COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
+                COVERAGE_CLI="--coverage-html coverage/"
             else
                 COVERAGE_CLI=""
             fi
 
             # Eventually, launch the tests
             echo "*** Launching tests with php ${php_version} and curl ${curl_version} ***"
-            phpunit ${TEST_GROUP} --bootstrap tests/config.php ${COVERAGE_CLI} tests
+            phpunit ${TEST_GROUP} ${COVERAGE_CLI} -c "tests/phpunit.xml" tests
             last_exit_code=$?
             if [[ "$last_exit_code" != "0" ]]
             then
