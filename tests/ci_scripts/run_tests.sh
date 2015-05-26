@@ -7,12 +7,12 @@ show_usage() {
     echo "USAGE: $0 [OPTIONS]"
     echo "OPTIONS:  -p|--php-version    The PHP version you want to run. E.g. '5.2.17'"
     echo "          -c|--curl-version   The curl version you want to run. E.g. '7.42.1'"
-    echo "          -g|--group          The PHPUnit group of tests to launch ('unit'/'integration')."
+    echo "          -g|--group          The PHPUnit group of tests to launch ('unit'/'integration'/'ci')."
     echo "          -h|--help           Show this help message."
 }
 
 ### Parse arguments ###
-while [[ $# > 1 ]]
+while [[ $# > 0 ]]
 do
     key="$1"
     case ${key} in
@@ -102,14 +102,15 @@ do
             # Generate coverage report if php and curl version matches
             if [[ "${PHP_VERSION_FOR_COVERAGE}" == "${php_version}" && "${CURL_VERSION_FOR_COVERAGE}" == "${curl_version}" ]]
             then
-                COVERAGE_CLI="--coverage-clover coverage/coverage.xml"
+#                COVERAGE_CL="--coverage-clover coverage/coverage.xml"
+                COVERAGE_CL="--coverage-html coverage/"
             else
-                COVERAGE_CLI=""
+                COVERAGE_CL=""
             fi
 
             # Eventually, launch the tests
             echo "*** Launching tests with php ${php_version} and curl ${curl_version} ***"
-            phpunit ${TEST_GROUP} ${COVERAGE_CLI} -c "tests/phpunit.xml" tests
+            phpunit ${TEST_GROUP} ${COVERAGE_CL} -c "tests/phpunit.xml" tests
             last_exit_code=$?
             if [[ "$last_exit_code" != "0" ]]
             then
