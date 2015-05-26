@@ -63,8 +63,7 @@ Here's how simple it is to create a payment request:
                 'notification_url'  => 'http://www.example.org/callbackURL',
                 'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
                 'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
-            ),
-            'force_3ds'         => false
+            )
     ));
 
     // You will be able to find how the payment object is built in the documentation.

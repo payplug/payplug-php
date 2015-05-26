@@ -26,8 +26,7 @@ class RefundFunctionalTest extends PHPUnit_Framework_TestCase
                 'notification_url'  => 'https://www.payplug.com/?notification',
                 'return_url'        => 'https://www.payplug.com/?return',
                 'cancel_url'        => 'https://www.payplug.com/?cancel'
-            ),
-            'force_3ds'         => false
+            )
         ), $this->_configuration);
 
         fwrite(STDOUT, "\nPay this test payment and press enter: " . $payment->hosted_payment->payment_url);

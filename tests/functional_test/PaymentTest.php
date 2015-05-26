@@ -55,8 +55,7 @@ class PaymentFunctionalTest extends PHPUnit_Framework_TestCase
                 'notification_url'  => 'https://www.payplug.com/',
                 'return_url'        => 'https://www.payplug.com/',
                 'cancel_url'        => 'https://www.payplug.com/'
-            ),
-            'force_3ds'         => false
+            )
         ), $this->_configuration);
         $getPayment = PayPlug_Payment::retrieve($payment->id, $this->_configuration);
 
