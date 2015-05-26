@@ -5,12 +5,17 @@
  */
 class PayPlug_HttpException extends PayPlug_PayPlugException
 {
+    /**
+     * @var null|string The plain HTTP response.
+     */
     private $_httpResponse;
 
     /**
-     * @param string $message the exception message
-     * @param string $httpResponse the http response content
-     * @param int $code the exception code
+     * PayPlug_HttpException constructor.
+     *
+     * @param   string  $message        the exception message
+     * @param   string  $httpResponse   the http response content
+     * @param   int     $code           the exception code
      */
     public function __construct($message, $httpResponse = null, $code = 0)
     {
@@ -27,7 +32,9 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
     }
 
     /**
-     * @return string the HTTP response
+     * Get the plain HTTP response which caused the exception.
+     *
+     * @return  string  the HTTP response
      */
     public function getHttpResponse()
     {
@@ -35,7 +42,9 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
     }
 
     /**
-     * @return array|null the error array if it was a valid JSON, null otherwise.
+     * Try to parse the HTTP response as a JSON array and return it.
+     *
+     * @return  array|null  the error array if the HTTP response was a properly formed JSON string, null otherwise.
      */
     public function getErrorObject()
     {

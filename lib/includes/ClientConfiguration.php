@@ -6,19 +6,30 @@
 class PayPlug_ClientConfiguration
 {
     /**
-     * @var PayPlug_ClientConfiguration|null The default configuration that should
-     * be used when no configuration is provided.
+     * @var PayPlug_ClientConfiguration|null The default configuration that should be used when no configuration is
+     * provided.
      */
     private static $_defaultConfiguration = null;
 
+    /**
+     * @var string The live token.
+     */
     private $_liveToken;
+    /**
+     * @var string The test token.
+     */
     private $_testToken;
+    /**
+     * @var bool True for Test mode. False for Live mode.
+     */
     private $_isTestMode;
 
     /**
-     * @param string $liveToken The live token
-     * @param string $testToken The test token
-     * @param bool $isTestMode Test mode is enabled
+     * Constructor for a configuration.
+     *
+     * @param   string  $liveToken  The live token
+     * @param   string  $testToken  The test token
+     * @param   bool    $isTestMode Test mode is enabled
      */
     public function __construct($liveToken, $testToken, $isTestMode = true)
     {
@@ -38,8 +49,10 @@ class PayPlug_ClientConfiguration
      *               ['TEST_MODE_ENABLE'] = true for test mode, false for live mode
      * </pre>
      *
-     * @param array $configuration the configuration parameters
-     * @return PayPlug_ClientConfiguration the new client configuration
+     * @param   array   $configuration  the configuration parameters
+     *
+     * @return PayPlug_ClientConfiguration  the new client configuration
+     *
      * @throws PayPlug_ConfigurationException
      */
     public static function initialize(array $configuration)
@@ -72,7 +85,9 @@ class PayPlug_ClientConfiguration
     }
 
     /**
-     * @return string The current token
+     * Gets the token corresponding to the mode currently in use (Live token or Test token).
+     *
+     * @return  string  The current token
      */
     public function getToken()
     {
@@ -80,7 +95,9 @@ class PayPlug_ClientConfiguration
     }
 
     /**
-     * @return boolean True if test mode is enabled
+     * Gets the mode currently in use.
+     *
+     * @return  boolean True if test mode is enabled. False if live mode is enabled.
      */
     public function isTestMode()
     {
@@ -88,8 +105,9 @@ class PayPlug_ClientConfiguration
     }
 
     /**
-     * Sets the mode (live or test)
-     * @param boolean $isTestMode true if test mode, false if live mode
+     * Sets the mode to use. (Live mode or Test mode)
+     *
+     * @param   boolean $isTestMode true for Test mode, false for Live mode
      */
     public function setTestMode($isTestMode)
     {
@@ -98,10 +116,11 @@ class PayPlug_ClientConfiguration
 
 
     /**
-     * Gets the default "global" configuration.
+     * Gets the default global configuration.
      *
-     * @return PayPlug_ClientConfiguration The last client configuration
-     * @throws PayPlug_ConfigurationNotSetException when the global configuration was not set.
+     * @return  PayPlug_ClientConfiguration The last client configuration
+     *
+     * @throws  PayPlug_ConfigurationNotSetException    when the global configuration was not set.
      */
     public static function getDefaultConfiguration()
     {
@@ -114,8 +133,9 @@ class PayPlug_ClientConfiguration
 
     /**
      * Sets the new default client configuration. This configuration will be used when no configuration is explicitly
-     * used in API Resources objects parameters.
-     * @param PayPlug_ClientConfiguration $defaultConfiguration the new default configuration
+     * passed to methods.
+     *
+     * @param   PayPlug_ClientConfiguration $defaultConfiguration   the new default configuration
      */
     public static function setDefaultConfiguration($defaultConfiguration)
     {

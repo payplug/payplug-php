@@ -1,13 +1,16 @@
 <?php
 
 /**
- * Interface designed to force resources to implement a factory
+ * Interface designed to force resources to implement at least one factory.
  */
 interface PayPlug_IAPIResourceFactory
 {
     /**
-     * @param array $attributes the default attributes.
-     * @return PayPlug_APIResource The new resource.
+     * The factory method that constructs the API resource.
+     *
+     * @param   array   $attributes the default attributes.
+     *
+     * @return  PayPlug_APIResource The new resource.
      */
     static function fromAttributes(array $attributes);
 }
@@ -23,12 +26,14 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     protected $_attributes;
 
     /**
-     * You can only construct an API resource from a factory
+     * You can only construct an API resource from a factory. Thus, you cannot use this constructor.
      */
     protected function __construct(){}
 
     /**
-     * @return array Gets the attributes of the resource
+     * Gets an array composed of the attributes of the resource.
+     *
+     * @return  array   The attributes of the resource
      */
     protected final function getAttributes()
     {
@@ -36,7 +41,9 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     }
 
     /**
-     * @param array $attributes The attributes to set
+     * Sets the attributes of this resource.
+     *
+     * @param   array   $attributes The attributes to set.
      */
     protected function setAttributes(array $attributes)
     {
@@ -44,9 +51,13 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     }
 
     /**
-     * @param string $attribute the attribute of the resource to get
-     * @return mixed The value of the attribute
-     * @throws PayPlug_UndefinedAttributeException
+     * Reads an API resource property.
+     *
+     * @param   string  $attribute  the key of the attribute to get
+     *
+     * @return  mixed   The value of the attribute
+     *
+     * @throws  PayPlug_UndefinedAttributeException
      */
     public function __get($attribute)
     {
@@ -58,8 +69,10 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     }
 
     /**
-     * @param string $attribute the attribute key
-     * @param mixed $value the new value of the attribute
+     * Sets an API resource property.
+     *
+     * @param   string  $attribute  the attribute key
+     * @param   mixed   $value      the new value of the attribute
      */
     public function __set($attribute, $value)
     {
@@ -68,8 +81,9 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
 
     /**
      * Initializes the resource.
-     * Should be overridden when the resource has objects as attributes.
-     * @param array $attributes the attributes to initialize.
+     * This method must be overridden when the resource has objects as attributes.
+     *
+     * @param   array   $attributes the attributes to initialize.
      */
     protected function initialize(array $attributes)
     {

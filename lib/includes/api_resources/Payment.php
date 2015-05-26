@@ -6,7 +6,11 @@
 class PayPlug_Payment extends PayPlug_APIResource
 {
     /**
-     * {@inheritdoc}
+     * The factory method that constructs the API resource.
+     *
+     * @param   array   $attributes the default attributes.
+     *
+     * @return  PayPlug_APIResource The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
@@ -16,7 +20,10 @@ class PayPlug_Payment extends PayPlug_APIResource
     }
 
     /**
-     * {@inheritdoc}
+     * Initializes the resource.
+     * This method must be overridden when the resource has objects as attributes.
+     *
+     * @param   array   $attributes the attributes to initialize.
      */
     protected function initialize(array $attributes)
     {
@@ -38,10 +45,13 @@ class PayPlug_Payment extends PayPlug_APIResource
 
     /**
      * Open a refund on the payment.
-     * @param array $data the refund data
-     * @param PayPlug_ClientConfiguration $configuration the client configuration
-     * @return PayPlug_Refund|null the opened refund instance
-     * @throws PayPlug_InvalidPaymentException when the id of the payment is invalid
+     *
+     * @param   array                       $data           the refund data
+     * @param   PayPlug_ClientConfiguration $configuration  the client configuration
+     *
+     * @return  PayPlug_Refund|null the opened refund instance
+     *
+     * @throws  PayPlug_InvalidPaymentException when the id of the payment is invalid
      */
     public function refund(array $data = null, PayPlug_ClientConfiguration $configuration = null)
     {
@@ -53,11 +63,14 @@ class PayPlug_Payment extends PayPlug_APIResource
     }
 
     /**
-     * List the refunds of this payment
-     * @param PayPlug_ClientConfiguration $configuration the client configuration
-     * @return null|PayPlug_Refund[] the array of refunds of this payment
-     * @throws PayPlug_InvalidPaymentException
-     * @throws PayPlug_UnexpectedAPIResponseException
+     * List the refunds of this payment.
+     *
+     * @param   PayPlug_ClientConfiguration   $configuration  the client configuration
+     * 
+     * @return  null|PayPlug_Refund[]   the array of refunds of this payment
+     *
+     * @throws  PayPlug_InvalidPaymentException
+     * @throws  PayPlug_UnexpectedAPIResponseException
      */
     public function listRefunds(PayPlug_ClientConfiguration $configuration = null)
     {
@@ -70,9 +83,12 @@ class PayPlug_Payment extends PayPlug_APIResource
 
     /**
      * Retrieves a Payment.
-     * @param string $paymentId the payment ID
-     * @param PayPlug_ClientConfiguration $configuration the client configuration
+     *
+     * @param   string                      $paymentId      the payment ID
+     * @param   PayPlug_ClientConfiguration $configuration  the client configuration
+     *
      * @return null|PayPlug_Payment the retrieved payment or null on error
+     *
      * @throws PayPlug_ConfigurationNotSetException
      */
     public static function retrieve($paymentId, PayPlug_ClientConfiguration $configuration = null)
@@ -90,11 +106,14 @@ class PayPlug_Payment extends PayPlug_APIResource
     }
 
     /**
-     * Creates a Payment
-     * @param array $data API data for payment creation
-     * @param PayPlug_ClientConfiguration $configuration the client configuration
-     * @return null|PayPlug_Payment the created payment instance
-     * @throws PayPlug_ConfigurationNotSetException
+     * Creates a Payment.
+     *
+     * @param   array                       $data           API data for payment creation
+     * @param   PayPlug_ClientConfiguration $configuration  the client configuration
+     *
+     * @return  null|PayPlug_Payment the created payment instance
+     *
+     * @throws  PayPlug_ConfigurationNotSetException
      */
     public static function create(array $data, PayPlug_ClientConfiguration $configuration = null)
     {

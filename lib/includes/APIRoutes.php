@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Defines the routes to the PayPlug's API.
+ * Defines the routes to PayPlug's API.
  */
 class PayPlug_APIRoutes
 {
@@ -19,13 +18,19 @@ class PayPlug_APIRoutes
     const RETRIEVE_REFUND   = '/payments/{PAYMENT_ID}/refunds/{REFUND_ID}';
     const LIST_REFUNDS      = '/payments/{PAYMENT_ID}/refunds';
 
-    // Test route
+    /**
+     * @var string  Full route the the test resource.
+     * This variable is initialized in a static context and should not be updated.
+     */
     public static $TEST;
 
     /**
-     * @param string $route One of the routes defined above
-     * @param array $parameters The parameters required by the route.
-     * @return string the route to the resource
+     * Get the route to a specified resource.
+     *
+     * @param   string  $route      One of the routes defined above
+     * @param   array   $parameters The parameters required by the route.
+     *
+     * @return  string  the route to the resource
      */
     public static function getRoute($route, array $parameters = array())
     {

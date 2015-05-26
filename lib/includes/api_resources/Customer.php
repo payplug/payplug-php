@@ -6,7 +6,11 @@
 class PayPlug_Customer extends PayPlug_APIResource
 {
     /**
-     * {@inheritdoc}
+     * The factory method that constructs the API resource.
+     *
+     * @param   array   $attributes the default attributes.
+     *
+     * @return  PayPlug_APIResource The new resource.
      */
     public static function fromAttributes(array $attributes)
     {

@@ -7,46 +7,55 @@ interface PayPlug_IHttpRequest
 {
     /**
      * Simple wrapper for curl_setopt
+     *
      * @link http://php.net/manual/en/function.curl-setopt.php
      */
     function setopt($option, $value);
 
     /**
      * Simple wrapper for curl_exec
+     *
      * @link http://php.net/manual/en/function.curl-exec.php
      */
     function exec();
 
     /**
      * Simple wrapper for curl_getinfo
+     *
      * @link http://php.net/manual/en/function.curl-getinfo.php
      */
     function getinfo($option);
 
     /**
      * Simple wrapper for curl_close
+     *
      * @link http://php.net/manual/en/function.curl-close.php
      */
     function close();
 
     /**
      * Simple wrapper for curl_error
+     *
      * @link http://php.net/manual/en/function.curl-close.php
      */
     function error();
 
     /**
      * Simple wrapper for curl_errno
+     *
      * @link http://php.net/manual/en/function.curl-close.php
      */
     function errno();
 }
 
 /**
- * Implementation of {@link PayPlug_IHttpRequest} that uses curl
+ * A Curl implementation of a PayPlug_IHttpRequest.
  */
 class PayPlug_CurlRequest implements PayPlug_IHttpRequest
 {
+    /**
+     * @var resource the curl object
+     */
     private $_curl;
 
     /**
@@ -109,21 +118,28 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
 
 /**
  * An authenticated HTTP client for PayPlug's API.
+ *
  * @note This requires PHP's curl extension.
  */
 class PayPlug_HttpClient
 {
     const VERSION = '1.0.0';
     /**
-     * @var null|PayPlug_IHttpRequest set the request wrapper. For test purpose only.
+     * @var null|PayPlug_IHttpRequest   set the request wrapper. For test purpose only.
      * You can set this to a mock of PayPlug_IHttpRequest, so that the request will not be performed.
      */
     public static $REQUEST_HANDLER = null;
 
+    /**
+     * @var PayPlug_ClientConfiguration The configuration for the HTTP Client. This configuration will be used to pass
+     * the right token in the queries headers.
+     */
     private $_configuration;
 
     /**
-     * @param PayPlug_ClientConfiguration $configuration the client configuration
+     * PayPlug_HttpClient constructor.
+     *
+     * @param   PayPlug_ClientConfiguration $configuration  the client configuration
      */
     public function __construct(PayPlug_ClientConfiguration $configuration)
     {
@@ -131,11 +147,20 @@ class PayPlug_HttpClient
     }
 
     /**
-     * A GET request to the API
-     * @param string $resource the path to the remote resource
-     * @param array $data Request data
-     * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
-     * @throws PayPlug_HttpException
+     * Sends a GET request to the API.
+     *
+     * @param   string  $resource   the path to the remote resource
+     * @param   array   $data       Request data
+     *
+     * @return  array   the response in a dictionary with following keys:
+     * <pre>
+     *  'httpStatus'    => The 2xx HTTP status code as defined at http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2
+     *  'httpResponse'  => The HTTP response
+     * </pre>
+     *
+     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  PayPlug_HttpException                   When status code is not 2xx.
+     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function post($resource, $data = null)
     {
@@ -143,11 +168,20 @@ class PayPlug_HttpClient
     }
 
     /**
-     * A GET request to the API
-     * @param string $resource the path to the remote resource
-     * @param array $data Request data
-     * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
-     * @throws PayPlug_HttpException
+     * Sends a GET request to the API.
+     *
+     * @param   string  $resource   the path to the remote resource
+     * @param   array   $data       Request data
+     *
+     * @return  array   the response in a dictionary with following keys:
+     * <pre>
+     *  'httpStatus'    => The 2xx HTTP status code {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2}
+     *  'httpResponse'  => The HTTP response
+     * </pre>
+     *
+     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  PayPlug_HttpException                   When status code is not 2xx.
+     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function get($resource, $data = null)
     {
@@ -156,22 +190,38 @@ class PayPlug_HttpClient
 
     /**
      * Sends a test request to the remote API.
-     * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
-     * @throws PayPlug_HttpException
-     * @throws PayPlug_UnexpectedAPIResponseException
+     *
+     * @return  array   the response in a dictionary with following keys:
+     * <pre>
+     *  'httpStatus'    => The 2xx HTTP status code {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2}
+     *  'httpResponse'  => The HTTP response
+     * </pre>
+     *
+     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  PayPlug_HttpException                   When status code is not 2xx.
+     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function testRemote() {
         return $this->request('GET', PayPlug_APIRoutes::$TEST, null, false);
     }
 
     /**
-     * Perform a request
-     * @param string $httpVerb the HTTP verb (PUT, POST, GET, …)
-     * @param string $resource the path to the resource queried
-     * @param array $data request content
-     * @param bool $authenticated the request should be authenticated
-     * @return array the response in a dictionary with keys 'httpStatus' and 'httpResponse'.
-     * @throws PayPlug_UnexpectedAPIResponseException
+     * Performs a request.
+     *
+     * @param   string  $httpVerb       the HTTP verb (PUT, POST, GET, …)
+     * @param   string  $resource       the path to the resource queried
+     * @param   array   $data           the request content
+     * @param   bool    $authenticated  the request should be authenticated
+     *
+     * @return array the response in a dictionary with following keys:
+     * <pre>
+     *  'httpStatus'    => The 2xx HTTP status code {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2}
+     *  'httpResponse'  => The HTTP response
+     * </pre>
+     *
+     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  PayPlug_HttpException                   When status code is not 2xx.
+     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
      */
     private function request($httpVerb, $resource, array $data = null, $authenticated = true)
     {
@@ -246,10 +296,12 @@ class PayPlug_HttpClient
     }
 
     /**
-     * Throw an exception from a given curl error
-     * @param int $errorCode the curl error code
-     * @param string $errorMessage the error message
-     * @throws PayPlug_ConnectionException
+     * Throws an exception from a given curl error.
+     *
+     * @param   int     $errorCode      the curl error code
+     * @param   string  $errorMessage   the error message
+     *
+     * @throws  PayPlug_ConnectionException
      */
     private function throwConnectionException($errorCode, $errorMessage)
     {
@@ -260,9 +312,11 @@ class PayPlug_HttpClient
 
     /**
      * Throws an exception from a given HTTP response and status.
-     * @param string $httpResponse the HTTP response
-     * @param int $httpStatus the HTTP status
-     * @throws PayPlug_HttpException the generated exception from the request
+     *
+     * @param   string  $httpResponse   the HTTP response
+     * @param   int     $httpStatus     the HTTP status
+     *
+     * @throws  PayPlug_HttpException   the generated exception from the request
      */
     private function throwRequestException($httpResponse, $httpStatus)
     {
