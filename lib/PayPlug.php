@@ -29,7 +29,7 @@ class PayPlug_CONFIG
     const PHP_MIN_VERSION = '5.2.0';
 
     /**
-     * @var array   A dictionary whose keys are the name of the function required by this library and whose values are
+     * array   A dictionary whose keys are the name of the function required by this library and whose values are
      * the corresponding dependencies.
      * For instance:
      * <pre>

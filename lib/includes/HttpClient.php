@@ -68,7 +68,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setopt($option, $value)
     {
@@ -76,7 +76,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getinfo($option)
     {
@@ -84,7 +84,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function exec()
     {
@@ -92,7 +92,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function close()
     {
@@ -100,7 +100,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function error()
     {
@@ -108,7 +108,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function errno()
     {
