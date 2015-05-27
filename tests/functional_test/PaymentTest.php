@@ -26,8 +26,7 @@ class PaymentFunctionalTest extends PHPUnit_Framework_TestCase
                 'notification_url'  => 'https://www.payplug.com/?notification',
                 'return_url'        => 'https://www.payplug.com/?return',
                 'cancel_url'        => 'https://www.payplug.com/?cancel'
-            ),
-            'force_3ds'         => false
+            )
         ), $this->_configuration);
 
         $this->assertNotEmpty($payment->id);
