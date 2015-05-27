@@ -28,11 +28,14 @@ require_once 'includes/api_resources/resources/Refund.php';
  */
 class PayPlug_CONFIG
 {
+    /**
+     * PHP minimal version required by this library
+     */
     const PHP_MIN_VERSION = '5.2.0';
 
     /**
-     * array   A dictionary whose keys are the name of the function required by this library and whose values are
-     * the corresponding dependencies.
+     * array   A dictionary whose keys are the name of the function required by this library and whose values are the
+     * corresponding dependencies.
      * For instance:
      * <pre>
      *  'curl_version' => 'php5-curl'
