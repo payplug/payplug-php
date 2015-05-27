@@ -14,12 +14,14 @@ require_once 'includes/ClientConfiguration.php';
 require_once 'includes/HttpClient.php';
 
 require_once 'includes/api_resources/APIResource.php';
-require_once 'includes/api_resources/Card.php';
-require_once 'includes/api_resources/Customer.php';
-require_once 'includes/api_resources/HostedPayment.php';
-require_once 'includes/api_resources/Payment.php';
-require_once 'includes/api_resources/PaymentFailure.php';
-require_once 'includes/api_resources/Refund.php';
+require_once 'includes/api_resources/IConsistencyCheckableAPIResource.php';
+
+require_once 'includes/api_resources/resources/Card.php';
+require_once 'includes/api_resources/resources/Customer.php';
+require_once 'includes/api_resources/resources/HostedPayment.php';
+require_once 'includes/api_resources/resources/Payment.php';
+require_once 'includes/api_resources/resources/PaymentFailure.php';
+require_once 'includes/api_resources/resources/Refund.php';
 
 /**
  * Minimal configuration to launch the script.

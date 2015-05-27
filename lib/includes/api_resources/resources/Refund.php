@@ -3,14 +3,14 @@
 /**
  * A PayPlug_Payment refund.
  */
-class PayPlug_Refund extends PayPlug_APIResource
+class PayPlug_Refund extends PayPlug_APIResource implements PayPlug_IConsistencyCheckableAPIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_APIResource The new resource.
+     * @return  PayPlug_Refund  The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
@@ -119,5 +119,26 @@ class PayPlug_Refund extends PayPlug_APIResource
         }
 
         return $refunds;
+    }
+
+    /**
+     * Returns an API resource that you can trust.
+     *
+     * @param   PayPlug_ClientConfiguration $configuration the client configuration.
+     *
+     * @return  PayPlug_APIResource The consistent API resource.
+     *
+     * @throws  PayPlug_UndefinedAttributeException when the local resource is invalid.
+     */
+    function getConsistentResource(PayPlug_ClientConfiguration $configuration = null)
+    {
+        if (!array_key_exists('id', $this->_attributes)) {
+            throw new PayPlug_UndefinedAttributeException('The id of the refund is not set.');
+        }
+        else if (!array_key_exists('payment_id', $this->_attributes)) {
+            throw new PayPlug_UndefinedAttributeException('The payment_id of the refund is not set.');
+        }
+
+        return PayPlug_Refund::retrieve($this->_attributes['payment_id'], $this->_attributes['id'], $configuration);
     }
 }

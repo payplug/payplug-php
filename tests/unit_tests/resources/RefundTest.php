@@ -340,4 +340,53 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
+
+    public function testRetrieveConsistentRefundWhenIdIsUndefined()
+    {
+        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+
+        $payment = PayPlug_Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
+        $payment->getConsistentResource();
+    }
+
+    public function testRetrieveConsistentRefundWhenPaymentIdIsUndefined()
+    {
+        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+
+        $payment = PayPlug_Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
+        $payment->getConsistentResource();
+    }
+
+    public function testRetrieveConsistentRefund()
+    {
+        function testRetrieveConsistentRefund_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"id": "re_345", "payment_id": "pay_789"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnValue(true));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+
+        $refund1 = PayPlug_Refund::fromAttributes(array('id' => 're_123', 'payment_id' => 'pay_321'));
+        $refund2 = $refund1->getConsistentResource($this->_configuration);
+
+        $this->assertEquals('re_123', $refund1->id);
+        $this->assertEquals('pay_321', $refund1->payment_id);
+        $this->assertEquals('re_345', $refund2->id);
+        $this->assertEquals('pay_789', $refund2->payment_id);
+    }
 }

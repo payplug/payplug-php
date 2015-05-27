@@ -296,4 +296,43 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
+
+    public function testRetrieveConsistentPaymentWhenIdIsUndefined()
+    {
+        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+
+        $payment = PayPlug_Payment::fromAttributes(array('this_payment' => 'has_no_id'));
+        $payment->getConsistentResource();
+    }
+
+    public function testRetrieveConsistentPayment()
+    {
+        function testRetrieveConsistentPayment_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"id": "pay_345"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnValue(true));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+
+        $payment1 = PayPlug_Payment::fromAttributes(array('id' => 'pay_123'));
+        $payment2 = $payment1->getConsistentResource($this->_configuration);
+
+        $this->assertEquals('pay_123', $payment1->id);
+        $this->assertEquals('pay_345', $payment2->id);
+    }
 }

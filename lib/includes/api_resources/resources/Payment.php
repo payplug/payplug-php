@@ -3,14 +3,14 @@
 /**
  * A Payment
  */
-class PayPlug_Payment extends PayPlug_APIResource
+class PayPlug_Payment extends PayPlug_APIResource implements PayPlug_IConsistencyCheckableAPIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_APIResource The new resource.
+     * @return  PayPlug_Payment The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
@@ -87,9 +87,9 @@ class PayPlug_Payment extends PayPlug_APIResource
      * @param   string                      $paymentId      the payment ID
      * @param   PayPlug_ClientConfiguration $configuration  the client configuration
      *
-     * @return null|PayPlug_Payment the retrieved payment or null on error
+     * @return  null|PayPlug_Payment the retrieved payment or null on error
      *
-     * @throws PayPlug_ConfigurationNotSetException
+     * @throws  PayPlug_ConfigurationNotSetException
      */
     public static function retrieve($paymentId, PayPlug_ClientConfiguration $configuration = null)
     {
@@ -128,5 +128,23 @@ class PayPlug_Payment extends PayPlug_APIResource
         );
 
         return PayPlug_Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
+     * Returns an API resource that you can trust.
+     *
+     * @param   PayPlug_ClientConfiguration $configuration the client configuration.
+     *
+     * @return  PayPlug_APIResource The consistent API resource.
+     *
+     * @throws  PayPlug_UndefinedAttributeException when the local resource is invalid.
+     */
+    function getConsistentResource(PayPlug_ClientConfiguration $configuration = null)
+    {
+        if (!array_key_exists('id', $this->_attributes)) {
+            throw new PayPlug_UndefinedAttributeException('The id of the payment is not set.');
+        }
+
+        return PayPlug_Payment::retrieve($this->_attributes['id'], $configuration);
     }
 }

@@ -1,20 +1,20 @@
 <?php
 
 /**
- * A Hosted Payment
+ * A Credit Card.
  */
-class PayPlug_HostedPayment extends PayPlug_APIResource
+class PayPlug_Card extends PayPlug_APIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_APIResource The new resource.
+     * @return  PayPlug_Card    The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
-        $object = new PayPlug_HostedPayment();
+        $object = new PayPlug_Card();
         $object->initialize($attributes);
         return $object;
     }
