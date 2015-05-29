@@ -1,11 +1,11 @@
 <?php
 
 /**
- * A Consistency Checkable API Resource is an API Resource from which you can retrieve a consistent object.
- * Typically, you need to validate a resource when you received it from a untrustworthy source (e.g. from a
+ * A verifiable API Resource is an API Resource that can be converted into a consistent object.
+ * Typically, you need to verify a resource when you received it from a untrustworthy source (e.g. from a
  * notification).
  */
-interface PayPlug_IConsistencyCheckableAPIResource
+interface PayPlug_IVerifiableAPIResource
 {
     /**
      * Returns an API resource that you can trust.

@@ -28,7 +28,35 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
     /**
      * You can only construct an API resource from a factory. Thus, you cannot use this constructor.
      */
-    protected function __construct(){}
+    protected function __construct()
+    {
+    }
+
+    /**
+     * Tries to recompose an API Resource from its attributes. For example, when you got it from a notification.
+     * The API Resource must have a known 'object' property.
+     *
+     * @param   array   $attributes The attributes of the object.
+     *
+     * @return  PayPlug_IVerifiableAPIResource  An unsafe API Resource.
+     *
+     * @throws  PayPlug_UnknownAPIResourceException When the given object is unknown.
+     */
+    public static function factory(array $attributes)
+    {
+        if (!array_key_exists('object', $attributes)) {
+            throw new PayPlug_UnknownAPIResourceException('Missing "object" property.');
+        }
+
+        switch ($attributes['object']) {
+            case 'payment':
+                return PayPlug_Payment::fromAttributes($attributes);
+            case 'refund':
+                return PayPlug_Refund::fromAttributes($attributes);
+        }
+
+        throw new PayPlug_UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');
+    }
 
     /**
      * Gets an array composed of the attributes of the resource.

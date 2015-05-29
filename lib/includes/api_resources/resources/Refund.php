@@ -3,7 +3,7 @@
 /**
  * A PayPlug_Payment refund.
  */
-class PayPlug_Refund extends PayPlug_APIResource implements PayPlug_IConsistencyCheckableAPIResource
+class PayPlug_Refund extends PayPlug_APIResource implements PayPlug_IVerifiableAPIResource
 {
     /**
      * The factory method that constructs the API resource.

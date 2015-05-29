@@ -10,7 +10,7 @@ class APIRoutesTest extends PHPUnit_Framework_TestCase
     public function testThatRouteStartsWithBaseURL()
     {
         $route = PayPlug_APIRoutes::getRoute(PayPlug_APIRoutes::CREATE_PAYMENT);
-        $expected = PayPlug_APIRoutes::API_BASE_URL . '/v' . PayPlug_APIRoutes::API_VERSION . '/';
+        $expected = PayPlug_APIRoutes::$API_BASE_URL . '/v' . PayPlug_APIRoutes::API_VERSION . '/';
         $beginRoute = substr($route, 0, strlen($expected));
         $this->assertEquals($expected, $beginRoute);
     }

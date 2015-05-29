@@ -202,7 +202,7 @@ class PayPlug_HttpClient
      * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function testRemote() {
-        return $this->request('GET', PayPlug_APIRoutes::$TEST, null, false);
+        return $this->request('GET', PayPlug_APIRoutes::getTestRoute(), null, false);
     }
 
     /**

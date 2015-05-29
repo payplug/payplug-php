@@ -8,13 +8,15 @@ require_once 'includes/exceptions/DependencyException.php';
 require_once 'includes/exceptions/HttpException.php';
 require_once 'includes/exceptions/InvalidPaymentException.php';
 require_once 'includes/exceptions/UndefinedAttributeException.php';
+require_once 'includes/exceptions/UnknownAPIResourceException.php';
 
 require_once 'includes/APIRoutes.php';
 require_once 'includes/ClientConfiguration.php';
 require_once 'includes/HttpClient.php';
+require_once 'includes/Notification.php';
 
 require_once 'includes/api_resources/APIResource.php';
-require_once 'includes/api_resources/IConsistencyCheckableAPIResource.php';
+require_once 'includes/api_resources/IVerifiableAPIResource.php';
 
 require_once 'includes/api_resources/resources/Card.php';
 require_once 'includes/api_resources/resources/Customer.php';
