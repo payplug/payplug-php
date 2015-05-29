@@ -46,4 +46,4 @@ class PayPlug_APIRoutes
         return PayPlug_APIRoutes::$API_BASE_URL . '/test';
     }
 }
-PayPlug_APIRoutes::$API_BASE_URL = 'http://localhost:8080';
+PayPlug_APIRoutes::$API_BASE_URL = 'https://api.payplug.com';

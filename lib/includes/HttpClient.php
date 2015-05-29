@@ -123,7 +123,6 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
  */
 class PayPlug_HttpClient
 {
-    const VERSION = '1.0.0';
     /**
      * @var null|PayPlug_IHttpRequest   set the request wrapper. For test purpose only.
      * You can set this to a mock of PayPlug_IHttpRequest, so that the request will not be performed.
@@ -232,14 +231,15 @@ class PayPlug_HttpClient
             $request = self::$REQUEST_HANDLER;
         }
 
-        $curl_version = curl_version(); // Do not move this inside $headers even if it is used only there.
+        $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
                                         // PHP < 5.4 doesn't support call()['value'] directly.
+        $userAgent = sprintf(
+            'PayPlug-PHP/%s (PHP/%s; curl/%s)', PayPlug_Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
+        );
         $headers = array(
             'Accept: application/json',
             'Content-Type: application/json',
-            'User-Agent: PayPlug PHP Client ' . PayPlug_HttpClient::VERSION,
-            'X-PHP-Version: ' . phpversion(),
-            'X-Curl-Version: ' . $curl_version['version']
+            'User-Agent: ' . $userAgent
         );
         if ($authenticated) {
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();

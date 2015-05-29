@@ -28,8 +28,13 @@ require_once 'includes/api_resources/resources/Refund.php';
 /**
  * Minimal configuration to launch the script.
  */
-class PayPlug_CONFIG
+class PayPlug_Config
 {
+    /**
+     * The library version
+     */
+    const LIBRARY_VERSION = '1.0.0';
+
     /**
      * PHP minimal version required by this library
      */
@@ -53,12 +58,12 @@ class PayPlug_CONFIG
 }
 
 // Check PHP version
-if (version_compare(phpversion(), PayPlug_CONFIG::PHP_MIN_VERSION, "<")) {
-    throw new Exception('This library needs PHP ' . PayPlug_CONFIG::PHP_MIN_VERSION . ' or newer.');
+if (version_compare(phpversion(), PayPlug_Config::PHP_MIN_VERSION, "<")) {
+    throw new Exception('This library needs PHP ' . PayPlug_Config::PHP_MIN_VERSION . ' or newer.');
 }
 
 // Check PHP configuration
-foreach(PayPlug_CONFIG::$REQUIRED_FUNCTIONS as $key => $value) {
+foreach(PayPlug_Config::$REQUIRED_FUNCTIONS as $key => $value) {
     if (!function_exists($key)) {
         throw new PayPlug_DependencyException('This library requires ' . $value . '.');
     }
