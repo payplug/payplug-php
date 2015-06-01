@@ -56,6 +56,10 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'code'      => null,
                 'message'   => null
             ),
+            'metadata'          => array(
+                'a_custom_field'    => 'a custom value',
+                'another_key'       => 'another value'
+            )
         ));
 
         $this->assertEquals('pay_490329', $payment->id);
@@ -88,6 +92,9 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($payment->failure->code);
         $this->assertNull($payment->failure->message);
+
+        $this->assertEquals('a custom value', $payment->metadata['a_custom_field']);
+        $this->assertEquals('another value', $payment->metadata['another_key']);
     }
 
     public function testPaymentCreate()
