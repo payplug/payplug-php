@@ -32,11 +32,13 @@ class Payplug {
         $httpMsg;
         $parameters;
         $process = curl_init($configUrl);
+        $curl_version = curl_version();
 
         curl_setopt($process, CURLOPT_HEADER, true);
         curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($process, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($process, CURLOPT_SSL_VERIFYHOST, true);
+        # >= 7.26 to 7.28.1 add a notice message for value 1 will be remove
+        curl_setopt($process, CURLOPT_SSL_VERIFYHOST, (version_compare($curl_version['version'], '7.21', '<') ? true : 2));
         curl_setopt($process, CURLOPT_USERPWD, $email . ':' . $password);
 
         $answer = curl_exec($process);
