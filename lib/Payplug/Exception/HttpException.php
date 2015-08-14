@@ -1,9 +1,10 @@
 <?php
+namespace Payplug\Exception;
 
 /**
  * HTTP errors
  */
-class PayPlug_HttpException extends PayPlug_PayPlugException
+class HttpException extends \Payplug\Exception\PayPlugException
 {
     /**
      * @var null|string The plain HTTP response.
@@ -11,7 +12,7 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
     private $_httpResponse;
 
     /**
-     * PayPlug_HttpException constructor.
+     * \Payplug\Exception\HttpException constructor.
      *
      * @param   string  $message        the exception message
      * @param   string  $httpResponse   the http response content
@@ -55,48 +56,48 @@ class PayPlug_HttpException extends PayPlug_PayPlugException
 /**
  * 400 Bad Request
  */
-class PayPlug_BadRequestException extends PayPlug_HttpException
+class BadRequestException extends HttpException
 {
 }
 
 /**
  * 401 Unauthorized
  */
-class PayPlug_UnauthorizedException extends PayPlug_HttpException
+class UnauthorizedException extends HttpException
 {
 }
 
 /**
  * 403 Forbidden
  */
-class PayPlug_ForbiddenException extends PayPlug_HttpException
+class ForbiddenException extends HttpException
 {
 }
 
 /**
  * 404 Not Found
  */
-class PayPlug_NotFoundException extends PayPlug_HttpException
+class NotFoundException extends HttpException
 {
 }
 
 /**
  * 405 Not Allowed
  */
-class PayPlug_NotAllowedException extends PayPlug_HttpException
+class NotAllowedException extends HttpException
 {
 }
 
 /**
  * 5XX server errors
  */
-class PayPlug_PayPlugServerException extends PayPlug_HttpException
+class PayPlugServerException extends HttpException
 {
 }
 
 /**
  * Thrown when we expected the API to have a specific format, and we got something else.
  */
-class PayPlug_UnexpectedAPIResponseException extends PayPlug_HttpException
+class UnexpectedAPIResponseException extends HttpException
 {
 }

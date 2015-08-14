@@ -1,9 +1,10 @@
 <?php
+namespace Payplug;
 
 /**
  * Generified HttpRequest so that it can easily be mocked
  */
-interface PayPlug_IHttpRequest
+interface IHttpRequest
 {
     /**
      * Simple wrapper for curl_setopt
@@ -49,9 +50,9 @@ interface PayPlug_IHttpRequest
 }
 
 /**
- * A Curl implementation of a PayPlug_IHttpRequest.
+ * A Curl implementation of a IHttpRequest.
  */
-class PayPlug_CurlRequest implements PayPlug_IHttpRequest
+class CurlRequest implements IHttpRequest
 {
     /**
      * @var resource the curl object
@@ -59,7 +60,7 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
     private $_curl;
 
     /**
-     * PayPlug_CurlRequest constructor
+     * \Payplug\CurlRequest constructor
      * Initializes a curl request
      */
     public function __construct()
@@ -121,28 +122,28 @@ class PayPlug_CurlRequest implements PayPlug_IHttpRequest
  *
  * @note This requires PHP's curl extension.
  */
-class PayPlug_HttpClient
+class HttpClient
 {
     /**
-     * @var null|PayPlug_IHttpRequest   set the request wrapper. For test purpose only.
-     * You can set this to a mock of PayPlug_IHttpRequest, so that the request will not be performed.
+     * @var null|IHttpRequest   set the request wrapper. For test purpose only.
+     * You can set this to a mock of IHttpRequest, so that the request will not be performed.
      */
     public static $REQUEST_HANDLER = null;
 
     /**
-     * @var PayPlug_ClientConfiguration The configuration for the HTTP Client. This configuration will be used to pass
+     * @var \Payplug\Payplug The configuration for the HTTP Client. This configuration will be used to pass
      * the right token in the queries headers.
      */
     private $_configuration;
 
     /**
-     * PayPlug_HttpClient constructor.
+     * HttpClient constructor.
      *
-     * @param   PayPlug_ClientConfiguration $configuration  the client configuration
+     * @param   Authentication $authentication  the client configuration
      */
-    public function __construct(PayPlug_ClientConfiguration $configuration)
+    public function __construct(\Payplug\Payplug $authentication)
     {
-        $this->_configuration = $configuration;
+        $this->_configuration = $authentication;
     }
 
     /**
@@ -157,9 +158,9 @@ class PayPlug_HttpClient
      *  'httpResponse'  => The HTTP response
      * </pre>
      *
-     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
-     * @throws  PayPlug_HttpException                   When status code is not 2xx.
-     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
+     * @throws  \Payplug\Exception\UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  \Payplug\Exception\HttpException                   When status code is not 2xx.
+     * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function post($resource, $data = null)
     {
@@ -178,9 +179,9 @@ class PayPlug_HttpClient
      *  'httpResponse'  => The HTTP response
      * </pre>
      *
-     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
-     * @throws  PayPlug_HttpException                   When status code is not 2xx.
-     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
+     * @throws  \Payplug\Exception\UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  \Payplug\Exception\HttpException                   When status code is not 2xx.
+     * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function get($resource, $data = null)
     {
@@ -196,12 +197,12 @@ class PayPlug_HttpClient
      *  'httpResponse'  => The HTTP response
      * </pre>
      *
-     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
-     * @throws  PayPlug_HttpException                   When status code is not 2xx.
-     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
+     * @throws  \Payplug\Exception\UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  \Payplug\Exception\HttpException                   When status code is not 2xx.
+     * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function testRemote() {
-        return $this->request('GET', PayPlug_APIRoutes::getTestRoute(), null, false);
+        return $this->request('GET', \Payplug\APIRoutes::getTestRoute(), null, false);
     }
 
     /**
@@ -218,14 +219,14 @@ class PayPlug_HttpClient
      *  'httpResponse'  => The HTTP response
      * </pre>
      *
-     * @throws  PayPlug_UnexpectedAPIResponseException  When the API response is not parsable in JSON.
-     * @throws  PayPlug_HttpException                   When status code is not 2xx.
-     * @throws  PayPlug_ConnectionException             When an error was encountered while connecting to the resource.
+     * @throws  \Payplug\Exception\UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  \Payplug\Exception\HttpException                   When status code is not 2xx.
+     * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     private function request($httpVerb, $resource, array $data = null, $authenticated = true)
     {
         if (self::$REQUEST_HANDLER === null) {
-            $request = new PayPlug_CurlRequest();
+            $request = new CurlRequest();
         }
         else {
             $request = self::$REQUEST_HANDLER;
@@ -234,7 +235,7 @@ class PayPlug_HttpClient
         $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
                                         // PHP < 5.4 doesn't support call()['value'] directly.
         $userAgent = sprintf(
-            'PayPlug-PHP/%s (PHP/%s; curl/%s)', PayPlug_Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
+            'PayPlug-PHP/%s (PHP/%s; curl/%s)', \Payplug\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
         );
         $headers = array(
             'Accept: application/json',
@@ -245,7 +246,6 @@ class PayPlug_HttpClient
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
         }
 
-//        $request->setopt(CURLOPT_VERBOSE, true);
         $request->setopt(CURLOPT_FAILONERROR, true);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
@@ -254,9 +254,6 @@ class PayPlug_HttpClient
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
         $request->setopt(CURLOPT_CAINFO, realpath(dirname(__FILE__) . '/../certs/cacert.pem'));
-//        $request->setopt(CURLOPT_SSLVERSION,
-//            defined('CURL_SSLVERSION_TLSv1_2') ? CURL_SSLVERSION_TLSv1_2 : CURL_SSLVERSION_DEFAULT
-//        );
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }
@@ -272,15 +269,22 @@ class PayPlug_HttpClient
 
         $request->close();
 
-        // If there was an error with curl
-        if ($result['httpResponse'] === false || $errorCode) {
-            $this->throwConnectionException($errorCode, $errorMessage);
+        // We want manage errors from HTTP in standards cases
+        $curlStatusNotManage = array(
+            0, // CURLE_OK
+            22 // CURLE_HTTP_NOT_FOUND or CURLE_HTTP_RETURNED_ERROR
+        );
+
+        // If there was an HTTP error
+        //@codeCoverageIgnoreEnd
+        if (in_array($errorCode, $curlStatusNotManage) && substr($result['httpStatus'], 0, 1) !== '2') {
+            $this->throwRequestException($result['httpResponse'], $result['httpStatus']);
         //@codeCoverageIgnoreStart
         // Unreachable bracket marked as executable by old versions of XDebug
-        } // If there was an HTTP error
+        } // If there was an error with curl
         //@codeCoverageIgnoreEnd
-        elseif (substr($result['httpStatus'], 0, 1) !== '2') {
-            $this->throwRequestException($result['httpResponse'], $result['httpStatus']);
+        elseif ($result['httpResponse'] === false || $errorCode) {
+            $this->throwConnectionException($result['httpStatus'], $errorMessage);
         //@codeCoverageIgnoreStart
         // Unreachable bracket marked as executable by old versions of XDebug
         }
@@ -289,7 +293,7 @@ class PayPlug_HttpClient
         $result['httpResponse'] = json_decode($result['httpResponse'], true);
 
         if ($result['httpResponse'] === null) {
-            throw new PayPlug_UnexpectedAPIResponseException('API response is not valid JSON.', $result['httpResponse']);
+            throw new \Payplug\Exception\UnexpectedAPIResponseException('API response is not valid JSON.', $result['httpResponse']);
         }
 
         return $result;
@@ -301,11 +305,11 @@ class PayPlug_HttpClient
      * @param   int     $errorCode      the curl error code
      * @param   string  $errorMessage   the error message
      *
-     * @throws  PayPlug_ConnectionException
+     * @throws  \Payplug\Exception\ConnectionException
      */
     private function throwConnectionException($errorCode, $errorMessage)
     {
-        throw new PayPlug_ConnectionException(
+        throw new \Payplug\Exception\ConnectionException(
             'Connection to the API failed with the following message: ' . $errorMessage, $errorCode
         );
     }
@@ -316,7 +320,7 @@ class PayPlug_HttpClient
      * @param   string  $httpResponse   the HTTP response
      * @param   int     $httpStatus     the HTTP status
      *
-     * @throws  PayPlug_HttpException   the generated exception from the request
+     * @throws  \Payplug\Exception\HttpException   the generated exception from the request
      */
     private function throwRequestException($httpResponse, $httpStatus)
     {
@@ -324,7 +328,7 @@ class PayPlug_HttpClient
 
         // Error 5XX
         if (substr($httpStatus, 0, 1) === '5') {
-            throw new PayPlug_PayPlugServerException('Unexpected server error during the request.',
+            throw new \Payplug\Exception\PayPlugServerException('Unexpected server error during the request.',
                 $httpResponse,
                 $httpStatus
             );
@@ -332,26 +336,26 @@ class PayPlug_HttpClient
 
         switch ($httpStatus) {
             case 400:
-                throw new PayPlug_BadRequestException('Bad request.', $httpResponse, $httpStatus);
+                throw new \Payplug\Exception\BadRequestException('Bad request.', $httpResponse, $httpStatus);
                 break;
             case 401:
-                throw new PayPlug_UnauthorizedException('Unauthorized. Please check your credentials.',
+                throw new \Payplug\Exception\UnauthorizedException('Unauthorized. Please check your credentials.',
                     $httpResponse, $httpStatus);
                 break;
             case 403:
-                throw new PayPlug_ForbiddenException('Forbidden error. You are not allowed to access this resource.',
+                throw new \Payplug\Exception\ForbiddenException('Forbidden error. You are not allowed to access this resource.',
                     $httpResponse, $httpStatus);
                 break;
             case 404:
-                throw new PayPlug_NotFoundException('The resource you requested could not be found.',
+                throw new \Payplug\Exception\NotFoundException('The resource you requested could not be found.',
                     $httpResponse, $httpStatus);
                 break;
             case 405:
-                throw new PayPlug_NotAllowedException('The requested method is not supported by this resource.',
+                throw new \Payplug\Exception\NotAllowedException('The requested method is not supported by this resource.',
                     $httpResponse, $httpStatus);
                 break;
         }
 
-        throw new PayPlug_HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);
+        throw new \Payplug\Exception\HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);
     }
 }

@@ -1,16 +1,14 @@
 {
   "name": "PayPlug/PHPClient",
   "description": "PHP client for PayPlug public API!",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "library",
   "homepage": "https://www.payplug.com",
   "time": "2015-05-06",
   "license": "Proprietary",
   "authors": [
     {
-      "name": "Nils Le Roux",
-      "email": "nleroux@payplug.com",
-      "role": "Developer"
+      "email": "support@payplug.com",
     }
   ],
   "require": {

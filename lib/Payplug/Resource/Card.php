@@ -1,20 +1,21 @@
 <?php
+namespace Payplug\Resource;
 
 /**
- * Payment Failure information
+ * A Credit Card.
  */
-class PayPlug_PaymentFailure extends PayPlug_APIResource
+class Card extends \Payplug\APIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_PaymentFailure  The new resource.
+     * @return  Card    The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
-        $object = new PayPlug_PaymentFailure();
+        $object = new Card();
         $object->initialize($attributes);
         return $object;
     }

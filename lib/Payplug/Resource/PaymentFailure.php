@@ -1,20 +1,21 @@
 <?php
+namespace Payplug\Resource;
 
 /**
- * A Hosted Payment
+ * Payment Failure information
  */
-class PayPlug_HostedPayment extends PayPlug_APIResource
+class PaymentFailure extends \Payplug\APIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_HostedPayment   The new resource.
+     * @return  PaymentFailure  The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
-        $object = new PayPlug_HostedPayment();
+        $object = new PaymentFailure();
         $object->initialize($attributes);
         return $object;
     }

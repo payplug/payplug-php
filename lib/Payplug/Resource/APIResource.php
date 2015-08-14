@@ -1,16 +1,17 @@
 <?php
+namespace Payplug;
 
 /**
  * Interface designed to force resources to implement at least one factory.
  */
-interface PayPlug_IAPIResourceFactory
+interface IAPIResourceFactory
 {
     /**
      * The factory method that constructs the API resource.
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  PayPlug_APIResource The new resource.
+     * @return  APIResource The new resource.
      */
     static function fromAttributes(array $attributes);
 }
@@ -18,7 +19,7 @@ interface PayPlug_IAPIResourceFactory
 /**
  * A simple API resource
  */
-abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
+abstract class APIResource implements IAPIResourceFactory
 {
     /**
      * The resource attributes
@@ -38,24 +39,24 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
      *
      * @param   array   $attributes The attributes of the object.
      *
-     * @return  PayPlug_IVerifiableAPIResource  An unsafe API Resource.
+     * @return  IVerifiableAPIResource  An unsafe API Resource.
      *
-     * @throws  PayPlug_UnknownAPIResourceException When the given object is unknown.
+     * @throws  \Payplug\Exception\UnknownAPIResourceException When the given object is unknown.
      */
     public static function factory(array $attributes)
     {
         if (!array_key_exists('object', $attributes)) {
-            throw new PayPlug_UnknownAPIResourceException('Missing "object" property.');
+            throw new \Payplug\Exception\UnknownAPIResourceException('Missing "object" property.');
         }
 
         switch ($attributes['object']) {
             case 'payment':
-                return PayPlug_Payment::fromAttributes($attributes);
+                return \Payplug\Resource\Payment::fromAttributes($attributes);
             case 'refund':
-                return PayPlug_Refund::fromAttributes($attributes);
+                return \Payplug\Resource\Refund::fromAttributes($attributes);
         }
 
-        throw new PayPlug_UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');
+        throw new \Payplug\Exception\UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');
     }
 
     /**
@@ -85,7 +86,7 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
      *
      * @return  mixed   The value of the attribute
      *
-     * @throws  PayPlug_UndefinedAttributeException
+     * @throws  \Payplug\Exception\UndefinedAttributeException
      */
     public function __get($attribute)
     {
@@ -93,7 +94,7 @@ abstract class PayPlug_APIResource implements PayPlug_IAPIResourceFactory
             return $this->_attributes[$attribute];
         }
 
-        throw new PayPlug_UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
+        throw new \Payplug\Exception\UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
     }
 
     /**

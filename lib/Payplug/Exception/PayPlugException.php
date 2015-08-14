@@ -1,10 +1,11 @@
 <?php
+namespace Payplug\Exception;
 
 /**
  * PayPlug's generic exception.
  * You can catch this exception to catch every PayPlug related exception.
  */
-abstract class PayPlug_PayPlugException extends Exception
+abstract class PayPlugException extends \Exception
 {
     /**
      * A normalized string representation of the exception.

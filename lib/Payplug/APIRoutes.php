@@ -1,8 +1,10 @@
 <?php
+namespace Payplug;
+
 /**
  * Defines the routes to PayPlug's API.
  */
-class PayPlug_APIRoutes
+class APIRoutes
 {
     /**
      * @var string  the root URL of the API.
@@ -14,6 +16,7 @@ class PayPlug_APIRoutes
     // Payments routes
     const CREATE_PAYMENT    = '/payments';
     const RETRIEVE_PAYMENT  = '/payments/{PAYMENT_ID}';
+    const LIST_PAYMENTS     = '/payments';
 
     // Refunds routes
     const CREATE_REFUND     = '/payments/{PAYMENT_ID}/refunds';
@@ -43,7 +46,8 @@ class PayPlug_APIRoutes
      */
     public static function getTestRoute()
     {
-        return PayPlug_APIRoutes::$API_BASE_URL . '/test';
+        return APIRoutes::$API_BASE_URL . '/test';
     }
 }
-PayPlug_APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
+
+APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
