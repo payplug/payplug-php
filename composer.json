@@ -8,7 +8,8 @@
   "license": "Proprietary",
   "authors": [
     {
-      "email": "support@payplug.com",
+      "name": "PayPlug",
+      "email": "support@payplug.com"
     }
   ],
   "require": {

@@ -1,15 +1,16 @@
 <?php
+namespace Payplug\Resource;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class CardTest extends PHPUnit_Framework_TestCase
+class CardTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCardFromAttributes()
     {
-        $card = PayPlug_Card::fromAttributes(array(
+        $card = \Payplug\Resource\Card::fromAttributes(array(
             'last4'     => '1234',
             'country'   => 'FR',
             'exp_year'  => 2022,

@@ -1,15 +1,16 @@
 <?php
+namespace Payplug\Resource;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class PaymentFailureTest extends PHPUnit_Framework_TestCase
+class PaymentFailureTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreatePaymentFailureFromAttributes()
     {
-        $paymentFailure = PayPlug_PaymentFailure::fromAttributes(array(
+        $paymentFailure = \Payplug\Resource\PaymentFailure::fromAttributes(array(
             'code'      => 'card_stolen',
             'message'   => 'The card is stolen.'
         ));

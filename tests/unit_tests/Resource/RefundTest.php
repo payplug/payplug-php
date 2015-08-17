@@ -1,27 +1,28 @@
 <?php
+namespace Payplug\Resource;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class RefundTest extends PHPUnit_Framework_TestCase
+class RefundTest extends \PHPUnit_Framework_TestCase
 {
     private $_requestMock;
     private $_configuration;
 
     protected function setUp()
     {
-        $this->_configuration = new PayPlug_ClientConfiguration('abc', 'cba', true);
-        PayPlug_ClientConfiguration::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
+        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
-        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
+        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreateRefundFromAttributes()
     {
-        $refund = PayPlug_Refund::fromAttributes(array(
+        $refund = \Payplug\Resource\Refund::fromAttributes(array(
             'id'            => 're_390312',
             'payment_id'    => 'pay_490329',
             'object'        => 'refund',
@@ -40,24 +41,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRefundCreateFromPaymentId()
     {
-        function testRefundCreateFromPaymentId_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testRefundCreateFromPaymentId_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -67,13 +51,26 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundCreateFromPaymentId_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundCreateFromPaymentId_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refund = PayPlug_Refund::create('a_payment_id', array('amount' => 3300));
+        $refund = \Payplug\Resource\Refund::create('a_payment_id', array('amount' => 3300));
 
         $this->assertEquals('ok', $refund->status);
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -83,24 +80,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRefundCreateFromPaymentObject()
     {
-        function testRefundCreateFromPaymentObject_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testRefundCreateFromPaymentObject_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -110,14 +90,27 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundCreateFromPaymentObject_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundCreateFromPaymentObject_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refund = PayPlug_Refund::create(
-            PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id')),
+        $refund = \Payplug\Resource\Refund::create(
+            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id')),
             array('amount' => 3300)
         );
 
@@ -136,8 +129,6 @@ class RefundTest extends PHPUnit_Framework_TestCase
             }
             return null;
         }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
         function testRefundRetrieveFromPaymentId_setopt($option, $value = null) {
             switch($option) {
@@ -156,13 +147,26 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundCreateFromPaymentId_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundCreateFromPaymentId_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refund = PayPlug_Refund::retrieve('a_payment_id', 'a_refund_id');
+        $refund = \Payplug\Resource\Refund::retrieve('a_payment_id', 'a_refund_id');
 
         $this->assertEquals('ok', $refund->status);
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -173,24 +177,8 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRefundRetrieveFromPaymentObject()
     {
-        function testRefundRetrieveFromPaymentObject_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testRefundRetrieveFromPaymentObject_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
+        
 
         $this->_requestMock
             ->expects($this->once())
@@ -200,14 +188,27 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundRetrieveFromPaymentObject_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundRetrieveFromPaymentObject_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refund = PayPlug_Refund::retrieve(
-            PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id')),
+        $refund = \Payplug\Resource\Refund::retrieve(
+            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id')),
             'a_refund_id'
         );
 
@@ -220,15 +221,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRefundsListThrowsExceptionOnWongAPIResponse()
     {
-        $this->setExpectedException('PayPlug_UnexpectedAPIResponseException');
-
-        function testRefundsListThrowsExceptionOnWongAPIResponse_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
+        $this->setExpectedException('\PayPlug\Exception\UnexpectedAPIResponseException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -238,31 +231,20 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundsListThrowsExceptionOnWongAPIResponse_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
-        PayPlug_Refund::listRefunds('a_payment_id');
+        \Payplug\Resource\Refund::listRefunds('a_payment_id');
     }
 
     public function testRefundsListFromPaymentId()
     {
-        function testRefundsListFromPaymentId_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testRefundsListFromPaymentId_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -272,13 +254,26 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundsListFromPaymentId_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundsListFromPaymentId_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refunds = PayPlug_Refund::listRefunds('a_payment_id');
+        $refunds = \Payplug\Resource\Refund::listRefunds('a_payment_id')['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));
@@ -293,24 +288,7 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRefundsListFromPaymentObject()
     {
-        function testRefundsListFromPaymentObject_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testRefundsListFromPaymentObject_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -320,15 +298,28 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testRefundRetrieveFromPaymentObject_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testRefundRetrieveFromPaymentObject_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $refunds = PayPlug_Refund::listRefunds(
-            PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'))
-        );
+        $refunds = \Payplug\Resource\Refund::listRefunds(
+            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'))
+        )['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));
@@ -343,17 +334,17 @@ class RefundTest extends PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentRefundWhenIdIsUndefined()
     {
-        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = PayPlug_Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
+        $payment = \Payplug\Resource\Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
         $payment->getConsistentResource();
     }
 
     public function testRetrieveConsistentRefundWhenPaymentIdIsUndefined()
     {
-        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = PayPlug_Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
+        $payment = \Payplug\Resource\Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
         $payment->getConsistentResource();
     }
 
@@ -379,9 +370,15 @@ class RefundTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
-        $refund1 = PayPlug_Refund::fromAttributes(array('id' => 're_123', 'payment_id' => 'pay_321'));
+        $refund1 = \Payplug\Resource\Refund::fromAttributes(array('id' => 're_123', 'payment_id' => 'pay_321'));
         $refund2 = $refund1->getConsistentResource($this->_configuration);
 
         $this->assertEquals('re_123', $refund1->id);

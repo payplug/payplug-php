@@ -1,32 +1,26 @@
 <?php
+namespace Payplug;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class HttpClientTest extends PHPUnit_Framework_TestCase
+class HttpClientTest extends \PHPUnit_Framework_TestCase
 {
     private $_httpClient;
     private $_requestMock;
 
     protected function setUp()
     {
-        $this->_httpClient = new PayPlug_HttpClient(new PayPlug_ClientConfiguration('abc', 'cba', 123));
+        $this->_httpClient = new \Payplug\HttpClient(new \Payplug\Payplug('abc'));
 
-        $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
-        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
+        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testPost()
     {
-        function testPost_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -35,7 +29,13 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPost_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
         $result = $this->_httpClient->post('somewhere');
 
@@ -60,7 +60,13 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPost_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
         $result = $this->_httpClient->get('somewhere_else');
 
@@ -70,15 +76,8 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
     public function testError500()
     {
-        function testError500_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 500;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_PayPlugServerException');
+        $this->setExpectedException('\PayPlug\Exception\PayPlugServerException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -87,22 +86,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError500_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 500;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testError400()
     {
-        function testError400_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 400;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_BadRequestException');
+        $this->setExpectedException('\PayPlug\Exception\BadRequestException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -111,22 +109,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError400_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 400;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testError401()
     {
-        function testError401_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 401;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_UnauthorizedException');
+        $this->setExpectedException('\PayPlug\Exception\UnauthorizedException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -135,22 +132,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError401_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 401;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testError403()
     {
-        function testError403_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 403;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_ForbiddenException');
+        $this->setExpectedException('\PayPlug\Exception\ForbiddenException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -159,22 +155,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError403_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 403;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testError404()
     {
-        function testError404_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 404;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_NotFoundException');
+        $this->setExpectedException('\PayPlug\Exception\NotFoundException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -183,22 +178,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError404_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 404;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testError405()
     {
-        function testError405_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 405;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_NotAllowedException');
+        $this->setExpectedException('\PayPlug\Exception\NotAllowedException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -207,22 +201,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError405_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 405;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testErrorUnknown()
     {
-        function testError418_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 418;
-            }
-            return null;
-        }
 
-        $this->setExpectedException('PayPlug_HttpException');
+        $this->setExpectedException('\PayPlug\Exception\HttpException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -231,32 +224,20 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testError418_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 418;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }
 
     public function testNotEmptyData()
     {
-        function testNotEmptyData_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
-        function testNotEmptyData_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_POSTFIELDS:
-                    $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
-                    return true;
-            }
-
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -265,11 +246,24 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testNotEmptyData_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testNotEmptyData_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
 
         $result = $this->_httpClient->get('somewhere_else', array('foo' => 'bar'));
 
@@ -282,15 +276,9 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
     function testInvalidAPIResponse()
     {
-        $this->setExpectedException('PayPlug_UnexpectedAPIResponseException');
+        $this->setExpectedException('\PayPlug\Exception\UnexpectedAPIResponseException');
 
-        function testInvalidAPIResponse_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
+        
 
         $this->_requestMock
             ->expects($this->once())
@@ -299,7 +287,13 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testInvalidAPIResponse_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere_else');
     }
@@ -308,15 +302,9 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
     function testConnectionError()
     {
-        $this->setExpectedException('PayPlug_ConnectionException');
+        $this->setExpectedException('\PayPlug\Exception\ConnectionException');
 
-        function testConnectionError_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 0;
-            }
-            return null;
-        }
+        
 
         function testConnectionError_errno($option) {
             switch($option) {
@@ -341,7 +329,13 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testConnectionError_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 0;
+                }
+                return null;
+            }));
 
         $this->_httpClient->get('somewhere');
     }

@@ -1,15 +1,16 @@
 <?php
+namespace Payplug\Resource;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class HostedPaymentTest extends PHPUnit_Framework_TestCase
+class HostedPaymentTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateHostedPaymentFromAttributes()
     {
-        $hostedPayment = PayPlug_HostedPayment::fromAttributes(array(
+        $hostedPayment = \Payplug\Resource\HostedPayment::fromAttributes(array(
             'payment_url'       => 'https://www.payplug.com/pay/test/7ZcMGi6KNnVT5H7o9hms9g',
             'notification_url'  => 'https://www.payplug.com/?notification',
             'return_url'        => 'https://www.payplug.com/?return',

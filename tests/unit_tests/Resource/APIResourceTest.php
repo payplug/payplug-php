@@ -1,6 +1,7 @@
 <?php
+namespace Payplug;
 
-class APIResourceMock extends PayPlug_APIResource
+class APIResourceMock extends \Payplug\APIResource
 {
     static function fromAttributes(array $attributes)
     {
@@ -15,7 +16,7 @@ class APIResourceMock extends PayPlug_APIResource
  * @group ci
  * @group recommended
  */
-class APIResourceTest extends PHPUnit_Framework_TestCase
+class APIResourceTest extends \PHPUnit_Framework_TestCase
 {
     private $_myApiResource = null;
 
@@ -29,7 +30,7 @@ class APIResourceTest extends PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionWhenKeyDoesNotExist()
     {
-        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
         $this->_myApiResource->an_undefined_attribute;
     }
 
@@ -39,8 +40,8 @@ class APIResourceTest extends PHPUnit_Framework_TestCase
             'id'        =>  'pay_123',
             'object'    =>  'payment'
         );
-        $payment = PayPlug_APIResource::factory($attributes);
-        $this->assertTrue($payment instanceof PayPlug_Payment);
+        $payment = \Payplug\APIResource::factory($attributes);
+        $this->assertTrue($payment instanceof \Payplug\Resource\Payment);
         $this->assertEquals('pay_123', $payment->id);
     }
 
@@ -50,27 +51,27 @@ class APIResourceTest extends PHPUnit_Framework_TestCase
             'id'        =>  're_123',
             'object'    =>  'refund'
         );
-        $refund = PayPlug_APIResource::factory($attributes);
-        $this->assertTrue($refund instanceof PayPlug_Refund);
+        $refund = \Payplug\APIResource::factory($attributes);
+        $this->assertTrue($refund instanceof \Payplug\Resource\Refund);
         $this->assertEquals('re_123', $refund->id);
     }
 
     public function testAPIResourceFactoryWhenObjectIsNotDefined()
     {
-        $this->setExpectedException('PayPlug_UnknownAPIResourceException');
+        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
         $attributes = array(
             'id'    => 'a_random_object'
         );
-        PayPlug_APIResource::factory($attributes);
+        \Payplug\APIResource::factory($attributes);
     }
 
     public function testAPIResourceFectoryWhenObjectIsUnknown()
     {
-        $this->setExpectedException('PayPlug_UnknownAPIResourceException');
+        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
         $attributes = array(
             'id'        => 'a_random_object',
             'object'    => 'an_unknown_object'
         );
-        PayPlug_APIResource::factory($attributes);
+        \Payplug\APIResource::factory($attributes);
     }
 }

@@ -141,6 +141,6 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
             throw new \Payplug\Exception\UndefinedAttributeException('The payment_id of the refund is not set.');
         }
 
-        return \Payplug\Refund::retrieve($this->_attributes['payment_id'], $this->_attributes['id'], $payplug);
+        return \Payplug\Resource\Refund::retrieve($this->_attributes['payment_id'], $this->_attributes['id'], $payplug);
     }
 }

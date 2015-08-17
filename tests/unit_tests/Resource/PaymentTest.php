@@ -1,27 +1,28 @@
 <?php
+namespace Payplug\Resource;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class PaymentTest extends PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit_Framework_TestCase
 {
     private $_requestMock;
     private $_configuration;
 
     protected function setUp()
     {
-        $this->_configuration = new PayPlug_ClientConfiguration('abc', 'cba', true);
-        PayPlug_ClientConfiguration::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new \Payplug\Payplug('abc');
+        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
-        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
+        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreatePaymentFromAttributes()
     {
-        $payment = PayPlug_Payment::fromAttributes(array(
+        $payment = \Payplug\Resource\Payment::fromAttributes(array(
             'id'                => 'pay_490329',
             'object'            => 'payment',
             'is_live'           => true,
@@ -46,11 +47,13 @@ class PaymentTest extends PHPUnit_Framework_TestCase
             ),
             'hosted_payment'    => array(
                 'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
-                'ipn_url'           => 'http://yourwebsite.com/payplug_ipn',
                 'return_url'        => 'http://yourwebsite.com/payplug_return?someid=11235',
                 'cancel_url'        => 'http://yourwebsite.com/payplug_cancel?someid=81321',
-                'paid_at'           => 1410437806,
-                'ipn_answer_code'   => 200
+                'paid_at'           => 1410437806
+            ),
+            'notification'  => array(
+                'url'  => 'http://yourwebsite.com/payplug_ipn',
+                'response_code'  => 200
             ),
             'failure'           => array(
                 'code'      => null,
@@ -84,11 +87,12 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Doe', $payment->customer->last_name);
 
         $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $payment->hosted_payment->payment_url);
-        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $payment->hosted_payment->ipn_url);
+
         $this->assertEquals('http://yourwebsite.com/payplug_return?someid=11235', $payment->hosted_payment->return_url);
         $this->assertEquals('http://yourwebsite.com/payplug_cancel?someid=81321', $payment->hosted_payment->cancel_url);
         $this->assertEquals(1410437806, $payment->hosted_payment->paid_at);
-        $this->assertEquals(200, $payment->hosted_payment->ipn_answer_code);
+        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $payment->notification->url);
+        $this->assertEquals(200, $payment->notification->response_code);
 
         $this->assertNull($payment->failure->code);
         $this->assertNull($payment->failure->message);
@@ -99,24 +103,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentCreate()
     {
-        function testPaymentCreate_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
-        function testPaymentCreate_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_POSTFIELDS:
-                    $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -126,13 +113,26 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->atLeastOnce())
             ->method('setopt')
-            ->will($this->returnCallback('testPaymentCreate_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentCreate_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
-        $payment = PayPlug_Payment::create(array(
+        $payment = \Payplug\Resource\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(
@@ -141,10 +141,10 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'last_name'     => 'Doe'
             ),
             'hosted_payment'    => array(
-                'notification_url'  => 'http://www.example.org/callbackURL',
                 'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
                 'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
             ),
+            'notification_url'  => 'http://www.example.org/callbackURL',
             'force_3ds'         => false
         ));
 
@@ -156,24 +156,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentRetrieve()
     {
-        function testPaymentRetrieve_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testPaymentRetrieve_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -183,13 +166,26 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentRetrieve_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testPaymentRetrieve_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $payment = PayPlug_Payment::retrieve('a_payment_id');
+        $payment = \Payplug\Resource\Payment::retrieve('a_payment_id');
 
         $this->assertStringEndsWith('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals('ok', $payment->status);
@@ -197,34 +193,47 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
 
+    public function testPaymentList()
+    {
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"data":[{"id": "payment1"}, {"id": "payment2"}]}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payments = \Payplug\Resource\Payment::listPayments()['data'];
+        $this->assertEquals(2, count($payments));
+        $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
+        $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
+        $this->assertTrue($payments[0]->id !== $payments[1]->id);
+
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
+
     public function testPaymentRefundWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('PayPlug_InvalidPaymentException');
+        $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
 
-        $payment = PayPlug_Payment::fromAttributes(array('fake' => 'payment'));
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('fake' => 'payment'));
         $payment->refund(array('amount' => 3300));
     }
 
     public function testPaymentRefund()
     {
-        function testPaymentRefund_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testPaymentRefund_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -234,13 +243,26 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentRefund_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testPaymentRefund_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $payment = PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
         $payment->refund(array('amount' => 3300));
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -250,32 +272,15 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentListRefundsWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('PayPlug_InvalidPaymentException');
+        $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
 
-        $payment = PayPlug_Payment::fromAttributes(array('fake' => 'payment'));
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('fake' => 'payment'));
         $payment->listRefunds();
     }
 
     public function testPaymentListRefunds()
     {
-        function testPaymentListRefunds_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        // Anonymous functions not available with PHP 5.2 :(
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        function testPaymentListRefunds_setopt($option, $value = null) {
-            switch($option) {
-                case CURLOPT_URL:
-                    $GLOBALS['CURLOPT_URL_DATA'] = $value;
-                    return true;
-            }
-            return true;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -285,14 +290,27 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
         $this->_requestMock
             ->expects($this->any())
             ->method('setopt')
-            ->will($this->returnCallback('testPaymentListRefunds_setopt'));
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
 
-        $payment = PayPlug_Payment::fromAttributes(array('id' => 'a_payment_id'));
-        $refunds = $payment->listRefunds();
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $refunds = $payment->listRefunds()['data'];
 
         $this->assertEquals(2, count($refunds));
         $this->assertTrue($refunds[0]->id === 'refund1' || $refunds[0]->id === 'refund2');
@@ -306,9 +324,9 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentPaymentWhenIdIsUndefined()
     {
-        $this->setExpectedException('PayPlug_UndefinedAttributeException');
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = PayPlug_Payment::fromAttributes(array('this_payment' => 'has_no_id'));
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('this_payment' => 'has_no_id'));
         $payment->getConsistentResource();
     }
 
@@ -334,9 +352,15 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testPaymentListRefunds_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
-        $payment1 = PayPlug_Payment::fromAttributes(array('id' => 'pay_123'));
+        $payment1 = \Payplug\Resource\Payment::fromAttributes(array('id' => 'pay_123'));
         $payment2 = $payment1->getConsistentResource($this->_configuration);
 
         $this->assertEquals('pay_123', $payment1->id);

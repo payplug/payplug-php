@@ -24,6 +24,9 @@ class Payplug
      */
     public function __construct($token)
     {
+        if (!is_string($token)) {
+            throw new \Payplug\Exception\ConfigurationException('Expected string values for token.');
+        }
         $this->_token = $token;
     }
 
@@ -45,7 +48,7 @@ class Payplug
     public static function setSecretKey($token)
     {
         if (!is_string($token)) {
-            throw new \Payplug\Exception\ConfigurationException('Expected string values for key "TOKEN".');
+            throw new \Payplug\Exception\ConfigurationException('Expected string values for the token.');
         }
 
         $clientConfiguration = new Payplug($token);
@@ -75,7 +78,7 @@ class Payplug
     public static function getDefaultConfiguration()
     {
         if (self::$_defaultConfiguration === null) {
-                throw new Payplug\Exception\ConfigurationNotSetException('Unable to find an authentication.');
+                throw new \Payplug\Exception\ConfigurationNotSetException('Unable to find an authentication.');
         }
 
         return self::$_defaultConfiguration;

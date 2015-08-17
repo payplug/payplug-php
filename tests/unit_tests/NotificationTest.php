@@ -1,11 +1,12 @@
 <?php
+namespace Payplug;
 
 /**
 * @group unit
 * @group ci
 * @group recommended
 */
-class NotificationTest extends PHPUnit_Framework_TestCase
+class NotificationTest extends \PHPUnit_Framework_TestCase
 {
 
     private $_requestMock;
@@ -13,22 +14,15 @@ class NotificationTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new PayPlug_ClientConfiguration('abc', 'cba', true);
-        PayPlug_ClientConfiguration::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
+        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('PayPlug_IHttpRequest');
-        PayPlug_HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
+        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testTreatPayment()
     {
-        function testTreatPayment_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
 
         $this->_requestMock
             ->expects($this->once())
@@ -37,23 +31,29 @@ class NotificationTest extends PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback('testTreatPayment_getinfo'));
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
 
         $body = '{ "id": "pay_123", "object": "payment" }';
-        $payment = PayPlug_Notification::treat($body, $this->_configuration);
+        $payment = \Payplug\Notification::treat($body, $this->_configuration);
         $this->assertTrue($payment instanceof $payment);
         $this->assertEquals('real_payment', $payment->id);
     }
 
     public function testTreatWhenBodyIsNotValidJSON()
     {
-        $this->setExpectedException('PayPlug_UnknownAPIResourceException');
+        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
 
         $this->_requestMock
             ->expects($this->never())
             ->method('exec');
 
         $body = 'invalidJSON';
-        PayPlug_Notification::treat($body, $this->_configuration);
+        \Payplug\Notification::treat($body, $this->_configuration);
     }
 }

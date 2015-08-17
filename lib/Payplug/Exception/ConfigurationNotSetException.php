@@ -11,6 +11,6 @@ class ConfigurationException extends \Payplug\Exception\PayPlugException
 /**
  * Unable to find a client configuration exception.
  */
-class ConfigurationNotSetException extends ConfigurationException
+class ConfigurationNotSetException extends \Payplug\Exception\ConfigurationException
 {
 }
