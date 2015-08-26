@@ -223,6 +223,41 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
 
+
+    public function testPaymentPaginationList()
+    {
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"per_page": 1, "page": 0, "data":[{"id": "payment1"}]}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $perPage = 1;
+        $page = 0;
+        $payments = \PayPlug\Resource\Payment::listPayments($perPage, $page);
+
+        $this->assertEquals($payments['per_page'], 1);
+        $this->assertEquals($payments['page'], 0);
+        $payments = $payments['data'];
+        $this->assertEquals(1, count($payments));
+        $this->assertTrue($payments[0]->id == 'payment1');
+
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
+
     public function testPaymentRefundWhenPaymentIsInvalid()
     {
         $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');

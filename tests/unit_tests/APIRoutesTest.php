@@ -32,6 +32,23 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $endRoute);
     }
 
+    public function testListpaymentsRoute()
+    {
+        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS);
+        $expected = '/payments';
+        $endRoute = substr($route, -strlen($expected));
+        $this->assertEquals($expected, $endRoute);
+    }
+
+    public function testListpaymentspaginationRoute()
+    {
+        $pagination = array('perPage' => 5, 'page' => 1);
+        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS, array(), $pagination);
+        $expected = '/payments?perPage=5&page=1';
+        $endRoute = substr($route, -strlen($expected));
+        $this->assertEquals($expected, $endRoute);
+    }
+
     public function testCreateRefundRoute()
     {
         $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => 'foo'));

@@ -31,12 +31,15 @@ class APIRoutes
      *
      * @return  string  the full URL to the resource
      */
-    public static function getRoute($route, array $parameters = array())
+    public static function getRoute($route, array $parameters = array(), array $pagination = array())
     {
         foreach ($parameters as $parameter => $value) {
             $route = str_replace('{' . $parameter . '}', $value, $route);
         }
-        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route;
+        $query_pagination = '';
+        if (!empty($pagination))
+            $query_pagination = '?' . http_build_query($pagination);
+        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route . $query_pagination;
     }
 
     /**

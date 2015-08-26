@@ -93,7 +93,7 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
      * @throws \Payplug\Exception\ConfigurationNotSetException
      * @throws \Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function listRefunds($payment, \Payplug\Payplug $payplug = null)
+    public static function listRefunds($payment, $perPage = null, $page = null, \Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
@@ -103,8 +103,10 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
         }
 
         $httpClient = new \Payplug\HttpClient($payplug);
+        $pagination = array('per_page' => $perPage, 'page' => $page);
+
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment))
+            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment), $pagination)
         );
 
         if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {

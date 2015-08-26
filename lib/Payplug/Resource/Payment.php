@@ -76,13 +76,13 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
      * @throws  \Payplug\Exception\InvalidPaymentException
      * @throws  \Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listRefunds(\Payplug\Payplug $payplug = null)
+    public function listRefunds($perPage = null, $page = null, \Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) {
             throw new \Payplug\Exception\InvalidPaymentException("This payment object has no id. You can't list refunds on it.");
         }
 
-        return Refund::listRefunds($this->id, $payplug);
+        return Refund::listRefunds($this->id, $perPage, $page, $payplug);
     }
 
     /**
@@ -119,15 +119,17 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
      * @throws  \Payplug\Exception\InvalidPaymentException
      * @throws  \Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listPayments(\Payplug\Payplug $payplug = null)
+    public function listPayments($perPage = null, $page = null, \Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
         }
 
         $httpClient = new \Payplug\HttpClient($payplug);
+        $parameters = array();
+        $pagination = array('per_page' => $perPage, 'page' => $page);
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS)
+            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS, $parameters, $pagination)
         );
 
         if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
