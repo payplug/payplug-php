@@ -246,7 +246,7 @@ class HttpClient
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
         }
 
-        $request->setopt(CURLOPT_FAILONERROR, true);
+        $request->setopt(CURLOPT_FAILONERROR, false);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
         $request->setopt(CURLOPT_URL, $resource);
