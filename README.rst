@@ -53,9 +53,9 @@ Here's how simple it is to create a payment request:
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(
-                'email'         => 'john.doe@example.com',
-                'first_name'    => 'John',
-                'last_name'     => 'Doe'
+                'email'             => 'john.doe@example.com',
+                'first_name'        => 'John',
+                'last_name'         => 'Doe'
             ),
             'hosted_payment'    => array(
                 'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
