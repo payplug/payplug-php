@@ -1,0 +1,28 @@
+{
+  "name": "PayPlug/PHPClient",
+  "description": "PHP client for PayPlug public API!",
+  "version": "2.0.0",
+  "type": "library",
+  "homepage": "https://www.payplug.com",
+  "time": "2015-05-06",
+  "license": "Proprietary",
+  "authors": [
+    {
+      "name": "PayPlug",
+      "email": "support@payplug.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ext-openssl": "*",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.6.*",
+    "phpdocumentor/phpdocumentor": "2.*"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-0": {"PayPlug": "PayPlug/"}
+  }
+}
