@@ -213,7 +213,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payments = \Payplug\Resource\Payment::listPayments()['data'];
+        $result = \Payplug\Resource\Payment::listPayments();
+        $payments = $result['data'];
         $this->assertEquals(2, count($payments));
         $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
         $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
