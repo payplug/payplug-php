@@ -119,7 +119,7 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
      * @throws  \Payplug\Exception\InvalidPaymentException
      * @throws  \Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listPayments($perPage = null, $page = null, \Payplug\Payplug $payplug = null)
+    public static function listPayments($perPage = null, $page = null, \Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
