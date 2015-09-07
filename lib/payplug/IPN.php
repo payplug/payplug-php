@@ -39,6 +39,12 @@ class IPN {
 
         /* Checks if the signature, and by extension the IPN, is valid */
         $headers = array_change_key_case($headers, CASE_UPPER);
+        
+        // if the page is not called by payplug we don't want notice
+        if ( ! isset($headers['PAYPLUG-SIGNATURE'])) {
+            throw new InvalidSignatureException();
+        }
+        
         $signature = base64_decode($headers['PAYPLUG-SIGNATURE']);
         $publicKey = openssl_pkey_get_public($config->payplugPublicKey);
 
