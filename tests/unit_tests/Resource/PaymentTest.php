@@ -346,7 +346,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             }));
 
         $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
-        $refunds = $payment->listRefunds()['data'];
+        $result = $payment->listRefunds();
+        $refunds = $result['data'];
 
         $this->assertEquals(2, count($refunds));
         $this->assertTrue($refunds[0]->id === 'refund1' || $refunds[0]->id === 'refund2');
