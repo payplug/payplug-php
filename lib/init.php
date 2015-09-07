@@ -28,3 +28,6 @@ require_once 'Payplug/Resource/Notification.php';
 require_once 'Payplug/Resource/Payment.php';
 require_once 'Payplug/Resource/PaymentFailure.php';
 require_once 'Payplug/Resource/Refund.php';
+
+require_once 'Payplug/Payment.php';
+require_once 'Payplug/Refund.php';
