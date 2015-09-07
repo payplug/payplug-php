@@ -5,7 +5,7 @@
  */
 class Payplug {
 
-    const VERSION = "1.1.1";
+    const VERSION = "1.1.2";
 
     /**
      * The merchant's parameters which will be used to generate payment URLS.
