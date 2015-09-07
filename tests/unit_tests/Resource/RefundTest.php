@@ -318,9 +318,10 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refunds = \Payplug\Resource\Refund::listRefunds(
+        $result = \Payplug\Resource\Refund::listRefunds(
             \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'))
-        )['data'];
+        );
+        $refunds = $refunds['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));
