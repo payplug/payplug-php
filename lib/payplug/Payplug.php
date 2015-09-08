@@ -73,7 +73,7 @@ class Payplug
      *
      * @return  Configuration The last client authentication
      *
-     * @throws  \Payplug\ConfigurationNotSetException    when the global authentication was not set.
+     * @throws  \Payplug\Exception\ConfigurationNotSetException    when the global authentication was not set.
      */
     public static function getDefaultConfiguration()
     {

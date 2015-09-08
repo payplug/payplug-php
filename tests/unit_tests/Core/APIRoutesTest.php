@@ -1,6 +1,6 @@
 <?php
 namespace PayplugTest;
-
+use \Payplug\Core\APIRoutes as APIRoutes;
 /**
  * @group unit
  * @group ci
@@ -10,15 +10,15 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 {
     public function testThatRouteStartsWithBaseURL()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_PAYMENT);
-        $expected = \Payplug\APIRoutes::$API_BASE_URL . '/v' . \Payplug\APIRoutes::API_VERSION . '/';
+        $route = APIRoutes::getRoute(APIRoutes::CREATE_PAYMENT);
+        $expected = APIRoutes::$API_BASE_URL . '/v' . APIRoutes::API_VERSION . '/';
         $beginRoute = substr($route, 0, strlen($expected));
         $this->assertEquals($expected, $beginRoute);
     }
 
     public function testCreatePaymentRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_PAYMENT);
+        $route = APIRoutes::getRoute(APIRoutes::CREATE_PAYMENT);
         $expected = '/payments';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -26,7 +26,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrievePaymentRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -34,7 +34,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testListpaymentsRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS);
+        $route = APIRoutes::getRoute(APIRoutes::LIST_PAYMENTS);
         $expected = '/payments';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -43,7 +43,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
     public function testListpaymentspaginationRoute()
     {
         $pagination = array('perPage' => 5, 'page' => 1);
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS, array(), $pagination);
+        $route = APIRoutes::getRoute(APIRoutes::LIST_PAYMENTS, array(), $pagination);
         $expected = '/payments?perPage=5&page=1';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -51,7 +51,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateRefundRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo/refunds';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -59,7 +59,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveRefundRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::RETRIEVE_REFUND, array('PAYMENT_ID' => 'foo', 'REFUND_ID' => 'bar'));
+        $route = APIRoutes::getRoute(APIRoutes::RETRIEVE_REFUND, array('PAYMENT_ID' => 'foo', 'REFUND_ID' => 'bar'));
         $expected = '/payments/foo/refunds/bar';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -67,7 +67,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testListRefundsRoute()
     {
-        $route = \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo/refunds';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);

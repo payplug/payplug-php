@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * A Payment
  */
-class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIResource
+class Payment extends APIResource implements IVerifiableAPIResource
 {
     /**
      * The factory method that constructs the API resource.
@@ -101,9 +101,9 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => $paymentId))
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => $paymentId))
         );
 
         return Payment::fromAttributes($response['httpResponse']);
@@ -125,11 +125,11 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $parameters = array();
         $pagination = array('per_page' => $perPage, 'page' => $page);
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_PAYMENTS, $parameters, $pagination)
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::LIST_PAYMENTS, $parameters, $pagination)
         );
 
         if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
@@ -164,9 +164,9 @@ class Payment extends \Payplug\APIResource implements \Payplug\IVerifiableAPIRes
             $payplug = \Payplug\Payplug::getDefaultConfiguration();
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_PAYMENT),
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::CREATE_PAYMENT),
             $data
         );
 

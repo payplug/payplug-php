@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Core;
 
 /**
  * Generified HttpRequest so that it can easily be mocked
@@ -202,7 +202,7 @@ class HttpClient
      * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function testRemote() {
-        return $this->request('GET', \Payplug\APIRoutes::getTestRoute(), null, false);
+        return $this->request('GET', \Payplug\Core\APIRoutes::getTestRoute(), null, false);
     }
 
     /**
@@ -235,7 +235,7 @@ class HttpClient
         $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
                                         // PHP < 5.4 doesn't support call()['value'] directly.
         $userAgent = sprintf(
-            'PayPlug-PHP/%s (PHP/%s; curl/%s)', \Payplug\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
+            'PayPlug-PHP/%s (PHP/%s; curl/%s)', \Payplug\Core\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
         );
         $headers = array(
             'Accept: application/json',

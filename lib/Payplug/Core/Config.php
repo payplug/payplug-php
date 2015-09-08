@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Core;
 
 /**
  * Minimal configuration to launch the script.
@@ -35,7 +35,7 @@ class Config
 
 // Check PHP version
 if (version_compare(phpversion(), Config::PHP_MIN_VERSION, "<")) {
-    throw new Exception('This library needs PHP ' . \Payplug\Config::PHP_MIN_VERSION . ' or newer.');
+    throw new Exception('This library needs PHP ' . \Payplug\Core\Config::PHP_MIN_VERSION . ' or newer.');
 }
 
 // Check PHP configuration

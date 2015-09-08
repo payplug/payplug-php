@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * Payment Failure information
  */
-class PaymentFailure extends \Payplug\APIResource
+class PaymentFailure extends APIResource
 {
     /**
      * The factory method that constructs the API resource.

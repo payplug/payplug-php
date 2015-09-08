@@ -17,7 +17,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
-        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreatePaymentFromAttributes()
@@ -34,16 +34,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'is_refunded'       => false,
             'is_3ds'            => false,
             'card'              => array(
-                'last4'     => '1800',
-                'country'   => 'FR',
-                'exp_year'  => 2017,
-                'exp_month' => 9,
-                'brand'     => 'Mastercard'
+                'last4'             => '1800',
+                'country'           => 'FR',
+                'exp_year'          => 2017,
+                'exp_month'         => 9,
+                'brand'             => 'Mastercard'
             ),
             'customer'          => array(
-                'email'         => 'name@customer.net',
-                'first_name'    => 'John',
-                'last_name'     => 'Doe'
+                'email'             => 'name@customer.net',
+                'first_name'        => 'John',
+                'last_name'         => 'Doe'
             ),
             'hosted_payment'    => array(
                 'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
@@ -51,13 +51,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'cancel_url'        => 'http://yourwebsite.com/payplug_cancel?someid=81321',
                 'paid_at'           => 1410437806
             ),
-            'notification'  => array(
-                'url'  => 'http://yourwebsite.com/payplug_ipn',
-                'response_code'  => 200
+            'notification'      => array(
+                'url'               => 'http://yourwebsite.com/payplug_ipn',
+                'response_code'     => 200
             ),
             'failure'           => array(
-                'code'      => null,
-                'message'   => null
+                'code'              => null,
+                'message'           => null
             ),
             'metadata'          => array(
                 'a_custom_field'    => 'a custom value',
