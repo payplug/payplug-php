@@ -1,7 +1,7 @@
 <?php
 namespace Payplug;
 
-class APIResourceMock extends \Payplug\Core\APIResource
+class APIResourceMock extends \Payplug\Resource\APIResource
 {
     static function fromAttributes(array $attributes)
     {
