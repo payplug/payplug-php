@@ -51,7 +51,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
             'id'        =>  're_123',
             'object'    =>  'refund'
         );
-        $refund = \Payplug\APIResource::factory($attributes);
+        $refund = \Payplug\Resource\APIResource::factory($attributes);
         $this->assertTrue($refund instanceof \Payplug\Resource\Refund);
         $this->assertEquals('re_123', $refund->id);
     }
@@ -72,6 +72,6 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
             'id'        => 'a_random_object',
             'object'    => 'an_unknown_object'
         );
-        \Payplug\APIResource::factory($attributes);
+        \Payplug\Resource\APIResource::factory($attributes);
     }
 }
