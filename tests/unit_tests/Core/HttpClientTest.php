@@ -16,7 +16,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->_httpClient = new HttpClient(new \Payplug\Payplug('abc'));
 
-        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
