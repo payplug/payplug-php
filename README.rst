@@ -49,7 +49,7 @@ Here's how simple it is to create a payment request:
     Payplug\Payplug::setSecretKey('YOUR_TOKEN');
 
     // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.com/callbackURL"
-    $payment = \Payplug\Resource\Payment::create(array(
+    $payment = \Payplug\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(
