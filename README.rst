@@ -21,10 +21,13 @@ Installation
 
 **Option 2)** download as a tarball :
 
-- Download the most recent tarball from the `download page`__ (V2 for **PHP 5.3** or newer)
-- Download the most recent tarball from the `download page`__ (V1 for **PHP 5.2** or older)
+- Download the most recent tarball from the `download page V2`_ (V2 for **PHP 5.3** or newer)
+- Download the most recent tarball from the `download page V1`_ (V1 for **PHP 5.2** or older)
 - Unpack the tarball
 - Put the files somewhere in your project
+
+.. _download page V1: https://github.com/payplug/payplug-php/releases/tag/V1.1.2
+.. _download page V2: https://github.com/payplug/payplug-php/releases
 
 __ https://bitbucket.org/payplug/payplug_php/downloads#tag-downloads
 
