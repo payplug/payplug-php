@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * A Notification
  */
-class Notification extends \Payplug\APIResource
+class Notification extends APIResource
 {
     /**
      * The factory method that constructs the API resource.

@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Resource;
 
 /**
  * A verifiable API Resource is an API Resource that can be converted into a consistent object.

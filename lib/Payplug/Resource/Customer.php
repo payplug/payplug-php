@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * A Customer.
  */
-class Customer extends \Payplug\APIResource
+class Customer extends APIResource
 {
     /**
      * The factory method that constructs the API resource.

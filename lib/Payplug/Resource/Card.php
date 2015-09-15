@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * A Credit Card.
  */
-class Card extends \Payplug\APIResource
+class Card extends APIResource
 {
     /**
      * The factory method that constructs the API resource.

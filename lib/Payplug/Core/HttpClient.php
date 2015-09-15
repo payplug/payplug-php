@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Core;
 
 /**
  * Generified HttpRequest so that it can easily be mocked
@@ -202,7 +202,7 @@ class HttpClient
      * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
     public function testRemote() {
-        return $this->request('GET', \Payplug\APIRoutes::getTestRoute(), null, false);
+        return $this->request('GET', \Payplug\Core\APIRoutes::getTestRoute(), null, false);
     }
 
     /**
@@ -235,7 +235,7 @@ class HttpClient
         $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
                                         // PHP < 5.4 doesn't support call()['value'] directly.
         $userAgent = sprintf(
-            'PayPlug-PHP/%s (PHP/%s; curl/%s)', \Payplug\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
+            'PayPlug-PHP/%s (PHP/%s; curl/%s)', \Payplug\Core\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
         );
         $headers = array(
             'Accept: application/json',
@@ -253,7 +253,7 @@ class HttpClient
         $request->setopt(CURLOPT_HTTPHEADER, $headers);
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
-        $request->setopt(CURLOPT_CAINFO, realpath(dirname(__FILE__) . '/../certs/cacert.pem'));
+        $request->setopt(CURLOPT_CAINFO, realpath(__DIR__ . '/../../certs/cacert.pem'));
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }

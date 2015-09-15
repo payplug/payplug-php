@@ -16,8 +16,8 @@ class RefundTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
         \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
-        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreateRefundFromAttributes()
@@ -273,7 +273,8 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refunds = \Payplug\Resource\Refund::listRefunds('a_payment_id')['data'];
+        $result = \Payplug\Resource\Refund::listRefunds('a_payment_id');
+        $refunds = $result['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));
@@ -317,9 +318,10 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refunds = \Payplug\Resource\Refund::listRefunds(
+        $result = \Payplug\Resource\Refund::listRefunds(
             \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'))
-        )['data'];
+        );
+        $refunds = $result['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals(2, count($refunds));

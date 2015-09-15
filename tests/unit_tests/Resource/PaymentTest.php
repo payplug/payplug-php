@@ -16,8 +16,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new \Payplug\Payplug('abc');
         \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
-        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreatePaymentFromAttributes()
@@ -34,16 +34,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'is_refunded'       => false,
             'is_3ds'            => false,
             'card'              => array(
-                'last4'     => '1800',
-                'country'   => 'FR',
-                'exp_year'  => 2017,
-                'exp_month' => 9,
-                'brand'     => 'Mastercard'
+                'last4'             => '1800',
+                'country'           => 'FR',
+                'exp_year'          => 2017,
+                'exp_month'         => 9,
+                'brand'             => 'Mastercard'
             ),
             'customer'          => array(
-                'email'         => 'name@customer.net',
-                'first_name'    => 'John',
-                'last_name'     => 'Doe'
+                'email'             => 'name@customer.net',
+                'first_name'        => 'John',
+                'last_name'         => 'Doe'
             ),
             'hosted_payment'    => array(
                 'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
@@ -51,13 +51,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'cancel_url'        => 'http://yourwebsite.com/payplug_cancel?someid=81321',
                 'paid_at'           => 1410437806
             ),
-            'notification'  => array(
-                'url'  => 'http://yourwebsite.com/payplug_ipn',
-                'response_code'  => 200
+            'notification'      => array(
+                'url'               => 'http://yourwebsite.com/payplug_ipn',
+                'response_code'     => 200
             ),
             'failure'           => array(
-                'code'      => null,
-                'message'   => null
+                'code'              => null,
+                'message'           => null
             ),
             'metadata'          => array(
                 'a_custom_field'    => 'a custom value',
@@ -213,7 +213,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payments = \Payplug\Resource\Payment::listPayments()['data'];
+        $result = \Payplug\Resource\Payment::listPayments();
+        $payments = $result['data'];
         $this->assertEquals(2, count($payments));
         $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
         $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
@@ -345,7 +346,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             }));
 
         $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
-        $refunds = $payment->listRefunds()['data'];
+        $result = $payment->listRefunds();
+        $refunds = $result['data'];
 
         $this->assertEquals(2, count($refunds));
         $this->assertTrue($refunds[0]->id === 'refund1' || $refunds[0]->id === 'refund2');

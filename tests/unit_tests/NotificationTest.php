@@ -17,8 +17,8 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
         \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\IHttpRequest');
-        \Payplug\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testTreatPayment()

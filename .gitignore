@@ -5,5 +5,4 @@ _build/
 vendor/
 *.iml
 *.phar
-docs/
 coverage/

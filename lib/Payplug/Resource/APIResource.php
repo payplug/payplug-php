@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Resource;
 
 /**
  * Interface designed to force resources to implement at least one factory.

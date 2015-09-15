@@ -4,7 +4,7 @@ namespace Payplug\Resource;
 /**
  * A \Payplug\Payment refund.
  */
-class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIResource
+class Refund extends APIResource implements IVerifiableAPIResource
 {
     /**
      * The factory method that constructs the API resource.
@@ -39,9 +39,9 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
             $payment = $payment->id;
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => $payment)),
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => $payment)),
             $data
         );
 
@@ -68,10 +68,10 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
             $payment = $payment->id;
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(
-                \Payplug\APIRoutes::RETRIEVE_REFUND,
+            \Payplug\Core\APIRoutes::getRoute(
+                \Payplug\Core\APIRoutes::RETRIEVE_REFUND,
                 array(
                     'PAYMENT_ID' => $payment,
                     'REFUND_ID'  => $refundId
@@ -102,11 +102,11 @@ class Refund extends \Payplug\APIResource implements \Payplug\IVerifiableAPIReso
             $payment = $payment->id;
         }
 
-        $httpClient = new \Payplug\HttpClient($payplug);
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
         $pagination = array('per_page' => $perPage, 'page' => $page);
 
         $response = $httpClient->get(
-            \Payplug\APIRoutes::getRoute(\Payplug\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment), $pagination)
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment), $pagination)
         );
 
         if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {

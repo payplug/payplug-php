@@ -17,7 +17,7 @@ class HttpClientFunctionalTest extends \PHPUnit_Framework_TestCase
 
     public function testAPIRequest()
     {
-        $httpClient = new \Payplug\HttpClient($this->_configuration);
+        $httpClient = new \Payplug\Core\HttpClient($this->_configuration);
         $response = $httpClient->testRemote();
         $this->assertEquals(200, $response['httpStatus']);
     }

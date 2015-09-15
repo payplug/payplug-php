@@ -1,5 +1,5 @@
 <?php
-namespace Payplug;
+namespace Payplug\Core;
 
 /**
  * Defines the routes to PayPlug's API.

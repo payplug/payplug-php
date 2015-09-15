@@ -24,7 +24,7 @@ class Notification
             throw new \Payplug\Exception\UnknownAPIResourceException('Request body is not valid JSON.');
         }
 
-        $unsafeAPIResource = \Payplug\APIResource::factory($postArray);
+        $unsafeAPIResource = \Payplug\Resource\APIResource::factory($postArray);
         return $unsafeAPIResource->getConsistentResource($authentication);
     }
 }

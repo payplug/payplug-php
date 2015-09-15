@@ -1,7 +1,7 @@
 <?php
 namespace Payplug;
 
-class APIResourceMock extends \Payplug\APIResource
+class APIResourceMock extends \Payplug\Resource\APIResource
 {
     static function fromAttributes(array $attributes)
     {
@@ -40,7 +40,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
             'id'        =>  'pay_123',
             'object'    =>  'payment'
         );
-        $payment = \Payplug\APIResource::factory($attributes);
+        $payment = \Payplug\Resource\APIResource::factory($attributes);
         $this->assertTrue($payment instanceof \Payplug\Resource\Payment);
         $this->assertEquals('pay_123', $payment->id);
     }
@@ -51,7 +51,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
             'id'        =>  're_123',
             'object'    =>  'refund'
         );
-        $refund = \Payplug\APIResource::factory($attributes);
+        $refund = \Payplug\Resource\APIResource::factory($attributes);
         $this->assertTrue($refund instanceof \Payplug\Resource\Refund);
         $this->assertEquals('re_123', $refund->id);
     }
@@ -62,7 +62,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
         $attributes = array(
             'id'    => 'a_random_object'
         );
-        \Payplug\APIResource::factory($attributes);
+        \Payplug\Resource\APIResource::factory($attributes);
     }
 
     public function testAPIResourceFectoryWhenObjectIsUnknown()
@@ -72,6 +72,6 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
             'id'        => 'a_random_object',
             'object'    => 'an_unknown_object'
         );
-        \Payplug\APIResource::factory($attributes);
+        \Payplug\Resource\APIResource::factory($attributes);
     }
 }
