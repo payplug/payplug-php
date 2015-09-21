@@ -110,6 +110,31 @@ class Payment extends APIResource implements IVerifiableAPIResource
     }
 
     /**
+     * Aborts a Payment.
+     *
+     * @param   string                      $paymentId      the payment ID
+     * @param   \Payplug\Payplug $payplug  the client configuration
+     *
+     * @return  null|Payment the aborted payment or null on error
+     *
+     * @throws  \Payplug\Exception\ConfigurationNotSetException
+     */
+    public static function abort($paymentId, \Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = \Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new \Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            \Payplug\Core\APIRoutes::getRoute(\Payplug\Core\APIRoutes::ABORT_PAYMENT, array('PAYMENT_ID' => $paymentId)),
+            array('abort' => true)
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
      * List payments.
      *
      * @param   \Payplug\Payplug   $payplug  the client configuration
