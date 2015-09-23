@@ -50,8 +50,8 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * Open a refund on the payment.
      *
-     * @param   array                       $data           the refund data
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   array               $data       the refund data
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      *
      * @return  Refund|null the opened refund instance
      *
@@ -69,7 +69,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * List the refunds of this payment.
      *
-     * @param   \Payplug\Payplug   $payplug  the client configuration
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      * 
      * @return  null|Refund[]   the array of refunds of this payment
      *
@@ -88,8 +88,8 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * Retrieves a Payment.
      *
-     * @param   string                      $paymentId      the payment ID
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   string              $paymentId  the payment ID
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      *
      * @return  null|Payment the retrieved payment or null on error
      *
@@ -112,8 +112,8 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * Aborts a Payment.
      *
-     * @param   string                      $paymentId      the payment ID
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   string              $paymentId  the payment ID
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      *
      * @return  null|Payment the aborted payment or null on error
      *
@@ -137,7 +137,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * List payments.
      *
-     * @param   \Payplug\Payplug   $payplug  the client configuration
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      * 
      * @return  null|Payment[]   the array of payments
      *
@@ -176,8 +176,8 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * Creates a Payment.
      *
-     * @param   array                       $data           API data for payment creation
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   array               $data       API data for payment creation
+     * @param   \Payplug\Payplug    $payplug    the client configuration
      *
      * @return  null|Payment the created payment instance
      *
