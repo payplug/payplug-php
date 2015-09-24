@@ -154,6 +154,46 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
     }
 
+    public function testPaymentAbort()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = \Payplug\Resource\Payment::abort('a_payment_id');
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
     public function testPaymentRetrieve()
     {
         $GLOBALS['CURLOPT_URL_DATA'] = null;

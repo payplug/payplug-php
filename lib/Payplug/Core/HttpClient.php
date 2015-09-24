@@ -147,7 +147,7 @@ class HttpClient
     }
 
     /**
-     * Sends a GET request to the API.
+     * Sends a POST request to the API.
      *
      * @param   string  $resource   the path to the remote resource
      * @param   array   $data       Request data
@@ -165,6 +165,27 @@ class HttpClient
     public function post($resource, $data = null)
     {
         return $this->request('POST', $resource, $data);
+    }
+
+    /**
+     * Sends a PATCH request to the API.
+     *
+     * @param   string  $resource   the path to the remote resource
+     * @param   array   $data       Request data
+     *
+     * @return  array   the response in a dictionary with following keys:
+     * <pre>
+     *  'httpStatus'    => The 2xx HTTP status code as defined at http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2
+     *  'httpResponse'  => The HTTP response
+     * </pre>
+     *
+     * @throws  \Payplug\Exception\UnexpectedAPIResponseException  When the API response is not parsable in JSON.
+     * @throws  \Payplug\Exception\HttpException                   When status code is not 2xx.
+     * @throws  \Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
+     */
+    public function patch($resource, $data = null)
+    {
+        return $this->request('PATCH', $resource, $data);
     }
 
     /**
