@@ -33,6 +33,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'is_paid'           => true,
             'is_refunded'       => false,
             'is_3ds'            => false,
+            'save_card'         => false,
             'card'              => array(
                 'last4'             => '1800',
                 'country'           => 'FR',
@@ -75,6 +76,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $payment->is_paid);
         $this->assertEquals(false, $payment->is_refunded);
         $this->assertEquals(false, $payment->is_3ds);
+        $this->assertEquals(false, $payment->save_card);
 
         $this->assertEquals('1800', $payment->card->last4);
         $this->assertEquals('FR', $payment->card->country);
