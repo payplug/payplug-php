@@ -1,7 +1,7 @@
 PayPlug PHP library documentation
 =================================
 
-Pleae see https://www.payplug.com/docs/api/?php for an up-to-date documentation of the PHP Library.
+Please see https://www.payplug.com/docs/api/?php for an up-to-date documentation of the PHP Library.
 
 The latest version of the library is now available on `GitHub`_.
 
