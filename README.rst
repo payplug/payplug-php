@@ -17,7 +17,7 @@ Installation
 **Option 1)** clone the repository :
 ::
 
-    git clone https://bitbucket.org/payplug/payplug_php
+    git clone https://github.com/payplug/payplug-php.git
 
 **Option 2)** download as a tarball :
 
