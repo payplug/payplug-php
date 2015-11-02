@@ -16,6 +16,7 @@ class APIRoutes
     // Payments routes
     const CREATE_PAYMENT    = '/payments';
     const RETRIEVE_PAYMENT  = '/payments/{PAYMENT_ID}';
+    const ABORT_PAYMENT     = '/payments/{PAYMENT_ID}';
     const LIST_PAYMENTS     = '/payments';
 
     // Refunds routes

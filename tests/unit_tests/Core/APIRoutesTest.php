@@ -32,6 +32,14 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $endRoute);
     }
 
+    public function testAbortPaymentRoute()
+    {
+        $route = APIRoutes::getRoute(APIRoutes::ABORT_PAYMENT, array('PAYMENT_ID' => 'bar'));
+        $expected = '/payments/bar';
+        $endRoute = substr($route, -strlen($expected));
+        $this->assertEquals($expected, $endRoute);
+    }
+
     public function testListpaymentsRoute()
     {
         $route = APIRoutes::getRoute(APIRoutes::LIST_PAYMENTS);

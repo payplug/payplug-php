@@ -35,7 +35,7 @@ class Config
 
 // Check PHP version
 if (version_compare(phpversion(), Config::PHP_MIN_VERSION, "<")) {
-    throw new Exception('This library needs PHP ' . \Payplug\Core\Config::PHP_MIN_VERSION . ' or newer.');
+    throw new RuntimeException('This library needs PHP ' . Config::PHP_MIN_VERSION . ' or newer.');
 }
 
 // Check PHP configuration

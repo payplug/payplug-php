@@ -21,6 +21,21 @@ class Payment
     	return \Payplug\Resource\Payment::retrieve($paymentId, $payplug);
     }
 
+	/**
+     * Aborts a Payment.
+     *
+     * @param   string                      $paymentId      the payment ID
+     * @param   \Payplug\Payplug $payplug  the client configuration
+     *
+     * @return  null|\Payplug\Resource\Payment the aborted payment or null on error
+     *
+     * @throws  \Payplug\Exception\ConfigurationNotSetException
+     */
+    public static function abort($paymentId, \Payplug\Payplug $payplug = null)
+    {
+    	return \Payplug\Resource\Payment::abort($paymentId, $payplug);
+    }
+
     /**
      * Creates a Payment.
      *

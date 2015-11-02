@@ -33,6 +33,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'is_paid'           => true,
             'is_refunded'       => false,
             'is_3ds'            => false,
+            'save_card'         => false,
             'card'              => array(
                 'last4'             => '1800',
                 'country'           => 'FR',
@@ -75,6 +76,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $payment->is_paid);
         $this->assertEquals(false, $payment->is_refunded);
         $this->assertEquals(false, $payment->is_3ds);
+        $this->assertEquals(false, $payment->save_card);
 
         $this->assertEquals('1800', $payment->card->last4);
         $this->assertEquals('FR', $payment->card->country);
@@ -149,6 +151,46 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    public function testPaymentAbort()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = \Payplug\Resource\Payment::abort('a_payment_id');
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
         $this->assertEquals('ok', $payment->status);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
