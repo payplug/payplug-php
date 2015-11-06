@@ -9,7 +9,7 @@ class APIRoutes
     /**
      * @var string  the root URL of the API.
      */
-    public static $API_BASE_URL;
+    public static $API_BASE_URL = 'https://api.payplug.com';
 
     const API_VERSION = 1;
 
@@ -53,5 +53,3 @@ class APIRoutes
         return APIRoutes::$API_BASE_URL . '/test';
     }
 }
-
-APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
