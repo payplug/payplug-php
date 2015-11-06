@@ -7,10 +7,3 @@ namespace Payplug\Exception;
 class DependencyException extends \Payplug\Exception\PayPlugException
 {
 }
-
-/**
- * Wrong PHP version exception.
- */
-class PHPVersionException extends DependencyException
-{
-}

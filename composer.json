@@ -23,6 +23,6 @@
   },
   "minimum-stability": "dev",
   "autoload": {
-    "psr-0": {"PayPlug": "PayPlug/"}
+    "psr-0": {"Payplug": "lib/"}
   }
 }
