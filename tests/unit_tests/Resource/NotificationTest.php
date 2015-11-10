@@ -10,7 +10,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateNotificationFromAttributes()
     {
-        $notification = \Payplug\Resource\Notification::fromAttributes(array(
+        $notification = Notification::fromAttributes(array(
             'url'               => 'https://www.example.net/payplug_notification.html',
             'response_code'     => 200
         ));

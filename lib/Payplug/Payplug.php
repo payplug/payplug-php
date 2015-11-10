@@ -7,7 +7,7 @@ namespace Payplug;
 class Payplug
 {
     /**
-     * @var Authentication|null The default authentication that should be used when no authentication is
+     * @var Payplug|null The default authentication that should be used when no authentication is
      * provided.
      */
     private static $_defaultConfiguration = null;
@@ -20,12 +20,14 @@ class Payplug
     /**
      * Constructor for a authentication.
      *
-     * @param   string  token  The live token
+     * @param   string  $token  The token
+     *
+     * @throws Exception\ConfigurationException when token is not set
      */
     public function __construct($token)
     {
         if (!is_string($token)) {
-            throw new \Payplug\Exception\ConfigurationException('Expected string values for token.');
+            throw new Exception\ConfigurationException('Expected string values for token.');
         }
         $this->_token = $token;
     }
@@ -39,16 +41,16 @@ class Payplug
      * $authentication['TOKEN'] = 'YOUR TOKEN'
      * </pre>
      *
-     * @param   array   $authentication  the authentication parameters
+     * @param   array   $token  the authentication token
      *
-     * @return Authentication  the new client authentication
+     * @return Payplug  the new client authentication
      *
-     * @throws \Payplug\Exception\ConfigurationException
+     * @throws Exception\ConfigurationException
      */
     public static function setSecretKey($token)
     {
         if (!is_string($token)) {
-            throw new \Payplug\Exception\ConfigurationException('Expected string values for the token.');
+            throw new Exception\ConfigurationException('Expected string values for the token.');
         }
 
         $clientConfiguration = new Payplug($token);
@@ -71,14 +73,14 @@ class Payplug
     /**
      * Gets the default global authentication.
      *
-     * @return  Configuration The last client authentication
+     * @return  Payplug The last client authentication
      *
-     * @throws  \Payplug\Exception\ConfigurationNotSetException    when the global authentication was not set.
+     * @throws  Exception\ConfigurationNotSetException    when the global authentication was not set.
      */
     public static function getDefaultConfiguration()
     {
         if (self::$_defaultConfiguration === null) {
-                throw new \Payplug\Exception\ConfigurationNotSetException('Unable to find an authentication.');
+                throw new Exception\ConfigurationNotSetException('Unable to find an authentication.');
         }
 
         return self::$_defaultConfiguration;
@@ -88,7 +90,7 @@ class Payplug
      * Sets the new default client authentication. This authentication will be used when no authentication is explicitly
      * passed to methods.
      *
-     * @param  Authentication $defaultConfiguration   the new default authentication
+     * @param  Payplug $defaultConfiguration   the new default authentication
      */
     public static function setDefaultConfiguration($defaultConfiguration)
     {

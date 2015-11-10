@@ -10,7 +10,7 @@ class PaymentFailureTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreatePaymentFailureFromAttributes()
     {
-        $paymentFailure = \Payplug\Resource\PaymentFailure::fromAttributes(array(
+        $paymentFailure = PaymentFailure::fromAttributes(array(
             'code'      => 'card_stolen',
             'message'   => 'The card is stolen.'
         ));

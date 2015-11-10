@@ -10,7 +10,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCardFromAttributes()
     {
-        $card = \Payplug\Resource\Card::fromAttributes(array(
+        $card = Card::fromAttributes(array(
             'last4'     => '1234',
             'country'   => 'FR',
             'exp_year'  => 2022,

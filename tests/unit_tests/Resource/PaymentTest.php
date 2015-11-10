@@ -1,5 +1,6 @@
 <?php
 namespace Payplug\Resource;
+use Payplug;
 
 /**
  * @group unit
@@ -13,16 +14,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new \Payplug\Payplug('abc');
-        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new Payplug\Payplug('abc');
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
-        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreatePaymentFromAttributes()
     {
-        $payment = \Payplug\Resource\Payment::fromAttributes(array(
+        $payment = Payment::fromAttributes(array(
             'id'                => 'pay_490329',
             'object'            => 'payment',
             'is_live'           => true,
@@ -134,7 +135,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment = \Payplug\Resource\Payment::create(array(
+        $payment = Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(
@@ -187,7 +188,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment = \Payplug\Resource\Payment::abort('a_payment_id');
+        $payment = Payment::abort('a_payment_id');
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
         $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
@@ -227,7 +228,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $payment = \Payplug\Resource\Payment::retrieve('a_payment_id');
+        $payment = Payment::retrieve('a_payment_id');
 
         $this->assertStringEndsWith('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
         $this->assertEquals('ok', $payment->status);
@@ -255,7 +256,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $result = \Payplug\Resource\Payment::listPayments();
+        $result = Payment::listPayments();
         $payments = $result['data'];
         $this->assertEquals(2, count($payments));
         $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
@@ -289,7 +290,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $perPage = 1;
         $page = 0;
-        $payments = \PayPlug\Resource\Payment::listPayments($perPage, $page);
+        $payments = Payment::listPayments($perPage, $page);
 
         $this->assertEquals($payments['per_page'], 1);
         $this->assertEquals($payments['page'], 0);
@@ -305,7 +306,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
 
-        $payment = \Payplug\Resource\Payment::fromAttributes(array('fake' => 'payment'));
+        $payment = Payment::fromAttributes(array('fake' => 'payment'));
         $payment->refund(array('amount' => 3300));
     }
 
@@ -340,7 +341,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $payment = Payment::fromAttributes(array('id' => 'a_payment_id'));
         $payment->refund(array('amount' => 3300));
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -352,7 +353,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
 
-        $payment = \Payplug\Resource\Payment::fromAttributes(array('fake' => 'payment'));
+        $payment = Payment::fromAttributes(array('fake' => 'payment'));
         $payment->listRefunds();
     }
 
@@ -387,7 +388,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $payment = Payment::fromAttributes(array('id' => 'a_payment_id'));
         $result = $payment->listRefunds();
         $refunds = $result['data'];
 
@@ -405,7 +406,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = \Payplug\Resource\Payment::fromAttributes(array('this_payment' => 'has_no_id'));
+        $payment = Payment::fromAttributes(array('this_payment' => 'has_no_id'));
         $payment->getConsistentResource();
     }
 
@@ -439,7 +440,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment1 = \Payplug\Resource\Payment::fromAttributes(array('id' => 'pay_123'));
+        $payment1 = Payment::fromAttributes(array('id' => 'pay_123'));
         $payment2 = $payment1->getConsistentResource($this->_configuration);
 
         $this->assertEquals('pay_123', $payment1->id);

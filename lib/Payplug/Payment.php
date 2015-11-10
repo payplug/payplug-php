@@ -10,59 +10,61 @@ class Payment
      * Retrieves a Payment.
      *
      * @param   string                      $paymentId      the payment ID
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   Payplug $payplug  the client configuration
      *
-     * @return  null|\Payplug\Resource\Payment the retrieved payment or null on error
+     * @return  null|Resource\Payment the retrieved payment or null on error
      *
-     * @throws  \Payplug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($paymentId, \Payplug\Payplug $payplug = null)
+    public static function retrieve($paymentId, Payplug $payplug = null)
     {
-    	return \Payplug\Resource\Payment::retrieve($paymentId, $payplug);
+    	return Resource\Payment::retrieve($paymentId, $payplug);
     }
 
 	/**
      * Aborts a Payment.
      *
      * @param   string                      $paymentId      the payment ID
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   Payplug $payplug  the client configuration
      *
-     * @return  null|\Payplug\Resource\Payment the aborted payment or null on error
+     * @return  null|Resource\Payment the aborted payment or null on error
      *
-     * @throws  \Payplug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
-    public static function abort($paymentId, \Payplug\Payplug $payplug = null)
+    public static function abort($paymentId, Payplug $payplug = null)
     {
-    	return \Payplug\Resource\Payment::abort($paymentId, $payplug);
+    	return Resource\Payment::abort($paymentId, $payplug);
     }
 
     /**
      * Creates a Payment.
      *
      * @param   array                       $data           API data for payment creation
-     * @param   \Payplug\Payplug $payplug  the client configuration
+     * @param   Payplug $payplug  the client configuration
      *
-     * @return  null|\Payplug\Resource\Payment the created payment instance
+     * @return  null|Resource\Payment the created payment instance
      *
-     * @throws  PayPlug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, \Payplug\Payplug $payplug = null)
+    public static function create(array $data, Payplug $payplug = null)
     {
-    	return \Payplug\Resource\Payment::create($data, $payplug);
+    	return Resource\Payment::create($data, $payplug);
     }
 
     /**
      * List payments.
      *
-     * @param   \Payplug\Payplug   $payplug  the client configuration
+     * @param   int                 $perPage  number of results per page
+     * @param   int                 $page     the page number
+     * @param   Payplug             $payplug  the client configuration
      * 
-     * @return  null|\Payplug\Resource\Payment[]   the array of payments
+     * @return  null|Resource\Payment[]   the array of payments
      *
-     * @throws  \Payplug\Exception\InvalidPaymentException
-     * @throws  \Payplug\Exception\UnexpectedAPIResponseException
+     * @throws  Exception\InvalidPaymentException
+     * @throws  Exception\UnexpectedAPIResponseException
      */
-    public static function listPayments($perPage = null, $page = null, \Payplug\Payplug $payplug = null)
+    public static function listPayments($perPage = null, $page = null, Payplug $payplug = null)
     {
-    	return \Payplug\Resource\Payment::listPayments($perPage, $page, $payplug);
+    	return Payment::listPayments($perPage, $page, $payplug);
     }    
 };

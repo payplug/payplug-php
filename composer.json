@@ -1,7 +1,7 @@
 {
   "name": "PayPlug/PHPClient",
   "description": "PHP client for PayPlug public API!",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "library",
   "homepage": "https://www.payplug.com",
   "time": "2015-05-06",
@@ -23,6 +23,6 @@
   },
   "minimum-stability": "dev",
   "autoload": {
-    "psr-0": {"PayPlug": "PayPlug/"}
+    "psr-4": {"Payplug\\": "lib/"}
   }
 }

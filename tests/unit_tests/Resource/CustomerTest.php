@@ -10,7 +10,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCustomerFromAttributes()
     {
-        $customer = \Payplug\Resource\Customer::fromAttributes(array(
+        $customer = Customer::fromAttributes(array(
             'email'         => 'john.doe@example.com',
             'first_name'    => 'John',
             'last_name'     => 'Doe',

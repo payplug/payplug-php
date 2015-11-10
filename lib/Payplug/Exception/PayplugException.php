@@ -5,7 +5,7 @@ namespace Payplug\Exception;
  * PayPlug's generic exception.
  * You can catch this exception to catch every PayPlug related exception.
  */
-abstract class PayPlugException extends \Exception
+abstract class PayplugException extends \Exception
 {
     /**
      * A normalized string representation of the exception.

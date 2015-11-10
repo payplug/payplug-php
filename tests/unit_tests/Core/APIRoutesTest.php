@@ -1,6 +1,6 @@
 <?php
 namespace PayplugTest;
-use \Payplug\Core\APIRoutes as APIRoutes;
+use \Payplug\Core\APIRoutes;
 /**
  * @group unit
  * @group ci

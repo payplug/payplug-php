@@ -1,6 +1,6 @@
 <?php
 namespace Payplug;
-use \Payplug\Core\HttpClient as HttpClient;
+use \Payplug\Core\HttpClient;
 
 /**
  * @group unit
@@ -14,7 +14,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_httpClient = new HttpClient(new \Payplug\Payplug('abc'));
+        $this->_httpClient = new HttpClient(new Payplug('abc'));
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;

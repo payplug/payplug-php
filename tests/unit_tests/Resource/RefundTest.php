@@ -1,5 +1,6 @@
 <?php
 namespace Payplug\Resource;
+use Payplug;
 
 /**
  * @group unit
@@ -13,16 +14,16 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
-        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new Payplug\Payplug('abc', 'cba', true);
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
-        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testCreateRefundFromAttributes()
     {
-        $refund = \Payplug\Resource\Refund::fromAttributes(array(
+        $refund = Refund::fromAttributes(array(
             'id'            => 're_390312',
             'payment_id'    => 'pay_490329',
             'object'        => 'refund',
@@ -70,7 +71,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refund = \Payplug\Resource\Refund::create('a_payment_id', array('amount' => 3300));
+        $refund = Refund::create('a_payment_id', array('amount' => 3300));
 
         $this->assertEquals('ok', $refund->status);
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -109,8 +110,8 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refund = \Payplug\Resource\Refund::create(
-            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id')),
+        $refund = Refund::create(
+            Payment::fromAttributes(array('id' => 'a_payment_id')),
             array('amount' => 3300)
         );
 
@@ -166,7 +167,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refund = \Payplug\Resource\Refund::retrieve('a_payment_id', 'a_refund_id');
+        $refund = Refund::retrieve('a_payment_id', 'a_refund_id');
 
         $this->assertEquals('ok', $refund->status);
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -207,8 +208,8 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $refund = \Payplug\Resource\Refund::retrieve(
-            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id')),
+        $refund = Refund::retrieve(
+            Payment::fromAttributes(array('id' => 'a_payment_id')),
             'a_refund_id'
         );
 
@@ -239,7 +240,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        \Payplug\Resource\Refund::listRefunds('a_payment_id');
+        Refund::listRefunds('a_payment_id');
     }
 
     public function testRefundsListFromPaymentId()
@@ -273,7 +274,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $result = \Payplug\Resource\Refund::listRefunds('a_payment_id');
+        $result = Refund::listRefunds('a_payment_id');
         $refunds = $result['data'];
 
         $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
@@ -318,8 +319,8 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return true;
             }));
 
-        $result = \Payplug\Resource\Refund::listRefunds(
-            \Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'))
+        $result = Refund::listRefunds(
+            Payment::fromAttributes(array('id' => 'a_payment_id'))
         );
         $refunds = $result['data'];
 
@@ -338,7 +339,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = \Payplug\Resource\Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
+        $payment = Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
         $payment->getConsistentResource();
     }
 
@@ -346,7 +347,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
 
-        $payment = \Payplug\Resource\Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
+        $payment = Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
         $payment->getConsistentResource();
     }
 
@@ -380,7 +381,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $refund1 = \Payplug\Resource\Refund::fromAttributes(array('id' => 're_123', 'payment_id' => 'pay_321'));
+        $refund1 = Refund::fromAttributes(array('id' => 're_123', 'payment_id' => 'pay_321'));
         $refund2 = $refund1->getConsistentResource($this->_configuration);
 
         $this->assertEquals('re_123', $refund1->id);
