@@ -52,12 +52,6 @@ foreach(Config::$REQUIRED_FUNCTIONS as $key => $value) {
     }
 }
 
-// Check curl version
-$curl_version = curl_version();
-if ($curl_version['version_number'] < 0x71C00) {
-    throw new \RuntimeException('This library requires Curl 7.28.0 or newer. Please contact your webhoster or update your curl version.');
-}
-
 // Prior to PHP 5.5, CURL_SSLVERSION_TLSv1 and CURL_SSLVERSION_DEFAULT didn't exist. Hence, we have to use a numeric value.
 if (!defined('CURL_SSLVERSION_DEFAULT')) {
     define('CURL_SSLVERSION_DEFAULT', 0);
