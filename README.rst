@@ -38,7 +38,7 @@ Installation
 
 __ https://bitbucket.org/payplug/payplug_php/downloads#tag-downloads
 
-To get started, add the following to your PHP script :
+To get started, add the following to your PHP script (if you are not running a framework):
 
 .. sourcecode :: php
 
@@ -53,13 +53,15 @@ Here's how simple it is to create a payment request:
 .. sourcecode :: php
 
     <?php
-    require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php");
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php"); // If not using a framework
+
+    use Payplug;
 
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug\Payplug::setSecretKey('YOUR_TOKEN');
 
     // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.com/callbackURL"
-    $payment = \Payplug\Payment::create(array(
+    $payment = Payplug\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(
