@@ -21,7 +21,7 @@
     "phpunit/phpunit": "4.6.*",
     "phpdocumentor/phpdocumentor": "2.*"
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "autoload": {
     "psr-0": {"Payplug\\": "lib/"},
     "psr-4": {"Payplug\\": "lib/Payplug"}
