@@ -65,6 +65,6 @@ class Payment
      */
     public static function listPayments($perPage = null, $page = null, Payplug $payplug = null)
     {
-    	return Payment::listPayments($perPage, $page, $payplug);
+    	return Resource\Payment::listPayments($perPage, $page, $payplug);
     }    
 };
