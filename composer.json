@@ -1,5 +1,5 @@
 {
-  "name": "PayPlug/PHPClient",
+  "name": "payplug/payplug-php",
   "description": "PHP client for PayPlug public API!",
   "version": "2.1.0",
   "type": "library",
@@ -21,7 +21,7 @@
     "phpunit/phpunit": "4.6.*",
     "phpdocumentor/phpdocumentor": "2.*"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {"Payplug\\": "lib/"}
   }
