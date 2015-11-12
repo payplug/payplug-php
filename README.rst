@@ -14,7 +14,6 @@ For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
 Installation
 ------------
 **Option 1 - Strongly preferred)** via composer:
-::
 
 - Get composer from `composer website`_.
 - Make sure you have initialized your *composer.json*.
