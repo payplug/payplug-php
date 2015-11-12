@@ -1,7 +1,7 @@
 {
   "name": "payplug/payplug-php",
   "description": "A simple PHP library for PayPlug public API.",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "type": "library",
   "homepage": "https://www.payplug.com",
   "time": "2015-05-06",
@@ -23,6 +23,6 @@
   },
   "minimum-stability": "dev",
   "autoload": {
-    "psr-4": {"\\": "lib/Payplug"}
+    "psr-4": {"Payplug\\": "lib/Payplug"}
   }
 }
