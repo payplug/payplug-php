@@ -13,13 +13,21 @@ For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
 
 Installation
 ------------
+**Option 1 - Strongly preferred)** via composer:
+::
 
-**Option 1)** clone the repository :
+- Get composer from `composer website`_.
+- Make sure you have initialized your *composer.json*.
+- Run *composer require payplug/payplug-php* from your project directory.
+
+.. _composer website: https://getcomposer.org/download/
+
+**Option 2)** clone the repository :
 ::
 
     git clone https://github.com/payplug/payplug-php.git
 
-**Option 2)** download as a tarball :
+**Option 3)** download as a tarball :
 
 - Download the most recent tarball from the `download page V2`_ (V2 for **PHP 5.3** or newer)
 - Download the most recent tarball from the `download page V1`_ (V1 for **PHP 5.2** or older)
