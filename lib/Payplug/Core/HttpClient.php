@@ -10,6 +10,11 @@ use Payplug;
 class HttpClient
 {
     /**
+     * @var string  Constant that defines the path to cacert file which contains a set of trusted CA.
+     */
+    public static $CACERT_PATH;
+
+    /**
      * @var null|IHttpRequest   set the request wrapper. For test purpose only.
      * You can set this to a mock of IHttpRequest, so that the request will not be performed.
      */
@@ -159,7 +164,7 @@ class HttpClient
         $request->setopt(CURLOPT_HTTPHEADER, $headers);
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
-        $request->setopt(CURLOPT_CAINFO, realpath(__DIR__ . '/../../certs/cacert.pem'));
+        $request->setopt(CURLOPT_CAINFO, self::$CACERT_PATH);
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }
@@ -259,3 +264,5 @@ class HttpClient
         throw new Payplug\Exception\HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);
     }
 }
+
+HttpClient::$CACERT_PATH = realpath(__DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/../../certs/cacert.pem'));
