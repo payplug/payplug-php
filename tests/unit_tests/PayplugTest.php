@@ -10,9 +10,9 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanInitializeConfiguration()
     {
-        \Payplug\Payplug::setSecretKey('cba');
+        Payplug::setSecretKey('cba');
 
-        $configuration = \Payplug\Payplug::getDefaultConfiguration();
+        $configuration = Payplug::getDefaultConfiguration();
 
         $this->assertEquals('cba', $configuration->getToken());
     }
@@ -21,14 +21,14 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
 
-        \Payplug\Payplug::setSecretKey(true);
+        Payplug::setSecretKey(true);
     }
 
     public function testCannotInitializeConfigurationWhenTestTokenIsArray()
     {
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
 
-        \Payplug\Payplug::setSecretKey(array(
+        Payplug::setSecretKey(array(
                 'LIVE_TOKEN'        => 'cba'
             )
         );
@@ -36,7 +36,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 
     public function testCanGetAToken()
     {
-        $configuration = \Payplug\Payplug::setSecretKey('cba');
+        $configuration = Payplug::setSecretKey('cba');
         $this->assertEquals('cba', $configuration->getToken());
     }
 
@@ -46,13 +46,13 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionWhenDefaultConfigurationIsNotSet()
     {
         $this->setExpectedException('\Payplug\Exception\ConfigurationNotSetException');
-        \Payplug\Payplug::getDefaultConfiguration();
+        Payplug::getDefaultConfiguration();
     }
 
     public function testCanSetDefaultConfiguration()
     {
-        $configuration = \Payplug\Payplug::setSecretKey('abc');
-        \Payplug\Payplug::setDefaultConfiguration($configuration);
-        $this->assertEquals($configuration, \Payplug\Payplug::getDefaultConfiguration());
+        $configuration = Payplug::setSecretKey('abc');
+        Payplug::setDefaultConfiguration($configuration);
+        $this->assertEquals($configuration, Payplug::getDefaultConfiguration());
     }
 }

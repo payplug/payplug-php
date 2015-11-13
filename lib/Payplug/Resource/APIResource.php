@@ -1,20 +1,6 @@
 <?php
 namespace Payplug\Resource;
-
-/**
- * Interface designed to force resources to implement at least one factory.
- */
-interface IAPIResourceFactory
-{
-    /**
-     * The factory method that constructs the API resource.
-     *
-     * @param   array   $attributes the default attributes.
-     *
-     * @return  APIResource The new resource.
-     */
-    static function fromAttributes(array $attributes);
-}
+use Payplug;
 
 /**
  * A simple API resource
@@ -41,22 +27,22 @@ abstract class APIResource implements IAPIResourceFactory
      *
      * @return  IVerifiableAPIResource  An unsafe API Resource.
      *
-     * @throws  \Payplug\Exception\UnknownAPIResourceException When the given object is unknown.
+     * @throws  Payplug\Exception\UnknownAPIResourceException When the given object is unknown.
      */
     public static function factory(array $attributes)
     {
         if (!array_key_exists('object', $attributes)) {
-            throw new \Payplug\Exception\UnknownAPIResourceException('Missing "object" property.');
+            throw new Payplug\Exception\UnknownAPIResourceException('Missing "object" property.');
         }
 
         switch ($attributes['object']) {
             case 'payment':
-                return \Payplug\Resource\Payment::fromAttributes($attributes);
+                return Payplug\Resource\Payment::fromAttributes($attributes);
             case 'refund':
-                return \Payplug\Resource\Refund::fromAttributes($attributes);
+                return Payplug\Resource\Refund::fromAttributes($attributes);
         }
 
-        throw new \Payplug\Exception\UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');
+        throw new Payplug\Exception\UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');
     }
 
     /**
@@ -86,7 +72,7 @@ abstract class APIResource implements IAPIResourceFactory
      *
      * @return  mixed   The value of the attribute
      *
-     * @throws  \Payplug\Exception\UndefinedAttributeException
+     * @throws  Payplug\Exception\UndefinedAttributeException
      */
     public function __get($attribute)
     {
@@ -94,7 +80,7 @@ abstract class APIResource implements IAPIResourceFactory
             return $this->_attributes[$attribute];
         }
 
-        throw new \Payplug\Exception\UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
+        throw new Payplug\Exception\UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
     }
 
     /**

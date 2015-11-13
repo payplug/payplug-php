@@ -13,13 +13,20 @@ For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
 
 Installation
 ------------
+**Option 1 - Strongly preferred)** via composer:
 
-**Option 1)** clone the repository :
+- Get composer from `composer website`_.
+- Make sure you have initialized your *composer.json*.
+- Run *composer require payplug/payplug-php* from your project directory.
+
+.. _composer website: https://getcomposer.org/download/
+
+**Option 2)** clone the repository :
 ::
 
     git clone https://github.com/payplug/payplug-php.git
 
-**Option 2)** download as a tarball :
+**Option 3)** download as a tarball :
 
 - Download the most recent tarball from the `download page V2`_ (V2 for **PHP 5.3** or newer)
 - Download the most recent tarball from the `download page V1`_ (V1 for **PHP 5.2** or older)
@@ -31,7 +38,7 @@ Installation
 
 __ https://bitbucket.org/payplug/payplug_php/downloads#tag-downloads
 
-To get started, add the following to your PHP script :
+To get started, add the following to your PHP script (if you are not running a framework):
 
 .. sourcecode :: php
 
@@ -46,13 +53,15 @@ Here's how simple it is to create a payment request:
 .. sourcecode :: php
 
     <?php
-    require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php");
+    require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php"); // If not using a framework
+
+    use Payplug;
 
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug\Payplug::setSecretKey('YOUR_TOKEN');
 
     // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.com/callbackURL"
-    $payment = \Payplug\Payment::create(array(
+    $payment = Payplug\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
             'customer'          => array(

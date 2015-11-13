@@ -4,7 +4,7 @@ namespace Payplug\Exception;
 /**
  * HTTP errors
  */
-class HttpException extends \Payplug\Exception\PayPlugException
+class HttpException extends PayplugException
 {
     /**
      * @var null|string The plain HTTP response.
@@ -12,7 +12,7 @@ class HttpException extends \Payplug\Exception\PayPlugException
     private $_httpResponse;
 
     /**
-     * \Payplug\Exception\HttpException constructor.
+     * HttpException constructor.
      *
      * @param   string  $message        the exception message
      * @param   string  $httpResponse   the http response content
@@ -51,53 +51,4 @@ class HttpException extends \Payplug\Exception\PayPlugException
     {
         return json_decode($this->_httpResponse, true);
     }
-}
-
-/**
- * 400 Bad Request
- */
-class BadRequestException extends HttpException
-{
-}
-
-/**
- * 401 Unauthorized
- */
-class UnauthorizedException extends HttpException
-{
-}
-
-/**
- * 403 Forbidden
- */
-class ForbiddenException extends HttpException
-{
-}
-
-/**
- * 404 Not Found
- */
-class NotFoundException extends HttpException
-{
-}
-
-/**
- * 405 Not Allowed
- */
-class NotAllowedException extends HttpException
-{
-}
-
-/**
- * 5XX server errors
- */
-class PayPlugServerException extends HttpException
-{
-}
-
-/**
- * Thrown when we expected the API to have a specific format, and we got something else.
- */
-class UnexpectedAPIResponseException extends HttpException
-{
 }

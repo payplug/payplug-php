@@ -14,11 +14,11 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new \Payplug\Payplug('abc', 'cba', true);
-        \Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+        $this->_configuration = new Payplug('abc', 'cba', true);
+        Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
-        \Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+        Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
     public function testTreatPayment()
@@ -40,7 +40,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
             }));
 
         $body = '{ "id": "pay_123", "object": "payment" }';
-        $payment = \Payplug\Notification::treat($body, $this->_configuration);
+        $payment = Notification::treat($body, $this->_configuration);
         $this->assertTrue($payment instanceof $payment);
         $this->assertEquals('real_payment', $payment->id);
     }
@@ -54,6 +54,6 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
             ->method('exec');
 
         $body = 'invalidJSON';
-        \Payplug\Notification::treat($body, $this->_configuration);
+        Notification::treat($body, $this->_configuration);
     }
 }

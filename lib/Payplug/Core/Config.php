@@ -1,5 +1,6 @@
 <?php
 namespace Payplug\Core;
+use Payplug\Exception;
 
 /**
  * Minimal configuration to launch the script.
@@ -9,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '2.0.0';
+    const LIBRARY_VERSION = '2.1.0';
 
     /**
      * PHP minimal version required by this library
@@ -35,22 +36,26 @@ class Config
 
 // Check PHP version
 if (version_compare(phpversion(), Config::PHP_MIN_VERSION, "<")) {
-    throw new RuntimeException('This library needs PHP ' . Config::PHP_MIN_VERSION . ' or newer.');
+    throw new \RuntimeException('This library requires PHP ' . Config::PHP_MIN_VERSION . ' or newer.');
+}
+
+// Check OpenSSL version
+// http://blog.techstacks.com/2013/04/an-openssl-version-matrix.html
+if (defined('OPENSSL_VERSION_NUMBER') && OPENSSL_VERSION_NUMBER < 0x10001001) {
+    throw new \RuntimeException('This library requires OpenSSL 1.0.1 or newer. Please contact your webhoster or update your OpenSSL version.');
 }
 
 // Check PHP configuration
 foreach(Config::$REQUIRED_FUNCTIONS as $key => $value) {
     if (!function_exists($key)) {
-        throw new \Payplug\Exception\DependencyException('This library requires ' . $value . '.');
+        throw new Exception\DependencyException('This library requires ' . $value . '.');
     }
 }
 
 // Prior to PHP 5.5, CURL_SSLVERSION_TLSv1 and CURL_SSLVERSION_DEFAULT didn't exist. Hence, we have to use a numeric value.
 if (!defined('CURL_SSLVERSION_DEFAULT')) {
-    /** @ignore */
     define('CURL_SSLVERSION_DEFAULT', 0);
 }
 if (!defined('CURL_SSLVERSION_TLSv1')) {
-    /** @ignore */
     define('CURL_SSLVERSION_TLSv1', 1);
 }

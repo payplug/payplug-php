@@ -1,5 +1,6 @@
 <?php
 namespace Payplug\Resource;
+use Payplug;
 
 /**
  * A verifiable API Resource is an API Resource that can be converted into a consistent object.
@@ -11,11 +12,11 @@ interface IVerifiableAPIResource
     /**
      * Returns an API resource that you can trust.
      *
-     * @param   \Payplug\Payplug $payplug  the client configuration.
+     * @param   Payplug\Payplug $payplug  the client configuration.
      *
-     * @return  \Payplug\APIResource The consistent API resource.
+     * @return  Payplug\Resource\APIResource The consistent API resource.
      *
-     * @throws  \Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
+     * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource(\Payplug\Payplug $payplug = null);
+    function getConsistentResource(Payplug\Payplug $payplug = null);
 }

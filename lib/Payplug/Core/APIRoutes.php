@@ -29,6 +29,8 @@ class APIRoutes
      *
      * @param   string  $route      One of the routes defined above
      * @param   array   $parameters The parameters required by the route.
+     * @param   array   $pagination The pagination parameters (mainly page and per_page keys that will be appended to
+     *                              the query parameters of the request.
      *
      * @return  string  the full URL to the resource
      */
