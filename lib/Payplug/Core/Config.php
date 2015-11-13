@@ -10,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '2.1.0';
+    const LIBRARY_VERSION = '2.2.0';
 
     /**
      * PHP minimal version required by this library
@@ -42,7 +42,9 @@ if (version_compare(phpversion(), Config::PHP_MIN_VERSION, "<")) {
 // Check OpenSSL version
 // http://blog.techstacks.com/2013/04/an-openssl-version-matrix.html
 if (defined('OPENSSL_VERSION_NUMBER') && OPENSSL_VERSION_NUMBER < 0x10001001) {
-    throw new \RuntimeException('This library requires OpenSSL 1.0.1 or newer. Please contact your webhoster or update your OpenSSL version.');
+    throw new Exception\DependencyException(
+        'This library requires OpenSSL 1.0.1 or newer. Please contact your webhoster or update your OpenSSL version.'
+    );
 }
 
 // Check PHP configuration
