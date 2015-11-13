@@ -14,7 +14,8 @@ spl_autoload_register(function ($class) {
             trigger_error(
                 sprintf(
                     '\\%s is deprecated and may be removed in the near future. Use \\%s instead.',
-                    $deprecatedClass, $substitutionClass),
+                    $deprecatedClass, $substitutionClass
+                ),
                 E_USER_DEPRECATED
             );
             $class = $substitutionClass;
