@@ -7,7 +7,7 @@ help developers to use PayPlug as payment solution in a simple, yet robust way.
 Prerequisites
 -------------
 
-PayPlug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL** to secure transactions. You also need **PHP 5.3** or newer for the PayPlug PHP V2.
+PayPlug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL (1.0.1 or newer)** to secure transactions. You also need **PHP 5.3** or newer for the PayPlug PHP V2.
 
 For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
 
