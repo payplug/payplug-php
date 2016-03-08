@@ -5,7 +5,7 @@ Prerequisites:
 Download composer and update dev dependencies.
 ::
 
-    php composer.phar update --require-dev
+    php composer.phar update
 
 Run the recommended tests:
 --------------------------
