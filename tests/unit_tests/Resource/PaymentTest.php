@@ -188,7 +188,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment = Payment::abort('a_payment_id');
+        $payment = Payplug\Resource\Payment::fromAttributes(array('id' => 'a_payment_id'));
+        $payment = $payment->abort();
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
         $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));

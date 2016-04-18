@@ -6,11 +6,11 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class PaymentCustomerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCustomerFromAttributes()
     {
-        $customer = Customer::fromAttributes(array(
+        $customer = PaymentCustomer::fromAttributes(array(
             'email'         => 'john.doe@example.com',
             'first_name'    => 'John',
             'last_name'     => 'Doe',

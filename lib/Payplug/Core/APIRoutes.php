@@ -13,16 +13,11 @@ class APIRoutes
 
     const API_VERSION = 1;
 
-    // Payments routes
-    const CREATE_PAYMENT    = '/payments';
-    const RETRIEVE_PAYMENT  = '/payments/{PAYMENT_ID}';
-    const ABORT_PAYMENT     = '/payments/{PAYMENT_ID}';
-    const LIST_PAYMENTS     = '/payments';
-
-    // Refunds routes
-    const CREATE_REFUND     = '/payments/{PAYMENT_ID}/refunds';
-    const RETRIEVE_REFUND   = '/payments/{PAYMENT_ID}/refunds/{REFUND_ID}';
-    const LIST_REFUNDS      = '/payments/{PAYMENT_ID}/refunds';
+    // Resources routes
+    const PAYMENT_RESOURCE    = '/payments';
+    const REFUND_RESOURCE     = APIRoutes::PAYMENT_RESOURCE . '/{PAYMENT_ID}/refunds';
+    const CUSTOMER_RESOURCE   = '/customers';
+    const CARDS_RESOURCE      = APIRoutes::CUSTOMER_RESOURCE . '/{CUSTOMER_ID}/cards';
 
     /**
      * Get the route to a specified resource.
@@ -34,15 +29,19 @@ class APIRoutes
      *
      * @return  string  the full URL to the resource
      */
-    public static function getRoute($route, array $parameters = array(), array $pagination = array())
+    public static function getRoute($route, $resourceId = null, array $parameters = array(), array $pagination = array())
     {
         foreach ($parameters as $parameter => $value) {
             $route = str_replace('{' . $parameter . '}', $value, $route);
         }
+
+        $resourceIdUrl = $resourceId ? '/' . $resourceId : '';
+
         $query_pagination = '';
         if (!empty($pagination))
             $query_pagination = '?' . http_build_query($pagination);
-        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route . $query_pagination;
+
+        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route . $resourceIdUrl . $query_pagination;
     }
 
     /**

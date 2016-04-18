@@ -1,8 +1,9 @@
 <?php
 namespace Payplug\Resource;
+use Payplug;
 
 /**
- * A Customer.
+ * A Customer
  */
 class Customer extends APIResource
 {
@@ -11,7 +12,7 @@ class Customer extends APIResource
      *
      * @param   array   $attributes the default attributes.
      *
-     * @return  Customer    The new resource.
+     * @return  Customer The new resource.
      */
     public static function fromAttributes(array $attributes)
     {

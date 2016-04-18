@@ -6,11 +6,11 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentFailureTest extends \PHPUnit_Framework_TestCase
+class PaymentPaymentFailureTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreatePaymentFailureFromAttributes()
     {
-        $paymentFailure = PaymentFailure::fromAttributes(array(
+        $paymentFailure = PaymentPaymentFailure::fromAttributes(array(
             'code'      => 'card_stolen',
             'message'   => 'The card is stolen.'
         ));

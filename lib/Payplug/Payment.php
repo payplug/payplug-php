@@ -33,7 +33,8 @@ class Payment
      */
     public static function abort($paymentId, Payplug $payplug = null)
     {
-    	return Resource\Payment::abort($paymentId, $payplug);
+        $payment = \Payplug\Resource\Payment::fromAttributes(array('id' => $paymentId));
+    	return $payment->abort($payplug);
     }
 
     /**

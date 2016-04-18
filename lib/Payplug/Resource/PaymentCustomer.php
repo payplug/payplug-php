@@ -2,20 +2,20 @@
 namespace Payplug\Resource;
 
 /**
- * A Notification
+ * A Customer.
  */
-class Notification extends APIResource
+class PaymentCustomer extends APIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
-     * @param   array   $attributes the default attributes.
+     * @param   array $attributes the default attributes.
      *
-     * @return  Notification   The new resource.
+     * @return  PaymentCustomer The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
-        $object = new Notification();
+        $object = new PaymentCustomer();
         $object->initialize($attributes);
         return $object;
     }

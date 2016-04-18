@@ -6,11 +6,11 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class NotificationTest extends \PHPUnit_Framework_TestCase
+class PaymentNotificationTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateNotificationFromAttributes()
     {
-        $notification = Notification::fromAttributes(array(
+        $notification = PaymentNotification::fromAttributes(array(
             'url'               => 'https://www.example.net/payplug_notification.html',
             'response_code'     => 200
         ));
