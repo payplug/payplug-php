@@ -17,15 +17,16 @@ class APIRoutes
     const PAYMENT_RESOURCE    = '/payments';
     const REFUND_RESOURCE     = APIRoutes::PAYMENT_RESOURCE . '/{PAYMENT_ID}/refunds';
     const CUSTOMER_RESOURCE   = '/customers';
-    const CARDS_RESOURCE      = APIRoutes::CUSTOMER_RESOURCE . '/{CUSTOMER_ID}/cards';
+    const CARD_RESOURCE      = APIRoutes::CUSTOMER_RESOURCE . '/{CUSTOMER_ID}/cards';
 
     /**
      * Get the route to a specified resource.
      *
-     * @param   string  $route      One of the routes defined above
-     * @param   array   $parameters The parameters required by the route.
-     * @param   array   $pagination The pagination parameters (mainly page and per_page keys that will be appended to
-     *                              the query parameters of the request.
+     * @param   string $route One of the routes defined above
+     * @param   string $resourceId The resource id you want to get. If null, will point to the endpoint.
+     * @param   array $parameters The parameters required by the route.
+     * @param   array $pagination The pagination parameters (mainly page and per_page keys that will be appended to the
+     *                            query parameters of the request.
      *
      * @return  string  the full URL to the resource
      */

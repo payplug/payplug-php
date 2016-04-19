@@ -46,7 +46,6 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     public function testPatch()
     {
-
         $this->_requestMock
             ->expects($this->once())
             ->method('exec')
@@ -66,6 +65,29 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('status' => 'ok'), $result['httpResponse']);
         $this->assertEquals(200, $result['httpStatus']);
+    }
+
+    public function testDelete()
+    {
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 204;
+                }
+                return null;
+            }));
+
+        $result = $this->_httpClient->delete('somewhere');
+
+        $this->assertEquals(array('status' => 'ok'), $result['httpResponse']);
+        $this->assertEquals(204, $result['httpStatus']);
     }
 
     public function testGet()

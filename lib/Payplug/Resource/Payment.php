@@ -158,20 +158,20 @@ class Payment extends APIResource implements IVerifiableAPIResource
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, null, array(), $pagination)
         );
 
-        if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
+        if (!array_key_exists('data', $response['httpResponse'])
+            || !is_array($response['httpResponse']['data'])) {
             throw new Payplug\Exception\UnexpectedAPIResponseException(
-                "Expected API response to contain 'data' key referencing an array.",
+                "Expected 'data' key in API response.",
                 $response['httpResponse']
             );
         }
 
-        $wrap = $response['httpResponse'];
         $payments = array();
         foreach ($response['httpResponse']['data'] as &$payment) {
             $payments[] = Payment::fromAttributes($payment);
         }
-        $wrap['data'] = $payments;
-        return $wrap;
+
+        return $payments;
     }
 
     /**

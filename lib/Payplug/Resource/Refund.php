@@ -112,13 +112,12 @@ class Refund extends APIResource implements IVerifiableAPIResource
             );
         }
 
-        $wrap = $response['httpResponse'];
         $refunds = array();
         foreach ($response['httpResponse']['data'] as &$refund) {
             $refunds[] = Refund::fromAttributes($refund);
         }
-        $wrap['data'] = $refunds;
-        return $wrap;
+
+        return $refunds;
     }
 
     /**

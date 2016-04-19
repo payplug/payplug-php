@@ -2,7 +2,7 @@
 namespace Payplug;
 
 /**
- * The Refund DAO use to simplify the access to most usefull static methods
+ * The Refund DAO simplifies the access to most useful methods
  **/
 class Refund {
 	/**
