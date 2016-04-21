@@ -46,24 +46,22 @@ TEMP_DIRECTORY="$(mktemp -d)"
 
 cd "$TEMP_DIRECTORY"
 
-# Get and extract curl and PHP
-curl -L "https://curl.haxx.se/download/curl-$CURL_VERSION.tar.gz" --output curl.tar.gz
-curl -L "https://github.com/php/php-src/archive/php-$PHP_VERSION.tar.gz" --output php.tar.gz
-tar -xzf curl.tar.gz
-tar -xzf php.tar.gz
-
 # Build curl
 if ! [ -f "$PHP_CURL_LIBS_DIRECTORY/curl/lib/libcurl.so" ]; then
+    curl -L "https://curl.haxx.se/download/curl-$CURL_VERSION.tar.gz" --output curl.tar.gz
+    tar -xzf curl.tar.gz
     cd "curl-$CURL_VERSION"
+
     ./configure --prefix="$PHP_CURL_LIBS_DIRECTORY/curl/"
     make
     make install
+
+    cd ..
 fi
 # End build curl
 
 # Build PHP
-if ! [ -d "$PHP_DIRECTORY/php" ]; then
-    cd ..
+if ! [ -d "$PHP_DIRECTORY/php/bin/" ]; then
     git clone https://github.com/php-build/php-build.git
     grep -v "with-curl" "php-build/share/php-build/default_configure_options" \
          > "php-build/share/php-build/default_configure_options_"
@@ -74,6 +72,9 @@ fi
 
 # Build PHP Curl
 if ! [ -f "$PHP_CURL_LIBS_DIRECTORY/phpcurl/curl.so" ]; then
+    curl -L "https://github.com/php/php-src/archive/php-$PHP_VERSION.tar.gz" --output php.tar.gz
+    tar -xzf php.tar.gz
+
     cd "php-src-php-$PHP_VERSION/ext/curl/"
     chmod +x "$PHP_DIRECTORY/php/bin/phpize"
     "$PHP_DIRECTORY/php/bin/phpize"
@@ -85,7 +86,9 @@ if ! [ -f "$PHP_CURL_LIBS_DIRECTORY/phpcurl/curl.so" ]; then
     EXTENSION_LINE="extension=/tmp/curl/$PHP_VERSION/$CURL_VERSION/phpcurl/curl.so"
     ESCAPED_EXTENSION_LINE=$(sed -e 's/[]\/$*.^|[]/\\&/g' <<< "$EXTENSION_LINE")
     PHP_INI_FILE="$PHP_DIRECTORY/php/etc/php.ini"
-    sed 's/extension=.*curl.so.*/'"$ESCAPED_EXTENSION_LINE"'/g'  >> "$PHP_INI_FILE"_
+    sed 's/extension=.*curl.so.*/'"$ESCAPED_EXTENSION_LINE"'/g' "$PHP_INI_FILE" >> "$PHP_INI_FILE"_
     mv "$PHP_INI_FILE"_ "$PHP_INI_FILE"
+
+    cd ..
 fi
 # End build PHP Curl
