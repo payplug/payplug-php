@@ -84,10 +84,9 @@ if ! [ -f "$PHP_CURL_LIBS_DIRECTORY/phpcurl/curl.so" ]; then
 
     # Add PHP Curl module to php.ini if it's not already present
     EXTENSION_LINE="extension=/tmp/curl/$PHP_VERSION/$CURL_VERSION/phpcurl/curl.so"
-    ESCAPED_EXTENSION_LINE=$(sed -e 's/[]\/$*.^|[]/\\&/g' <<< "$EXTENSION_LINE")
     PHP_INI_FILE="$PHP_DIRECTORY/php/etc/php.ini"
-    sed 's/extension=.*curl.so.*/'"$ESCAPED_EXTENSION_LINE"'/g' "$PHP_INI_FILE" >> "$PHP_INI_FILE"_
-    mv "$PHP_INI_FILE"_ "$PHP_INI_FILE"
+    sed -i '/extension=.*curl.so.*/d' "$PHP_INI_FILE"
+    echo "$EXTENSION_LINE" >> "$PHP_INI_FILE"
 
     cd ..
 fi
