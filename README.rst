@@ -63,8 +63,6 @@ Here's how simple it is to create a payment request:
     <?php
     require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php"); // If not using a framework
 
-    use Payplug;
-
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug\Payplug::setSecretKey('YOUR_TOKEN');
 
