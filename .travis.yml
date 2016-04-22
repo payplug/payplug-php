@@ -18,6 +18,7 @@ env:
   - CURL=7.48.0
 
 cache:
+  timeout: 1000
   directories:
   - vendor/
   - /tmp/curl
