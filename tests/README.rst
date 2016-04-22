@@ -1,7 +1,9 @@
 How to run the tests
 ====================
+
 Prerequisites:
 --------------
+
 Download composer and update dev dependencies.
 ::
 
@@ -9,6 +11,7 @@ Download composer and update dev dependencies.
 
 Run the recommended tests:
 --------------------------
+
 It is recommended to launch these tests at least once to ensure this library will work properly on your configuration.
 ::
 
@@ -16,6 +19,7 @@ It is recommended to launch these tests at least once to ensure this library wil
 
 Run a specific test:
 --------------------
+
 You can run a specific test adding a filter to the previous command.
 ::
 
@@ -23,6 +27,7 @@ You can run a specific test adding a filter to the previous command.
 
 Run specific groups of test
 ---------------------------
+
 You can filter tests by groups:
 ::
 

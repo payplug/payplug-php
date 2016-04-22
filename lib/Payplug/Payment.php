@@ -2,7 +2,7 @@
 namespace Payplug;
 
 /**
- * The Payment DAO use to simplify the access to most usefull static methods
+ * The Payment DAO simplifies the access to most useful methods
  **/
 class Payment
 {
@@ -33,7 +33,8 @@ class Payment
      */
     public static function abort($paymentId, Payplug $payplug = null)
     {
-    	return Resource\Payment::abort($paymentId, $payplug);
+        $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
+    	return $payment->abort($payplug);
     }
 
     /**

@@ -4,18 +4,18 @@ namespace Payplug\Resource;
 /**
  * Payment Failure information
  */
-class PaymentFailure extends APIResource
+class PaymentPaymentFailure extends APIResource
 {
     /**
      * The factory method that constructs the API resource.
      *
-     * @param   array   $attributes the default attributes.
+     * @param   array $attributes the default attributes.
      *
-     * @return  PaymentFailure  The new resource.
+     * @return  PaymentPaymentFailure  The new resource.
      */
     public static function fromAttributes(array $attributes)
     {
-        $object = new PaymentFailure();
+        $object = new PaymentPaymentFailure();
         $object->initialize($attributes);
         return $object;
     }

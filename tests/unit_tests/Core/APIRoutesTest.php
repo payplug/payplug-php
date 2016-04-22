@@ -10,7 +10,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 {
     public function testThatRouteStartsWithBaseURL()
     {
-        $route = APIRoutes::getRoute(APIRoutes::CREATE_PAYMENT);
+        $route = APIRoutes::getRoute(APIRoutes::PAYMENT_RESOURCE);
         $expected = APIRoutes::$API_BASE_URL . '/v' . APIRoutes::API_VERSION . '/';
         $beginRoute = substr($route, 0, strlen($expected));
         $this->assertEquals($expected, $beginRoute);
@@ -18,7 +18,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testCreatePaymentRoute()
     {
-        $route = APIRoutes::getRoute(APIRoutes::CREATE_PAYMENT);
+        $route = APIRoutes::getRoute(APIRoutes::PAYMENT_RESOURCE);
         $expected = '/payments';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -26,24 +26,8 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrievePaymentRoute()
     {
-        $route = APIRoutes::getRoute(APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::PAYMENT_RESOURCE, 'foo');
         $expected = '/payments/foo';
-        $endRoute = substr($route, -strlen($expected));
-        $this->assertEquals($expected, $endRoute);
-    }
-
-    public function testAbortPaymentRoute()
-    {
-        $route = APIRoutes::getRoute(APIRoutes::ABORT_PAYMENT, array('PAYMENT_ID' => 'bar'));
-        $expected = '/payments/bar';
-        $endRoute = substr($route, -strlen($expected));
-        $this->assertEquals($expected, $endRoute);
-    }
-
-    public function testListpaymentsRoute()
-    {
-        $route = APIRoutes::getRoute(APIRoutes::LIST_PAYMENTS);
-        $expected = '/payments';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
     }
@@ -51,7 +35,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
     public function testListpaymentspaginationRoute()
     {
         $pagination = array('perPage' => 5, 'page' => 1);
-        $route = APIRoutes::getRoute(APIRoutes::LIST_PAYMENTS, array(), $pagination);
+        $route = APIRoutes::getRoute(APIRoutes::PAYMENT_RESOURCE, null, array(), $pagination);
         $expected = '/payments?perPage=5&page=1';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -59,7 +43,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateRefundRoute()
     {
-        $route = APIRoutes::getRoute(APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo/refunds';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -67,7 +51,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveRefundRoute()
     {
-        $route = APIRoutes::getRoute(APIRoutes::RETRIEVE_REFUND, array('PAYMENT_ID' => 'foo', 'REFUND_ID' => 'bar'));
+        $route = APIRoutes::getRoute(APIRoutes::REFUND_RESOURCE, 'bar', array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo/refunds/bar';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
@@ -75,7 +59,7 @@ class APIRoutesTest extends \PHPUnit_Framework_TestCase
 
     public function testListRefundsRoute()
     {
-        $route = APIRoutes::getRoute(APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => 'foo'));
+        $route = APIRoutes::getRoute(APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => 'foo'));
         $expected = '/payments/foo/refunds';
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);

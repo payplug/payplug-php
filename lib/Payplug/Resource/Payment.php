@@ -32,19 +32,19 @@ class Payment extends APIResource implements IVerifiableAPIResource
         parent::initialize($attributes);
 
         if (isset($attributes['card'])) {
-            $this->card = Card::fromAttributes($attributes['card']);
+            $this->card = PaymentCard::fromAttributes($attributes['card']);
         }
         if (isset($attributes['customer'])) {
-            $this->customer = Customer::fromAttributes($attributes['customer']);
+            $this->customer = PaymentCustomer::fromAttributes($attributes['customer']);
         }
         if (isset($attributes['hosted_payment'])) {
-            $this->hosted_payment = HostedPayment::fromAttributes($attributes['hosted_payment']);
+            $this->hosted_payment = PaymentHostedPayment::fromAttributes($attributes['hosted_payment']);
         }
         if (isset($attributes['failure'])) {
-            $this->failure = PaymentFailure::fromAttributes($attributes['failure']);
+            $this->failure = PaymentPaymentFailure::fromAttributes($attributes['failure']);
         }
         if (isset($attributes['notification'])) {
-            $this->notification = Notification::fromAttributes($attributes['notification']);
+            $this->notification = PaymentNotification::fromAttributes($attributes['notification']);
         }
     }
 
@@ -70,8 +70,6 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * List the refunds of this payment.
      *
-     * @param   int                 $perPage    the number of results per page
-     * @param   int                 $page       the page number
      * @param   Payplug\Payplug     $payplug    the client configuration
      *
      * @return  null|Refund[]   the array of refunds of this payment
@@ -79,13 +77,37 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws  Payplug\Exception\InvalidPaymentException
      * @throws  Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listRefunds($perPage = null, $page = null, Payplug\Payplug $payplug = null)
+    public function listRefunds(Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) {
             throw new Payplug\Exception\InvalidPaymentException("This payment object has no id. You can't list refunds on it.");
         }
 
-        return Refund::listRefunds($this->id, $perPage, $page, $payplug);
+        return Refund::listRefunds($this->id, $payplug);
+    }
+
+    /**
+     * Aborts a Payment.
+     *
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  null|Payment the aborted payment or null on error
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     */
+    public function abort(Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
+            array('abort' => true)
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
     }
 
     /**
@@ -106,32 +128,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->get(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::RETRIEVE_PAYMENT, array('PAYMENT_ID' => $paymentId))
-        );
-
-        return Payment::fromAttributes($response['httpResponse']);
-    }
-
-    /**
-     * Aborts a Payment.
-     *
-     * @param   string              $paymentId  the payment ID
-     * @param   Payplug\Payplug    $payplug    the client configuration
-     *
-     * @return  null|Payment the aborted payment or null on error
-     *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
-     */
-    public static function abort($paymentId, Payplug\Payplug $payplug = null)
-    {
-        if ($payplug === null) {
-            $payplug = Payplug\Payplug::getDefaultConfiguration();
-        }
-
-        $httpClient = new Payplug\Core\HttpClient($payplug);
-        $response = $httpClient->patch(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::ABORT_PAYMENT, array('PAYMENT_ID' => $paymentId)),
-            array('abort' => true)
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $paymentId)
         );
 
         return Payment::fromAttributes($response['httpResponse']);
@@ -156,26 +153,25 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        $parameters = array();
         $pagination = array('per_page' => $perPage, 'page' => $page);
         $response = $httpClient->get(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::LIST_PAYMENTS, $parameters, $pagination)
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, null, array(), $pagination)
         );
 
-        if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
+        if (!array_key_exists('data', $response['httpResponse'])
+            || !is_array($response['httpResponse']['data'])) {
             throw new Payplug\Exception\UnexpectedAPIResponseException(
-                "Expected API response to contain 'data' key referencing an array.",
+                "Expected 'data' key in API response.",
                 $response['httpResponse']
             );
         }
 
-        $wrap = $response['httpResponse'];
         $payments = array();
         foreach ($response['httpResponse']['data'] as &$payment) {
             $payments[] = Payment::fromAttributes($payment);
         }
-        $wrap['data'] = $payments;
-        return $wrap;
+
+        return $payments;
     }
 
     /**
@@ -196,7 +192,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::CREATE_PAYMENT),
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE),
             $data
         );
 

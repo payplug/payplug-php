@@ -42,7 +42,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::CREATE_REFUND, array('PAYMENT_ID' => $payment)),
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => $payment)),
             $data
         );
 
@@ -72,11 +72,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->get(
             Payplug\Core\APIRoutes::getRoute(
-                Payplug\Core\APIRoutes::RETRIEVE_REFUND,
-                array(
-                    'PAYMENT_ID' => $payment,
-                    'REFUND_ID'  => $refundId
-                )
+                Payplug\Core\APIRoutes::REFUND_RESOURCE, $refundId, array('PAYMENT_ID' => $payment)
             )
         );
 
@@ -106,7 +102,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
         $httpClient = new Payplug\Core\HttpClient($payplug);
 
         $response = $httpClient->get(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::LIST_REFUNDS, array('PAYMENT_ID' => $payment))
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => $payment))
         );
 
         if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
@@ -116,13 +112,12 @@ class Refund extends APIResource implements IVerifiableAPIResource
             );
         }
 
-        $wrap = $response['httpResponse'];
         $refunds = array();
         foreach ($response['httpResponse']['data'] as &$refund) {
             $refunds[] = Refund::fromAttributes($refund);
         }
-        $wrap['data'] = $refunds;
-        return $wrap;
+
+        return $refunds;
     }
 
     /**

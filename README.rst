@@ -1,6 +1,14 @@
 PHP library for the PayPlug API
 ===============================
 
+.. image:: https://travis-ci.org/payplug/payplug-php.svg?branch=master
+   :target: https://travis-ci.org/payplug/payplug-php
+   :alt: CI Status
+
+.. image:: https://img.shields.io/packagist/v/payplug/payplug-php.svg?maxAge=2592000
+   :target: https://packagist.org/packages/payplug/payplug-php
+   :alt: Packagist
+
 This is the documentation of PayPlug's PHP library. It is designed to
 help developers to use PayPlug as payment solution in a simple, yet robust way.
 

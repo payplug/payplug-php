@@ -1,0 +1,38 @@
+dist: trusty
+sudo: false
+
+language: php
+
+php:
+  - '5.3'
+  - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.0'
+
+env:
+  - CURL=7.21.7
+  - CURL=7.35.0
+  - CURL=7.40.0
+  - CURL=7.45.0
+  - CURL=7.48.0
+
+cache:
+  timeout: 1000
+  directories:
+  - vendor/
+  - /tmp/curl
+
+matrix:
+  fast_finish: true
+
+before_script:
+  - PHP_VERSION=$(php -r "echo phpversion();")
+  - ./tests/ci_tools/get_php_curl.sh "$CURL" "$PHP_VERSION"
+  - export PATH="/tmp/curl/$PHP_VERSION/php/bin:$PATH"
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar update
+
+script:
+  - vendor/phpunit/phpunit/phpunit --group recommended --exclude-group ignore --bootstrap tests/config.php tests
+

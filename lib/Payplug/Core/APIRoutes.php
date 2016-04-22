@@ -13,36 +13,36 @@ class APIRoutes
 
     const API_VERSION = 1;
 
-    // Payments routes
-    const CREATE_PAYMENT    = '/payments';
-    const RETRIEVE_PAYMENT  = '/payments/{PAYMENT_ID}';
-    const ABORT_PAYMENT     = '/payments/{PAYMENT_ID}';
-    const LIST_PAYMENTS     = '/payments';
-
-    // Refunds routes
-    const CREATE_REFUND     = '/payments/{PAYMENT_ID}/refunds';
-    const RETRIEVE_REFUND   = '/payments/{PAYMENT_ID}/refunds/{REFUND_ID}';
-    const LIST_REFUNDS      = '/payments/{PAYMENT_ID}/refunds';
+    // Resources routes
+    const PAYMENT_RESOURCE    = '/payments';
+    const REFUND_RESOURCE     = '/payments/{PAYMENT_ID}/refunds';
+    const CUSTOMER_RESOURCE   = '/customers';
+    const CARD_RESOURCE       = '/customers/{CUSTOMER_ID}/cards';
 
     /**
      * Get the route to a specified resource.
      *
-     * @param   string  $route      One of the routes defined above
-     * @param   array   $parameters The parameters required by the route.
-     * @param   array   $pagination The pagination parameters (mainly page and per_page keys that will be appended to
-     *                              the query parameters of the request.
+     * @param   string $route One of the routes defined above
+     * @param   string $resourceId The resource id you want to get. If null, will point to the endpoint.
+     * @param   array $parameters The parameters required by the route.
+     * @param   array $pagination The pagination parameters (mainly page and per_page keys that will be appended to the
+     *                            query parameters of the request.
      *
      * @return  string  the full URL to the resource
      */
-    public static function getRoute($route, array $parameters = array(), array $pagination = array())
+    public static function getRoute($route, $resourceId = null, array $parameters = array(), array $pagination = array())
     {
         foreach ($parameters as $parameter => $value) {
             $route = str_replace('{' . $parameter . '}', $value, $route);
         }
+
+        $resourceIdUrl = $resourceId ? '/' . $resourceId : '';
+
         $query_pagination = '';
         if (!empty($pagination))
             $query_pagination = '?' . http_build_query($pagination);
-        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route . $query_pagination;
+
+        return self::$API_BASE_URL . '/v' . self::API_VERSION . $route . $resourceIdUrl . $query_pagination;
     }
 
     /**

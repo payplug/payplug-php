@@ -188,7 +188,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment = Payment::abort('a_payment_id');
+        $payment = Payplug\Payment::abort('a_payment_id');
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
         $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
@@ -256,8 +256,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $result = Payment::listPayments();
-        $payments = $result['data'];
+        $payments = Payment::listPayments();
         $this->assertEquals(2, count($payments));
         $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
         $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
@@ -292,9 +291,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $page = 0;
         $payments = Payment::listPayments($perPage, $page);
 
-        $this->assertEquals($payments['per_page'], 1);
-        $this->assertEquals($payments['page'], 0);
-        $payments = $payments['data'];
         $this->assertEquals(1, count($payments));
         $this->assertTrue($payments[0]->id == 'payment1');
 
@@ -389,8 +385,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             }));
 
         $payment = Payment::fromAttributes(array('id' => 'a_payment_id'));
-        $result = $payment->listRefunds();
-        $refunds = $result['data'];
+        $refunds = $payment->listRefunds();
 
         $this->assertEquals(2, count($refunds));
         $this->assertTrue($refunds[0]->id === 'refund1' || $refunds[0]->id === 'refund2');
