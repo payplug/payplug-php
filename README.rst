@@ -12,12 +12,18 @@ PHP library for the PayPlug API
 This is the documentation of PayPlug's PHP library. It is designed to
 help developers to use PayPlug as payment solution in a simple, yet robust way.
 
+You can create a PayPlug account at [http://payplug.com](http://payplug.com).
+
 Prerequisites
 -------------
 
 PayPlug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL (1.0.1 or newer)** to secure transactions. You also need **PHP 5.3** or newer for the PayPlug PHP V2.
 
 For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
+
+Documentation
+-------------
+Please see [https://www.payplug.com/docs/api](https://www.payplug.com/docs/api) for latest documentation.
 
 Installation
 ------------
