@@ -76,12 +76,25 @@ abstract class APIResource implements IAPIResourceFactory
      */
     public function __get($attribute)
     {
-        if (array_key_exists($attribute, $this->_attributes)) {
+        if ($this->__isset($attribute)) {
             return $this->_attributes[$attribute];
         }
 
         throw new Payplug\Exception\UndefinedAttributeException('Requested attribute ' . $attribute . ' is undefined.');
     }
+
+    /**
+     * Checks if an API resource property is set
+     *
+     * @param   string  $attribute  the key of the attribute to check
+     *
+     * @return  bool    True if the property is set. False otherwise.
+     */
+    public function __isset($attribute)
+    {
+        return array_key_exists($attribute, $this->_attributes);
+    }
+
 
     /**
      * Sets an API resource property.
