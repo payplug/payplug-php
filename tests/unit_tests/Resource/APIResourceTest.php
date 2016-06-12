@@ -34,6 +34,16 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
         $this->_myApiResource->an_undefined_attribute;
     }
 
+    public function testIssetReturnsTrueWhenPropertyExists()
+    {
+        $this->assertTrue(isset($this->_myApiResource->attr1));
+    }
+
+    public function testIssetReturnsFalseWhenPropertyDoesNotExist()
+    {
+        $this->assertFalse(isset($this->_myApiResource->an_undefined_attribute));
+    }
+
     public function testPaymentFromAPIResourceFactory()
     {
         $attributes = array(
