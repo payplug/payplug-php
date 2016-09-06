@@ -20,6 +20,24 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object    Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
+    }
+
     public function testPost()
     {
 
@@ -345,8 +363,6 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $this->_httpClient->get('somewhere_else');
     }
 
-
-
     function testConnectionError()
     {
         $this->setExpectedException('\PayPlug\Exception\ConnectionException');
@@ -385,5 +401,28 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
             }));
 
         $this->_httpClient->get('somewhere');
+    }
+
+    function testFormatUserAgentProduct()
+    {
+        $result = $this->invokeMethod($this->_httpClient, 'formatUserAgentProduct',
+                                      array('PayPlug-PHP', '2.2.1' , 'PHP/5.5.34; curl/7.43.0'));
+
+        $this->assertEquals($result, 'PayPlug-PHP/2.2.1 (PHP/5.5.34; curl/7.43.0)');
+    }
+
+    function testGetUserAgent()
+    {
+        $userAgent = $this->_httpClient->getUserAgent();
+        // Expected result is something like 'PayPlug-PHP/1.0.0 (PHP/5.5.35; curl/7.44.0)'
+        $this->assertRegExp('/^PayPlug-PHP\/(\d+\.?){1,3} \(PHP\/(\d+\.?){1,3}; curl\/(\d+\.?){1,3}\)$/', $userAgent);
+    }
+
+    function testGetUserAgentWithAdditionalProduct()
+    {
+        \Payplug\Core\HttpClient::addDefaultUserAgentProduct('PayPlug-Test', '1.0.0', 'Comment/1.6.3');
+        \Payplug\Core\HttpClient::addDefaultUserAgentProduct('Another-Test', '5.8.13');
+        $userAgent = $this->_httpClient->getUserAgent();
+        $this->assertStringEndsWith(' PayPlug-Test/1.0.0 (Comment/1.6.3) Another-Test/5.8.13', $userAgent);
     }
 }

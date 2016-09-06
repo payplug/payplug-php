@@ -21,6 +21,12 @@ class HttpClient
     public static $REQUEST_HANDLER = null;
 
     /**
+     * @var array  Default User-Agent products made to improve the User-Agent HTTP header
+     * sent for each HTTP request.
+     */
+    private static $defaultUserAgentProducts = array();
+
+    /**
      * @var Payplug\Payplug The configuration for the HTTP Client. This configuration will be used to pass
      * the right token in the queries headers.
      */
@@ -138,6 +144,55 @@ class HttpClient
     }
 
     /**
+     * Adds a default product for the User-Agent HTTP header sent for each HTTP request.
+     *
+     * @param   string  $product   the product's name
+     * @param   string  $version   the product's version
+     * @param   string  $comment   a comment about the product
+     *
+     */
+    public static function addDefaultUserAgentProduct($product, $version = null, $comment = null)
+    {
+        self::$defaultUserAgentProducts[] = array($product, $version, $comment);
+    }
+
+    /**
+     * Formats a product for a User-Agent HTTP header.
+     *
+     * @param   string  $product   the product's name
+     * @param   string  $version   the product's version
+     * @param   string  $comment   a comment about the product
+     *
+     */
+    private static function formatUserAgentProduct($product, $version = null, $comment = null)
+    {
+        $productString = $product;
+        if ($version) {
+            $productString .= '/' . $version;
+        }
+        if ($comment) {
+            $productString .= ' (' . $comment . ')';
+        }
+        return $productString;
+    }
+
+    /**
+     * Gets the User-Agent HTTP header sent for each HTTP request.
+     */
+    public static function getUserAgent()
+    {
+        $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
+                                       // PHP < 5.4 doesn't support call()['value'] directly.
+        $userAgent = self::formatUserAgentProduct('PayPlug-PHP',
+                                                  Payplug\Core\Config::LIBRARY_VERSION,
+                                                  sprintf('PHP/%s; curl/%s', phpversion(), $curlVersion['version']));
+        foreach (self::$defaultUserAgentProducts as $product) {
+            $userAgent .= ' ' . self::formatUserAgentProduct($product[0], $product[1], $product[2]);
+        }
+        return $userAgent;
+    }
+
+    /**
      * Performs a request.
      *
      * @param   string  $httpVerb       the HTTP verb (PUT, POST, GET, …)
@@ -164,11 +219,7 @@ class HttpClient
             $request = self::$REQUEST_HANDLER;
         }
 
-        $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
-                                        // PHP < 5.4 doesn't support call()['value'] directly.
-        $userAgent = sprintf(
-            'PayPlug-PHP/%s (PHP/%s; curl/%s)', Payplug\Core\Config::LIBRARY_VERSION, phpversion(), $curlVersion['version']
-        );
+        $userAgent = self::getUserAgent();
         $headers = array(
             'Accept: application/json',
             'Content-Type: application/json',
