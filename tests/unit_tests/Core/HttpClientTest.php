@@ -20,24 +20,6 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
-    /**
-     * Call protected/private method of a class.
-     *
-     * @param object &$object    Instantiated object that we will run method on.
-     * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
-     *
-     * @return mixed Method return.
-     */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
-    }
-
     public function testPost()
     {
 
@@ -405,8 +387,10 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     function testFormatUserAgentProduct()
     {
-        $result = $this->invokeMethod($this->_httpClient, 'formatUserAgentProduct',
-                                      array('PayPlug-PHP', '2.2.1' , 'PHP/5.5.34; curl/7.43.0'));
+        $result = \Payplug\Test\TestUtils::invokePrivateMethod(
+            $this->_httpClient, 'formatUserAgentProduct',
+            array('PayPlug-PHP', '2.2.1' , 'PHP/5.5.34; curl/7.43.0')
+        );
 
         $this->assertEquals($result, 'PayPlug-PHP/2.2.1 (PHP/5.5.34; curl/7.43.0)');
     }

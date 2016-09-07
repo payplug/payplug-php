@@ -6,7 +6,7 @@ namespace Payplug;
  **/
 class Customer
 {
-	/**
+     /**
      * Retrieve a customer.
      *
      * @param   string $customerId the payment ID
@@ -21,7 +21,7 @@ class Customer
     	return Resource\Customer::retrieve($customerId, $payplug);
     }
 
-	/**
+     /**
      * Update a customer.
      *
      * @param   string $customerId the customer ID

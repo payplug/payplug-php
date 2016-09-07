@@ -159,10 +159,11 @@ class HttpClient
     /**
      * Formats a product for a User-Agent HTTP header.
      *
-     * @param   string  $product   the product's name
-     * @param   string  $version   the product's version
-     * @param   string  $comment   a comment about the product
+     * @param   string  $product   the product name
+     * @param   string  $version   (optional) product version
+     * @param   string  $comment   (optional) comment about the product.
      *
+     * @return  string  a formatted User-Agent string (`PRODUCT/VERSION (COMMENT)`)
      */
     private static function formatUserAgentProduct($product, $version = null, $comment = null)
     {
