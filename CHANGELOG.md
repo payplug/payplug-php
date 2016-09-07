@@ -1,3 +1,10 @@
+2.4.0
+-----
+
+- **NEW**: Support for __isset magic method in resources. This should bring Twig support.
+  (Thanks [oservieres](https://github.com/oservieres))
+- **NEW**: Add a method to specify custom User-Agent products.
+
 2.3.0
 -----
 
@@ -21,6 +28,6 @@
   ```
 
 - **Breaking change**: Drop deprecated classes *PayPlugException* and *PayPlugServerException* (with two uppercase
-  letters in **P**ay**P**lug). If you use ***P**ayplugException* and ***P**ayplugServerException* classes (with one
+  letters in **P**ay**P**lug). If you use **P**ay**p**lugException* and **P**ay**p**lugServerException* classes (with one
   uppercase letter in Payplug), you have nothing to do.
 - **NEW**: This library is now under MIT Licence (Issue #4).
