@@ -41,7 +41,7 @@ class Payplug
      * $authentication['TOKEN'] = 'YOUR TOKEN'
      * </pre>
      *
-     * @param   array   $token  the authentication token
+     * @param  string   $token  the authentication token
      *
      * @return Payplug  the new client authentication
      *
