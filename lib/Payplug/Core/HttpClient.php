@@ -47,6 +47,7 @@ class HttpClient
      *
      * @param   string  $resource   the path to the remote resource
      * @param   array   $data       Request data
+     * @param   bool    $authenticated  the request should be authenticated
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -58,9 +59,9 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function post($resource, $data = null)
+    public function post($resource, $data = null, $authenticated = true)
     {
-        return $this->request('POST', $resource, $data);
+        return $this->request('POST', $resource, $data, $authenticated);
     }
 
     /**
@@ -108,8 +109,8 @@ class HttpClient
     /**
      * Sends a GET request to the API.
      *
-     * @param   string  $resource   the path to the remote resource
-     * @param   array   $data       Request data
+     * @param   string  $resource       the path to the remote resource
+     * @param   array   $data           Request data
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
