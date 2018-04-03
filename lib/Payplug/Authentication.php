@@ -1,6 +1,5 @@
 <?php
 namespace Payplug;
-use Payplug;
 
 /**
  * 
@@ -15,14 +14,14 @@ class Authentication
      *
      * @return  null|array the API keys
      *
-     * @throws  Payplug\Exception\BadRequestException
+     * @throws  Exception\BadRequestException
      */
     public static function getKeysByLogin($email, $password)
     {
-        $payplug = new Payplug\Payplug('');
-        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $payplug = new Payplug('');
+        $httpClient = new Core\HttpClient($payplug);
         $response = $httpClient->post(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::KEY_RESOURCE),
+            Core\APIRoutes::getRoute(Core\APIRoutes::KEY_RESOURCE),
             array('email' => $email, 'password' => $password),
             false
         );
@@ -32,20 +31,20 @@ class Authentication
     /**
      * Retrieve account info.
      *
-     * @param   Payplug\Payplug $payplug the client configuration
+     * @param   Payplug $payplug the client configuration
      *
      * @return  null|array the account settings
      *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
-    public static function getAccount(Payplug\Payplug $payplug = null)
+    public static function getAccount(Payplug $payplug = null)
     {
         if ($payplug === null) {
-            $payplug = Payplug\Payplug::getDefaultConfiguration();
+            $payplug = Payplug::getDefaultConfiguration();
         }
 
-        $httpClient = new Payplug\Core\HttpClient($payplug);
-        $response = $httpClient->get(Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::ACCOUNT_RESOURCE));
+        $httpClient = new Core\HttpClient($payplug);
+        $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
 
         return $response;
     }
@@ -53,20 +52,20 @@ class Authentication
     /**
      * Retrieve the account permissions
      *
-     * @param   Payplug\Payplug $payplug the client configuration
+     * @param   Payplug $payplug the client configuration
      *
      * @return  null|array the account permissions
      *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
-    public static function getPermissions(Payplug\Payplug $payplug = null)
+    public static function getPermissions(Payplug $payplug = null)
     {
         if ($payplug === null) {
-            $payplug = Payplug\Payplug::getDefaultConfiguration();
+            $payplug = Payplug::getDefaultConfiguration();
         }
 
-        $httpClient = new Payplug\Core\HttpClient($payplug);
-        $response = $httpClient->get(Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::ACCOUNT_RESOURCE));
+        $httpClient = new Core\HttpClient($payplug);
+        $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
 
         return $response['httpResponse']['permissions'];
     }
@@ -79,14 +78,14 @@ class Authentication
      *
      * @return  null|array the account permissions
      *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Exception\ConfigurationNotSetException
      */
     public static function getPermissionsByLogin($email, $password)
     {
         $keys = self::getKeysByLogin($email, $password);
-        $payplug = Payplug\Payplug::setSecretKey($keys['httpResponse']['secret_keys']['live']);
-        $httpClient = new Payplug\Core\HttpClient($payplug);
-        $response = $httpClient->get(Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::ACCOUNT_RESOURCE));
+        $payplug = Payplug::setSecretKey($keys['httpResponse']['secret_keys']['live']);
+        $httpClient = new Core\HttpClient($payplug);
+        $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
 
         return $response['httpResponse']['permissions'];
     }
