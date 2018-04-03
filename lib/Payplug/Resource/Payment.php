@@ -200,12 +200,12 @@ class Payment extends APIResource implements IVerifiableAPIResource
     }
 
     /**
-     * Creates a Payment.
+     * Update a Payment.
      *
      * @param   array               $data       API data for payment creation
      * @param   Payplug\Payplug    $payplug    the client configuration
      *
-     * @return  null|Payment the created payment instance
+     * @return  null|Payment the updated payment instance
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
