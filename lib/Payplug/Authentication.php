@@ -13,9 +13,9 @@ class Authentication
      * @param   string $email the user email
      * @param   string $password the user password
      *
-     * @return  null|Payplug\Resource\APIResource|Card the card object
+     * @return  null|array the API keys
      *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Payplug\Exception\BadRequestException
      */
     public static function getKeysByLogin($email, $password)
     {
@@ -32,9 +32,9 @@ class Authentication
     /**
      * Retrieve account info.
      *
-     * @param   string $payplug the user email
+     * @param   Payplug\Payplug $payplug the client configuration
      *
-     * @return  null|Payplug\Resource\APIResource|Card the card object
+     * @return  null|array the account settings
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
@@ -51,11 +51,11 @@ class Authentication
     }
 
     /**
-     * Retrieve existing API keys for an user, using his email and password.
+     * Retrieve the account permissions
      *
-     * @param   string $payplug the user email
+     * @param   Payplug\Payplug $payplug the client configuration
      *
-     * @return  null|Payplug\Resource\APIResource|Card the card object
+     * @return  null|array the account permissions
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
@@ -72,11 +72,12 @@ class Authentication
     }
 
     /**
-     * Retrieve existing API keys for an user, using his email and password.
+     * Retrieve the account permissions, using email and password.
      *
-     * @param   string $payplug the user email
+     * @param   string $email the user email
+     * @param   string $password the user password
      *
-     * @return  null|Payplug\Resource\APIResource|Card the card object
+     * @return  null|array the account permissions
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */

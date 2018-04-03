@@ -57,5 +57,4 @@ class APIRoutes
     }
 }
 
-//APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
-APIRoutes::$API_BASE_URL = 'https://api-dev.payplug.com';
+APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
