@@ -16,8 +16,9 @@ class APIRoutes
     // Resources routes
     const PAYMENT_RESOURCE    = '/payments';
     const REFUND_RESOURCE     = '/payments/{PAYMENT_ID}/refunds';
-    const CUSTOMER_RESOURCE   = '/customers';
-    const CARD_RESOURCE       = '/customers/{CUSTOMER_ID}/cards';
+    const KEY_RESOURCE        = '/keys';
+    const ACCOUNT_RESOURCE    = '/account';
+    const CARD_RESOURCE       = '/cards';
 
     /**
      * Get the route to a specified resource.

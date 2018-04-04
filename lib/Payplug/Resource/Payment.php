@@ -200,6 +200,31 @@ class Payment extends APIResource implements IVerifiableAPIResource
     }
 
     /**
+     * Update a Payment.
+     *
+     * @param   array               $data       API data for payment creation
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  null|Payment the updated payment instance
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     */
+    public function update(array $data, Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
+            $data
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
      * Returns an API resource that you can trust.
      *
      * @param   Payplug\Payplug $payplug the client configuration.

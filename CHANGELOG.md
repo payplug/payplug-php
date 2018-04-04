@@ -1,3 +1,10 @@
+2.5.0
+-----
+
+- **NEW**: Remove classes and methods specific to customer
+- **NEW**: Add Authentication class for method specific to login and account permissions
+- **NEW**: Add a method to patch payment
+
 2.4.0
 -----
 
