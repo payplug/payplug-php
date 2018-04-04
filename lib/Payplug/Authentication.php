@@ -8,6 +8,8 @@ class Authentication
 {
     /**
      * Retrieve existing API keys for an user, using his email and password.
+     * This function is for user-friendly interface purpose only.
+     * You should probably not use this more than once, login/password MUST NOT be stored and API Keys are enough to interact with API.
      *
      * @param   string $email the user email
      * @param   string $password the user password
@@ -71,6 +73,8 @@ class Authentication
 
     /**
      * Retrieve the account permissions, using email and password.
+     * This function is for user-friendly interface purpose only.
+     * You should probably not use this more than once, login/password MUST NOT be stored and API Keys are enough to interact with API.
      *
      * @param   string $email the user email
      * @param   string $password the user password
