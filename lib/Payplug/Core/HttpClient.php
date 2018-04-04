@@ -37,7 +37,7 @@ class HttpClient
      *
      * @param   Payplug\Payplug    $authentication  the client configuration
      */
-    public function __construct(Payplug\Payplug $authentication)
+    public function __construct(Payplug\Payplug $authentication = null)
     {
         $this->_configuration = $authentication;
     }

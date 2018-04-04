@@ -18,8 +18,7 @@ class Authentication
      */
     public static function getKeysByLogin($email, $password)
     {
-        $payplug = new Payplug('');
-        $httpClient = new Core\HttpClient($payplug);
+        $httpClient = new Core\HttpClient(null);
         $response = $httpClient->post(
             Core\APIRoutes::getRoute(Core\APIRoutes::KEY_RESOURCE),
             array('email' => $email, 'password' => $password),
