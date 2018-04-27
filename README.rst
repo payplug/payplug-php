@@ -5,7 +5,7 @@ PHP library for the PayPlug API
    :target: https://travis-ci.org/payplug/payplug-php
    :alt: CI Status
 
-.. image:: https://img.shields.io/packagist/v/payplug/payplug-php.svg?maxAge=2592000
+.. image:: https://img.shields.io/packagist/v/payplug/payplug-php.svg
    :target: https://packagist.org/packages/payplug/payplug-php
    :alt: Packagist
 
