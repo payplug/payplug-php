@@ -1,0 +1,352 @@
+<?php
+namespace Payplug\Resource;
+use Payplug;
+
+/**
+ * @group unit
+ * @group ci
+ * @group recommended
+ */
+class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
+{
+    private $_requestMock;
+    private $_configuration;
+
+    protected function setUp()
+    {
+        $this->_configuration = new Payplug\Payplug('abc');
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
+    public function testCreateInstallmentPlanFromAttributes()
+    {
+        $installment_plan = InstallmentPlan::fromAttributes(array(
+            'id'                => 'inst_123456',
+            'object'            => 'installment_plan',
+            'is_live'           => true,
+            'currency'          => 'EUR',
+            'created_at'        => 1410437760,
+            'is_active'         => true,
+            'is_fully_paid'     => false,
+            'schedule'          => array(
+                array('date' => '2018-01-01',
+                      'amount' => 10000,
+                      'payments' => array('pay_123', 'pay_456')),
+                array('date' => '2018-02-01',
+                      'amount' => 10000,
+                      'payments' => array('pay_789')),
+                array('date' => '2018-03-01',
+                      'amount' => 5000,
+                      'payments' => array())
+            ),
+            'failure'           => array(
+                'code'              => null,
+                'message'           => null
+            ),
+            'customer'          => array(
+                'email'             => 'name@customer.net',
+                'first_name'        => 'John',
+                'last_name'         => 'Doe'
+            ),
+            'hosted_payment'    => array(
+                'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
+                'return_url'        => 'http://yourwebsite.com/payplug_return?someid=11235',
+                'cancel_url'        => 'http://yourwebsite.com/payplug_cancel?someid=81321',
+            ),
+            'notification'      => array(
+                'url'               => 'http://yourwebsite.com/payplug_ipn',
+                'response_code'     => 200
+            ),
+            'metadata'          => array(
+                'a_custom_field'    => 'a custom value',
+                'another_key'       => 'another value'
+            )
+        ));
+
+        $this->assertEquals('inst_123456', $installment_plan->id);
+        $this->assertEquals('installment_plan', $installment_plan->object);
+        $this->assertEquals(true, $installment_plan->is_live);
+        $this->assertEquals('EUR', $installment_plan->currency);
+        $this->assertEquals(1410437760, $installment_plan->created_at);
+        $this->assertEquals(true, $installment_plan->is_active);
+        $this->assertEquals(false, $installment_plan->is_fully_paid);
+
+        // Schedule
+        $this->assertEquals('2018-01-01', $installment_plan->schedule[0]->date);
+        $this->assertEquals(10000, $installment_plan->schedule[0]->amount);
+        $this->assertEquals(array('pay_123', 'pay_456'), $installment_plan->schedule[0]->payments);
+        $this->assertEquals('2018-02-01', $installment_plan->schedule[1]->date);
+        $this->assertEquals(10000, $installment_plan->schedule[1]->amount);
+        $this->assertEquals(array('pay_789'), $installment_plan->schedule[1]->payments);
+        $this->assertEquals('2018-03-01', $installment_plan->schedule[2]->date);
+        $this->assertEquals(5000, $installment_plan->schedule[2]->amount);
+        $this->assertEquals(array(), $installment_plan->schedule[2]->payments);
+
+        $this->assertNull($installment_plan->failure->code);
+        $this->assertNull($installment_plan->failure->message);
+
+        // Customer
+        $this->assertEquals('name@customer.net', $installment_plan->customer->email);
+        $this->assertEquals('John', $installment_plan->customer->first_name);
+        $this->assertEquals('Doe', $installment_plan->customer->last_name);
+
+       // Hosted payment
+        $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $installment_plan->hosted_payment->payment_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_return?someid=11235', $installment_plan->hosted_payment->return_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_cancel?someid=81321', $installment_plan->hosted_payment->cancel_url);
+
+        // Notification
+        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $installment_plan->notification->url);
+        $this->assertEquals(200, $installment_plan->notification->response_code);
+
+
+        $this->assertEquals('a custom value', $installment_plan->metadata['a_custom_field']);
+        $this->assertEquals('another value', $installment_plan->metadata['another_key']);
+    }
+
+    public function testInstallmentPlanCreate()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = InstallmentPlan::create(array(
+            'currency'          => 'EUR',
+            'schedule'          => array(
+                array('date' => '2018-01-01',
+                      'amount' => 10000,
+                      'payments' => array()),
+                array('date' => '2018-02-01',
+                      'amount' => 10000,
+                      'payments' => array()),
+                array('date' => '2018-03-01',
+                      'amount' => 5000,
+                      'payments' => array()),
+            ),
+            'customer'          => array(
+                'email'         => 'john.doe@example.com',
+                'first_name'    => 'John',
+                'last_name'     => 'Doe'
+            ),
+            'hosted_payment'    => array(
+                'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
+                'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
+            ),
+            'notification_url'  => 'http://www.example.org/callbackURL'
+        ));
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    public function testInstallmentPlanAbort()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = Payplug\InstallmentPlan::abort('a_payment_id');
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    public function testInstallmentPlanRetrieve()
+    {
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
+
+        $installment_plan = InstallmentPlan::retrieve('a_installment_plan');
+
+        $this->assertStringEndsWith('a_installment_plan', $GLOBALS['CURLOPT_URL_DATA']);
+        $this->assertEquals('ok', $installment_plan->status);
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
+
+    public function testInstallmentPlanList()
+    {
+        $this->setExpectedException('\PayPlug\Exception\NotImplementedException');
+        InstallmentPlan::listInstallmentPlans();
+
+    }
+
+    public function testInstallmentPlanListPaymentsWhenPaymentIsInvalid()
+    {
+        $this->setExpectedException('\PayPlug\Exception\InvalidInstallmentPlanException');
+        $installment_plan = InstallmentPlan::fromAttributes(array('fake' => 'payment'));
+        $installment_plan->listPayments();
+    }
+
+    public function testInstallmentPlanListPayments()
+    {
+        $GLOBALS['CURLOPT_URL_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"data":[{"id": "payment1"}, {"id": "payment2"}]}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_URL:
+                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        return true;
+                }
+                return true;
+            }));
+
+        $installment_plan = InstallmentPlan::fromAttributes(array('id' => 'a_payment_id'));
+        $payments = $installment_plan->listPayments();
+
+        $this->assertEquals(2, count($payments));
+        $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
+        $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
+        $this->assertTrue($payments[0]->id !== $payments[1]->id);
+        $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
+
+        unset($GLOBALS['CURLOPT_URL_DATA']);
+    }
+
+    public function testRetrieveConsistentInstallmentPlanWhenIdIsUndefined()
+    {
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+
+        $installment_plan = InstallmentPlan::fromAttributes(array('this_installment_plan' => 'has_no_id'));
+        $installment_plan->getConsistentResource();
+    }
+
+    public function testRetrieveConsistentInstallmentPlan()
+    {
+        function testRetrieveConsistentInstallmentPlan_getinfo($option) {
+            switch($option) {
+                case CURLINFO_HTTP_CODE:
+                    return 200;
+            }
+            return null;
+        }
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"id": "pay_345"}'));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('setopt')
+            ->will($this->returnValue(true));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $installment_plan1 = InstallmentPlan::fromAttributes(array('id' => 'pay_123'));
+        $installment_plan2 = $installment_plan1->getConsistentResource($this->_configuration);
+
+        $this->assertEquals('pay_123', $installment_plan1->id);
+        $this->assertEquals('pay_345', $installment_plan2->id);
+    }
+}
