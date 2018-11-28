@@ -29,6 +29,7 @@ matrix:
   fast_finish: true
 
 before_script:
+  - PHP_AUTOCONF=autoconf2.13
   - PHP_VERSION=$(php -r "echo phpversion();")
   - ./tests/ci_tools/get_php_curl.sh "$CURL" "$PHP_VERSION"
   - export PATH="/tmp/curl/$PHP_VERSION/php/bin:$PATH"
