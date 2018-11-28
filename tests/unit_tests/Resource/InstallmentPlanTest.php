@@ -158,7 +158,6 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
         $payment = InstallmentPlan::create($data);
 
-        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
         $this->assertEquals($data, $GLOBALS['CURLOPT_POSTFIELDS_DATA']);
         $this->assertEquals('ok', $payment->status);
 
@@ -198,7 +197,6 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
         $payment = Payplug\InstallmentPlan::abort('a_payment_id');
 
-        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
         $this->assertEquals($GLOBALS['CURLOPT_POSTFIELDS_DATA'], array('abort' => true));
         $this->assertEquals('ok', $payment->status);
 
@@ -315,6 +313,9 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($payments[1]->id === 'pay_456');
         $this->assertTrue($payments[2]->id === 'pay_789');
         $this->assertContains('a_inst_id', $GLOBALS['CURLOPT_URL_DATA'][0]);
+        $this->assertContains('pay_123', $GLOBALS['CURLOPT_URL_DATA'][1]);
+        $this->assertContains('pay_456', $GLOBALS['CURLOPT_URL_DATA'][2]);
+        $this->assertContains('pay_789', $GLOBALS['CURLOPT_URL_DATA'][3]);
 
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
