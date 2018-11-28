@@ -72,23 +72,16 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
             throw new Payplug\Exception\InvalidInstallmentPlanException(
                 "This installment plan object has no id. You can't list payments on it.");
         }
-
         $httpClient = new Payplug\Core\HttpClient($payplug);
-
         $response = $httpClient->get(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::INSTALLMENT_PLAN_RESOURCE, $this->id)
         );
 
-        if (!array_key_exists('data', $response['httpResponse']) || !is_array($response['httpResponse']['data'])) {
-            throw new Payplug\Exception\UnexpectedAPIResponseException(
-                "Expected API response to contain 'data' key referencing an array.",
-                $response['httpResponse']
-            );
-        }
-
         $payments = array();
-        foreach ($response['httpResponse']['data'] as &$payment) {
-            $payments[] = Payment::fromAttributes($payment);
+        foreach ($response['httpResponse']['schedule'] as $schedule) {
+            foreach ($schedule['payment_ids'] as $payment_id) {
+                $payments[] = Payment::retrieve($payment_id, $payplug);
+            }
         }
 
         return $payments;
