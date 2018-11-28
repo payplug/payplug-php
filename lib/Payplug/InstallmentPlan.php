@@ -18,7 +18,7 @@ class InstallmentPlan
      */
     public static function retrieve($installmentPlanId, Payplug $payplug = null)
     {
-    	return Resource\InstallmentPlan::retrieve($installmentPlanId, $payplug);
+        return Resource\InstallmentPlan::retrieve($installmentPlanId, $payplug);
     }
 
 	/**
@@ -33,8 +33,8 @@ class InstallmentPlan
      */
     public static function abort($installmentPlanId, Payplug $payplug = null)
     {
-        $installment_plan = Resource\InstallmentPlan::fromAttributes(array('id' => $installmentPlanId));
-    	return $installment_plan->abort($payplug);
+        $installmentPlan = Resource\InstallmentPlan::fromAttributes(array('id' => $installmentPlanId));
+        return $installmentPlan->abort($payplug);
     }
 
     /**
