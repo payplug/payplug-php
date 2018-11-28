@@ -244,7 +244,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
     public function testInstallmentPlanListPaymentsWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('\PayPlug\Exception\InvalidInstallmentPlanException');
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
         $installment_plan = InstallmentPlan::fromAttributes(array('fake' => 'payment'));
         $installment_plan->listPayments();
     }

@@ -59,7 +59,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @return  null|Payment[]   the array of payments of this installment plan
      *
-     * @throws  Payplug\Exception\InvalidInstallmentPlanException
+     * @throws  Payplug\Exception\UndefinedAttributeException
      * @throws  Payplug\Exception\UnexpectedAPIResponseException
      */
     public function listPayments(Payplug\Payplug $payplug = null)
@@ -69,7 +69,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
         }
 
         if (!array_key_exists('id', $this->getAttributes())) {
-            throw new Payplug\Exception\InvalidInstallmentPlanException(
+            throw new Payplug\Exception\UndefinedAttributeException(
                 "This installment plan object has no id. You can't list payments on it.");
         }
         $httpClient = new Payplug\Core\HttpClient($payplug);
