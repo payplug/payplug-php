@@ -42,10 +42,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                       'amount' => 5000,
                       'payment_ids' => array())
             ),
-            'failure'           => array(
-                'code'              => null,
-                'message'           => null
-            ),
+            'failure'           => null,
             'customer'          => array(
                 'email'             => 'name@customer.net',
                 'first_name'        => 'John',
@@ -85,8 +82,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5000, $installment_plan->schedule[2]->amount);
         $this->assertEquals(array(), $installment_plan->schedule[2]->payment_ids);
 
-        $this->assertNull($installment_plan->failure->code);
-        $this->assertNull($installment_plan->failure->message);
+        $this->assertNull($installment_plan->failure);
 
         // Customer
         $this->assertEquals('name@customer.net', $installment_plan->customer->email);
