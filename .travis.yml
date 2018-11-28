@@ -1,10 +1,8 @@
-dist: precise
-sudo: false
+dist: xenial
 
 language: php
 
 php:
-  - '5.3'
   - '5.4'
   - '5.5'
   - '5.6'
@@ -14,6 +12,10 @@ php:
 
 matrix:
   fast_finish: true
+  include:
+  - php: '5.3'
+    dist: precise
+    sudo: false
 
 before_script:
   - curl -sS https://getcomposer.org/installer | php
