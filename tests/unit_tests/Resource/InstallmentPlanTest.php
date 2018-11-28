@@ -34,13 +34,13 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
             'schedule'          => array(
                 array('date' => '2018-01-01',
                       'amount' => 10000,
-                      'payments' => array('pay_123', 'pay_456')),
+                      'payment_ids' => array('pay_123', 'pay_456')),
                 array('date' => '2018-02-01',
                       'amount' => 10000,
-                      'payments' => array('pay_789')),
+                      'payment_ids' => array('pay_789')),
                 array('date' => '2018-03-01',
                       'amount' => 5000,
-                      'payments' => array())
+                      'payment_ids' => array())
             ),
             'failure'           => array(
                 'code'              => null,
@@ -77,13 +77,13 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         // Schedule
         $this->assertEquals('2018-01-01', $installment_plan->schedule[0]->date);
         $this->assertEquals(10000, $installment_plan->schedule[0]->amount);
-        $this->assertEquals(array('pay_123', 'pay_456'), $installment_plan->schedule[0]->payments);
+        $this->assertEquals(array('pay_123', 'pay_456'), $installment_plan->schedule[0]->payment_ids);
         $this->assertEquals('2018-02-01', $installment_plan->schedule[1]->date);
         $this->assertEquals(10000, $installment_plan->schedule[1]->amount);
-        $this->assertEquals(array('pay_789'), $installment_plan->schedule[1]->payments);
+        $this->assertEquals(array('pay_789'), $installment_plan->schedule[1]->payment_ids);
         $this->assertEquals('2018-03-01', $installment_plan->schedule[2]->date);
         $this->assertEquals(5000, $installment_plan->schedule[2]->amount);
-        $this->assertEquals(array(), $installment_plan->schedule[2]->payments);
+        $this->assertEquals(array(), $installment_plan->schedule[2]->payment_ids);
 
         $this->assertNull($installment_plan->failure->code);
         $this->assertNull($installment_plan->failure->message);
