@@ -134,18 +134,15 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $payment = InstallmentPlan::create(array(
+        $data = array(
             'currency'          => 'EUR',
             'schedule'          => array(
                 array('date' => '2018-01-01',
-                      'amount' => 10000,
-                      'payments' => array()),
+                      'amount' => 10000),
                 array('date' => '2018-02-01',
-                      'amount' => 10000,
-                      'payments' => array()),
+                      'amount' => 10000),
                 array('date' => '2018-03-01',
-                      'amount' => 5000,
-                      'payments' => array()),
+                      'amount' => 5000),
             ),
             'customer'          => array(
                 'email'         => 'john.doe@example.com',
@@ -157,9 +154,12 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
             ),
             'notification_url'  => 'http://www.example.org/callbackURL'
-        ));
+        );
+
+        $payment = InstallmentPlan::create($data);
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertEquals($data, $GLOBALS['CURLOPT_POSTFIELDS_DATA']);
         $this->assertEquals('ok', $payment->status);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
@@ -199,7 +199,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $payment = Payplug\InstallmentPlan::abort('a_payment_id');
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
-        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
+        $this->assertEquals($GLOBALS['CURLOPT_POSTFIELDS_DATA'], array('abort' => true));
         $this->assertEquals('ok', $payment->status);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
@@ -260,12 +260,31 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
     public function testInstallmentPlanListPayments()
     {
-        $GLOBALS['CURLOPT_URL_DATA'] = null;
+        $GLOBALS['CURLOPT_URL_DATA'] = array();
+        $data = json_encode(
+            array('schedule' => array(
+                    array('date' => '2018-01-01',
+                          'amount' => 10000,
+                          'payment_ids' => array('pay_123', 'pay_456')),
+                    array('date' => '2018-02-01',
+                          'amount' => 10000,
+                          'payment_ids' => array('pay_789')),
+                    array('date' => '2018-03-01',
+                          'amount' => 5000,
+                          'payment_ids' => array())
+            )));
 
         $this->_requestMock
-            ->expects($this->once())
+            ->expects($this->exactly(4))
             ->method('exec')
-            ->will($this->returnValue('{"data":[{"id": "payment1"}, {"id": "payment2"}]}'));
+            ->will($this->onConsecutiveCalls(
+                $data,
+                // Retrieve payment
+                '{"id": "pay_123"}',
+                '{"id": "pay_456"}',
+                '{"id": "pay_789"}'
+            ));
+
 
         $this->_requestMock
             ->expects($this->any())
@@ -283,20 +302,19 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function($option, $value = null) {
                 switch($option) {
                     case CURLOPT_URL:
-                        $GLOBALS['CURLOPT_URL_DATA'] = $value;
+                        $GLOBALS['CURLOPT_URL_DATA'][] = $value;
                         return true;
                 }
                 return true;
             }));
 
-        $installment_plan = InstallmentPlan::fromAttributes(array('id' => 'a_payment_id'));
+        $installment_plan = InstallmentPlan::fromAttributes(array('id' => 'a_inst_id'));
         $payments = $installment_plan->listPayments();
-
-        $this->assertEquals(2, count($payments));
-        $this->assertTrue($payments[0]->id === 'payment1' || $payments[0]->id === 'payment2');
-        $this->assertTrue($payments[1]->id === 'payment1' || $payments[1]->id === 'payment2');
-        $this->assertTrue($payments[0]->id !== $payments[1]->id);
-        $this->assertContains('a_payment_id', $GLOBALS['CURLOPT_URL_DATA']);
+        $this->assertEquals(3, count($payments));
+        $this->assertTrue($payments[0]->id === 'pay_123');
+        $this->assertTrue($payments[1]->id === 'pay_456');
+        $this->assertTrue($payments[2]->id === 'pay_789');
+        $this->assertContains('a_inst_id', $GLOBALS['CURLOPT_URL_DATA'][0]);
 
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
@@ -322,7 +340,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock
             ->expects($this->once())
             ->method('exec')
-            ->will($this->returnValue('{"id": "pay_345"}'));
+            ->will($this->returnValue('{"id": "inst_345"}'));
 
         $this->_requestMock
             ->expects($this->any())
@@ -339,10 +357,10 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
 
-        $installment_plan1 = InstallmentPlan::fromAttributes(array('id' => 'pay_123'));
+        $installment_plan1 = InstallmentPlan::fromAttributes(array('id' => 'inst_123'));
         $installment_plan2 = $installment_plan1->getConsistentResource($this->_configuration);
 
-        $this->assertEquals('pay_123', $installment_plan1->id);
-        $this->assertEquals('pay_345', $installment_plan2->id);
+        $this->assertEquals('inst_123', $installment_plan1->id);
+        $this->assertEquals('inst_345', $installment_plan2->id);
     }
 }
