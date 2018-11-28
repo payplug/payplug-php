@@ -242,13 +242,6 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
 
-    public function testInstallmentPlanList()
-    {
-        $this->setExpectedException('\PayPlug\Exception\NotImplementedException');
-        InstallmentPlan::listInstallmentPlans();
-
-    }
-
     public function testInstallmentPlanListPaymentsWhenPaymentIsInvalid()
     {
         $this->setExpectedException('\PayPlug\Exception\InvalidInstallmentPlanException');

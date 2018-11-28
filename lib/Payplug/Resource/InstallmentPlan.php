@@ -162,24 +162,6 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
     }
 
     /**
-     * List installment plans.
-     *
-     * @param   Payplug\Payplug    $payplug    the client configuration
-     *
-     * @param   int                 $perPage    the number of results per page
-     * @param   int                 $page       the page number
-     * @return  null|InstallmentPlan[]   the array of installment plans
-     *
-     * @throws  Payplug\Exception\NotImplementedException
-     */
-    public static function listInstallmentPlans($perPage = null, $page = null, Payplug\Payplug $payplug = null)
-    {
-        throw new Payplug\Exception\NotImplementedException(
-            "Method Not implemented",
-            501
-        );
-    }
-    /**
      * Returns an API resource that you can trust.
      *
      * @param   Payplug\Payplug $payplug the client configuration.

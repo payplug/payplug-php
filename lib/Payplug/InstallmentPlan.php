@@ -51,21 +51,4 @@ class InstallmentPlan
     {
     	return Resource\InstallmentPlan::create($data, $payplug);
     }
-
-    /**
-     * List installment plans.
-     *
-     * @param   int                 $perPage    number of results per page
-     * @param   int                 $page       the page number
-     * @param   Payplug             $payplug    the client configuration
-     * 
-     * @return  null|Resource\InstallmentPlan[]   the array of installment plans
-     *
-     * @throws  Exception\InvalidInstallmentPlanException
-     * @throws  Exception\UnexpectedAPIResponseException
-     */
-    public static function listInstallmentPlans($perPage = null, $page = null, Payplug $payplug = null)
-    {
-        return Resource\InstallmentPlan::listInstallmentPlans($perPage, $page, $payplug);
-    }
 };
