@@ -106,7 +106,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->patch(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::INSTALLMENT_PLAN_RESOURCE, $this->id),
-            array('abort' => true)
+            array('aborted' => true)
         );
 
         return InstallmentPlan::fromAttributes($response['httpResponse']);

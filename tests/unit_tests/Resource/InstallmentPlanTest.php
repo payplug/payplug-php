@@ -197,7 +197,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
         $payment = Payplug\InstallmentPlan::abort('a_payment_id');
 
-        $this->assertEquals($GLOBALS['CURLOPT_POSTFIELDS_DATA'], array('abort' => true));
+        $this->assertEquals($GLOBALS['CURLOPT_POSTFIELDS_DATA'], array('aborted' => true));
         $this->assertEquals('ok', $payment->status);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);

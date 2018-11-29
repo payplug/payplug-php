@@ -104,7 +104,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->patch(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
-            array('abort' => true)
+            array('aborted' => true)
         );
 
         return Payment::fromAttributes($response['httpResponse']);
