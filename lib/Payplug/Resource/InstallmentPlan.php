@@ -80,7 +80,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
         $payments = array();
         foreach ($response['httpResponse']['schedule'] as $schedule) {
             foreach ($schedule['payment_ids'] as $payment_id) {
-                $payments[] = Payment::retrieve($payment_id, $payplug);
+                $payments[$payment_id] = Payment::retrieve($payment_id, $payplug);
             }
         }
 

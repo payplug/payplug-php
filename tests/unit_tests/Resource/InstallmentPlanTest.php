@@ -302,9 +302,9 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $installment_plan = InstallmentPlan::fromAttributes(array('id' => 'a_inst_id'));
         $payments = $installment_plan->listPayments();
         $this->assertEquals(3, count($payments));
-        $this->assertTrue($payments[0]->id === 'pay_123');
-        $this->assertTrue($payments[1]->id === 'pay_456');
-        $this->assertTrue($payments[2]->id === 'pay_789');
+        $this->assertTrue($payments['pay_123']->id === 'pay_123');
+        $this->assertTrue($payments['pay_456']->id === 'pay_456');
+        $this->assertTrue($payments['pay_789']->id === 'pay_789');
         $this->assertContains('a_inst_id', $GLOBALS['CURLOPT_URL_DATA'][0]);
         $this->assertContains('pay_123', $GLOBALS['CURLOPT_URL_DATA'][1]);
         $this->assertContains('pay_456', $GLOBALS['CURLOPT_URL_DATA'][2]);
