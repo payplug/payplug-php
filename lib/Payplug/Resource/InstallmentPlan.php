@@ -122,7 +122,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function retrieve($paymentId, Payplug\Payplug $payplug = null)
+    public static function retrieve($installmentPlanId, Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -130,7 +130,8 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->get(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::INSTALLMENT_PLAN_RESOURCE, $paymentId)
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::INSTALLMENT_PLAN_RESOURCE,
+                $installmentPlanId)
         );
 
         return InstallmentPlan::fromAttributes($response['httpResponse']);
