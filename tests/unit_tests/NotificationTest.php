@@ -41,8 +41,32 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
         $body = '{ "id": "pay_123", "object": "payment" }';
         $payment = Notification::treat($body, $this->_configuration);
-        $this->assertTrue($payment instanceof $payment);
+        $this->assertTrue($payment instanceof Resource\Payment);
         $this->assertEquals('real_payment', $payment->id);
+    }
+
+    public function testTreatInstallmentPlan()
+    {
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{ "id": "real_installment_plan", "object": "installment_plan" }'));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $body = '{ "id": "inst_123456", "object": "installment_plan" }';
+        $installmentPlan = Notification::treat($body, $this->_configuration);
+        $this->assertTrue($installmentPlan instanceof Resource\InstallmentPlan);
+        $this->assertEquals('real_installment_plan', $installmentPlan->id);
     }
 
     public function testTreatWhenBodyIsNotValidJSON()

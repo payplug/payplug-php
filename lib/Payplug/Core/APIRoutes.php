@@ -14,11 +14,13 @@ class APIRoutes
     const API_VERSION = 1;
 
     // Resources routes
-    const PAYMENT_RESOURCE    = '/payments';
-    const REFUND_RESOURCE     = '/payments/{PAYMENT_ID}/refunds';
-    const KEY_RESOURCE        = '/keys';
-    const ACCOUNT_RESOURCE    = '/account';
-    const CARD_RESOURCE       = '/cards';
+    const PAYMENT_RESOURCE           = '/payments';
+    const REFUND_RESOURCE            = '/payments/{PAYMENT_ID}/refunds';
+    const KEY_RESOURCE               = '/keys';
+    const ACCOUNT_RESOURCE           = '/account';
+    const CARD_RESOURCE              = '/cards';
+    const INSTALLMENT_PLAN_RESOURCE  = '/installment_plans';
+
 
     /**
      * Get the route to a specified resource.

@@ -40,6 +40,8 @@ abstract class APIResource implements IAPIResourceFactory
                 return Payplug\Resource\Payment::fromAttributes($attributes);
             case 'refund':
                 return Payplug\Resource\Refund::fromAttributes($attributes);
+            case 'installment_plan':
+                return Payplug\Resource\InstallmentPlan::fromAttributes($attributes);
         }
 
         throw new Payplug\Exception\UnknownAPIResourceException('Unknown "object" property "' . $attributes['object'] . '".');

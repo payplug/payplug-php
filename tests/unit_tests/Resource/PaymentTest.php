@@ -57,10 +57,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'url'               => 'http://yourwebsite.com/payplug_ipn',
                 'response_code'     => 200
             ),
-            'failure'           => array(
-                'code'              => null,
-                'message'           => null
-            ),
+            'failure'           => null,
             'metadata'          => array(
                 'a_custom_field'    => 'a custom value',
                 'another_key'       => 'another value'
@@ -97,8 +94,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://yourwebsite.com/payplug_ipn', $payment->notification->url);
         $this->assertEquals(200, $payment->notification->response_code);
 
-        $this->assertNull($payment->failure->code);
-        $this->assertNull($payment->failure->message);
+        $this->assertNull($payment->failure);
 
         $this->assertEquals('a custom value', $payment->metadata['a_custom_field']);
         $this->assertEquals('another value', $payment->metadata['another_key']);
@@ -191,7 +187,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $payment = Payplug\Payment::abort('a_payment_id');
 
         $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
-        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('abort' => true));
+        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('aborted' => true));
         $this->assertEquals('ok', $payment->status);
 
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
