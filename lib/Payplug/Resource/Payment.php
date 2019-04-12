@@ -46,6 +46,9 @@ class Payment extends APIResource implements IVerifiableAPIResource
         if (isset($attributes['notification'])) {
             $this->notification = PaymentNotification::fromAttributes($attributes['notification']);
         }
+        if (isset($attributes['authorization'])) {
+            $this->authorization = PaymentAuthorization::fromAttributes($attributes['authorization']);
+        }
     }
 
     /**
@@ -105,6 +108,30 @@ class Payment extends APIResource implements IVerifiableAPIResource
         $response = $httpClient->patch(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
             array('aborted' => true)
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
+     * Captures a Payment.
+     * 
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  null|Payment the captured payment or null on error
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     */
+    public function capture(Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
+            array('captured' => true)
         );
 
         return Payment::fromAttributes($response['httpResponse']);
