@@ -38,6 +38,22 @@ class Payment
     }
 
     /**
+     * Captures a Payment.
+     *
+     * @param   string                      $paymentId      the payment ID
+     * @param   Payplug $payplug  the client configuration
+     *
+     * @return  null|Resource\Payment the captured payment or null on error
+     *
+     * @throws  Exception\ConfigurationNotSetException
+     */
+    public static function capture($paymentId, Payplug $payplug = null)
+    {
+        $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
+        return $payment->capture($payplug);
+    }
+
+    /**
      * Creates a Payment.
      *
      * @param   array                       $data           API data for payment creation
