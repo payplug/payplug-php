@@ -231,6 +231,8 @@ class HttpClient
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
         }
 
+        $headers[] = 'PayPlug-Version: ' . $this->_configuration->getVersion();
+
         $request->setopt(CURLOPT_FAILONERROR, false);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
