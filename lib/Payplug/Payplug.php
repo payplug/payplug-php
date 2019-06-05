@@ -103,9 +103,9 @@ class Payplug
     }
 
     /**
-     * Gets the date corresponding to the verstion.
+     * Gets the date corresponding to the version.
      *
-     * @return  string  The current token
+     * @return  string  The current version
      */
     public function getVersion()
     {
