@@ -30,7 +30,6 @@ class Payplug
             throw new Exception\ConfigurationException('Expected string values for token.');
         }
         $this->_token = $token;
-        $this->_version = '2019-05-15';
     }
 
     /**
