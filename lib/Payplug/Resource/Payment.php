@@ -37,6 +37,12 @@ class Payment extends APIResource implements IVerifiableAPIResource
         if (isset($attributes['customer'])) {
             $this->customer = PaymentCustomer::fromAttributes($attributes['customer']);
         }
+        if (isset($attributes['billing'])) {
+            $this->billing = PaymentBilling::fromAttributes($attributes['billing']);
+        }
+        if (isset($attributes['shipping'])) {
+            $this->shipping = PaymentShipping::fromAttributes($attributes['shipping']);
+        }
         if (isset($attributes['hosted_payment'])) {
             $this->hosted_payment = PaymentHostedPayment::fromAttributes($attributes['hosted_payment']);
         }
