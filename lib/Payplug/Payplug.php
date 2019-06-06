@@ -18,11 +18,6 @@ class Payplug
     private $_token;
 
     /**
-     * @var string The version as a date (format: Y-m-d)
-     */
-    private $_version = '2019-05-15';
-
-    /**
      * Constructor for a authentication.
      *
      * @param   string  $token  The token
@@ -35,6 +30,7 @@ class Payplug
             throw new Exception\ConfigurationException('Expected string values for token.');
         }
         $this->_token = $token;
+        $this->_version = '2019-05-15';
     }
 
     /**
@@ -100,15 +96,5 @@ class Payplug
     public static function setDefaultConfiguration($defaultConfiguration)
     {
         self::$_defaultConfiguration = $defaultConfiguration;
-    }
-
-    /**
-     * Gets the date corresponding to the version.
-     *
-     * @return  string  The current version
-     */
-    public function getVersion()
-    {
-        return $this->_version;
     }
 }

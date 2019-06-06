@@ -13,6 +13,11 @@ class Config
     const LIBRARY_VERSION = '2.6.0';
 
     /**
+     * The library version
+     */
+    const API_VERSION = '2.6.0';
+
+    /**
      * PHP minimal version required by this library
      */
     const PHP_MIN_VERSION = '5.3.0';
