@@ -48,6 +48,36 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 'first_name'        => 'John',
                 'last_name'         => 'Doe'
             ),
+            'billing'          => array(
+                "title" => "Mr",
+                "first_name" => "John",
+                "last_name" => "Doe",
+                "email" => "name@customer.net",
+                "phone_number" => "0123456789",
+                "address1" => "77 rue la Boétie",
+                "address2" => null,
+                "company_name" => "PayPlug",
+                "postcode" => "75008",
+                "city" => "Paris",
+                "state" => null,
+                "country" => "FR",
+                "language" => "fr"
+            ),
+            'shipping'          => array(
+                "title" => "Mr",
+                "first_name" => "John",
+                "last_name" => "Doe",
+                "email" => "name@customer.net",
+                "phone_number" => "0123456789",
+                "address1" => "77 rue la Boétie",
+                "address2" => null,
+                "company_name" => "PayPlug",
+                "postcode" => "75008",
+                "city" => "Paris",
+                "state" => null,
+                "country" => "FR",
+                "language" => "fr"
+            ),
             'hosted_payment'    => array(
                 'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
                 'return_url'        => 'http://yourwebsite.com/payplug_return?someid=11235',
@@ -148,6 +178,36 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 'email'         => 'john.doe@example.com',
                 'first_name'    => 'John',
                 'last_name'     => 'Doe'
+            ),
+            'billing'          => array(
+                'title' => 'Mr',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'name@customer.net',
+                'phone_number' => '0123456789',
+                'address1' => '77 rue la Boétie',
+                'address2' => 'ul',
+                'company_name' => 'PayPlug',
+                'postcode' => '75008',
+                'city' => 'Paris',
+                'state' => 'ul',
+                'country' => 'FR',
+                'language' => 'fr'
+            ),
+            'shipping'          => array(
+                'title' => 'Mr',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'name@customer.net',
+                'phone_number' => '0123456789',
+                'address1' => '77 rue la Boétie',
+                'address2' => 'ul',
+                'company_name' => 'PayPlug',
+                'postcode' => '75008',
+                'city' => 'Paris',
+                'state' => 'ul',
+                'country' => 'FR',
+                'language' => 'fr'
             ),
             'hosted_payment'    => array(
                 'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
