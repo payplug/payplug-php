@@ -2,7 +2,7 @@
 namespace Payplug\Resource;
 
 /**
- * A Customer.
+ * A Payment Billing.
  */
 class PaymentBilling extends APIResource
 {

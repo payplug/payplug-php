@@ -31,9 +31,6 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
     {
         parent::initialize($attributes);
 
-        if (isset($attributes['customer'])) {
-            $this->customer = PaymentCustomer::fromAttributes($attributes['customer']);
-        }
         if (isset($attributes['billing'])) {
             $this->billing = PaymentBilling::fromAttributes($attributes['billing']);
         }

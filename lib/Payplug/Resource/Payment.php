@@ -34,9 +34,6 @@ class Payment extends APIResource implements IVerifiableAPIResource
         if (isset($attributes['card'])) {
             $this->card = PaymentCard::fromAttributes($attributes['card']);
         }
-        if (isset($attributes['customer'])) {
-            $this->customer = PaymentCustomer::fromAttributes($attributes['customer']);
-        }
         if (isset($attributes['billing'])) {
             $this->billing = PaymentBilling::fromAttributes($attributes['billing']);
         }

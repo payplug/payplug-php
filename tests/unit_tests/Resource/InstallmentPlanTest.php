@@ -43,11 +43,6 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                       'payment_ids' => array())
             ),
             'failure'           => null,
-            'customer'          => array(
-                'email'             => 'name@customer.net',
-                'first_name'        => 'John',
-                'last_name'         => 'Doe'
-            ),
             'billing'          => array(
                 "title" => "Mr",
                 "first_name" => "John",
@@ -113,11 +108,6 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $installment_plan->schedule[2]->payment_ids);
 
         $this->assertNull($installment_plan->failure);
-
-        // Customer
-        $this->assertEquals('name@customer.net', $installment_plan->customer->email);
-        $this->assertEquals('John', $installment_plan->customer->first_name);
-        $this->assertEquals('Doe', $installment_plan->customer->last_name);
 
        // Hosted payment
         $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $installment_plan->hosted_payment->payment_url);
