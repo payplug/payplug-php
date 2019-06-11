@@ -48,6 +48,36 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
                 'first_name'        => 'John',
                 'last_name'         => 'Doe'
             ),
+            'billing'          => array(
+                "title" => "Mr",
+                "first_name" => "John",
+                "last_name" => "Doe",
+                "email" => "name@customer.net",
+                "phone_number" => "0123456789",
+                "address1" => "77 rue la Boétie",
+                "address2" => null,
+                "company_name" => "PayPlug",
+                "postcode" => "75008",
+                "city" => "Paris",
+                "state" => null,
+                "country" => "FR",
+                "language" => "fr"
+            ),
+            'shipping'          => array(
+                "title" => "Mr",
+                "first_name" => "John",
+                "last_name" => "Doe",
+                "email" => "name@customer.net",
+                "phone_number" => "0123456789",
+                "address1" => "77 rue la Boétie",
+                "address2" => null,
+                "company_name" => "PayPlug",
+                "postcode" => "75008",
+                "city" => "Paris",
+                "state" => null,
+                "country" => "FR",
+                "language" => "fr"
+            ),
             'hosted_payment'    => array(
                 'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
                 'return_url'        => 'http://yourwebsite.com/payplug_return?someid=11235',
@@ -88,6 +118,21 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('name@customer.net', $installment_plan->customer->email);
         $this->assertEquals('John', $installment_plan->customer->first_name);
         $this->assertEquals('Doe', $installment_plan->customer->last_name);
+
+        // Billing / Shiping
+        $this->assertEquals('Mr', $installment_plan->shipping->title);
+        $this->assertEquals('John', $installment_plan->billing->first_name);
+        $this->assertEquals('Doe', $installment_plan->shipping->last_name);
+        $this->assertEquals('name@customer.net', $installment_plan->billing->email);
+        $this->assertEquals('0123456789', $installment_plan->shipping->phone_number);
+        $this->assertEquals('77 rue la Boétie', $installment_plan->billing->address1);
+        $this->assertEquals(null, $installment_plan->shipping->address2);
+        $this->assertEquals('PayPlug', $installment_plan->billing->company_name);
+        $this->assertEquals('75008', $installment_plan->shipping->postcode);
+        $this->assertEquals('Paris', $installment_plan->billing->city);
+        $this->assertEquals(null, $installment_plan->billing->state);
+        $this->assertEquals('FR', $installment_plan->shipping->country);
+        $this->assertEquals('fr', $installment_plan->billing->language);
 
        // Hosted payment
         $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $installment_plan->hosted_payment->payment_url);
