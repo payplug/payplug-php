@@ -13,6 +13,12 @@ class Config
     const LIBRARY_VERSION = '2.6.0';
 
     /**
+     * The Api version
+     * @var DateTime
+     */
+    const API_VERSION = '2019-05-01';
+
+    /**
      * PHP minimal version required by this library
      */
     const PHP_MIN_VERSION = '5.3.0';
