@@ -21,6 +21,88 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
+    public function testCreateRetroInstallmentPlanFromAttributes()
+    {
+        $installment_plan = InstallmentPlan::fromAttributes(array(
+            'id'                => 'inst_123456',
+            'object'            => 'installment_plan',
+            'is_live'           => true,
+            'currency'          => 'EUR',
+            'created_at'        => 1410437760,
+            'is_active'         => true,
+            'is_fully_paid'     => false,
+            'schedule'          => array(
+                array('date' => '2018-01-01',
+                      'amount' => 10000,
+                      'payment_ids' => array('pay_123', 'pay_456')),
+                array('date' => '2018-02-01',
+                      'amount' => 10000,
+                      'payment_ids' => array('pay_789')),
+                array('date' => '2018-03-01',
+                      'amount' => 5000,
+                      'payment_ids' => array())
+            ),
+            'failure'           => null,
+            'customer'          => array(
+                'email'             => 'name@customer.net',
+                'first_name'        => 'John',
+                'last_name'         => 'Doe'
+            ),
+            'hosted_payment'    => array(
+                'payment_url'       => 'https://www.payplug.com/p/b9868d18546711e490c612314307c934',
+                'return_url'        => 'http://yourwebsite.com/payplug_return?someid=11235',
+                'cancel_url'        => 'http://yourwebsite.com/payplug_cancel?someid=81321',
+            ),
+            'notification'      => array(
+                'url'               => 'http://yourwebsite.com/payplug_ipn',
+                'response_code'     => 200
+            ),
+            'metadata'          => array(
+                'a_custom_field'    => 'a custom value',
+                'another_key'       => 'another value'
+            )
+        ));
+
+        $this->assertEquals('inst_123456', $installment_plan->id);
+        $this->assertEquals('installment_plan', $installment_plan->object);
+        $this->assertEquals(true, $installment_plan->is_live);
+        $this->assertEquals('EUR', $installment_plan->currency);
+        $this->assertEquals(1410437760, $installment_plan->created_at);
+        $this->assertEquals(true, $installment_plan->is_active);
+        $this->assertEquals(false, $installment_plan->is_fully_paid);
+
+        // Schedule
+        $this->assertEquals('2018-01-01', $installment_plan->schedule[0]->date);
+        $this->assertEquals(10000, $installment_plan->schedule[0]->amount);
+        $this->assertEquals(array('pay_123', 'pay_456'), $installment_plan->schedule[0]->payment_ids);
+        $this->assertEquals('2018-02-01', $installment_plan->schedule[1]->date);
+        $this->assertEquals(10000, $installment_plan->schedule[1]->amount);
+        $this->assertEquals(array('pay_789'), $installment_plan->schedule[1]->payment_ids);
+        $this->assertEquals('2018-03-01', $installment_plan->schedule[2]->date);
+        $this->assertEquals(5000, $installment_plan->schedule[2]->amount);
+        $this->assertEquals(array(), $installment_plan->schedule[2]->payment_ids);
+
+        $this->assertNull($installment_plan->failure);
+
+        // Customer
+        $this->assertEquals('name@customer.net', $installment_plan->customer->email);
+        $this->assertEquals('John', $installment_plan->customer->first_name);
+        $this->assertEquals('Doe', $installment_plan->customer->last_name);
+
+       // Hosted payment
+        $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $installment_plan->hosted_payment->payment_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_return?someid=11235', $installment_plan->hosted_payment->return_url);
+        $this->assertEquals('http://yourwebsite.com/payplug_cancel?someid=81321', $installment_plan->hosted_payment->cancel_url);
+
+        // Notification
+        $this->assertEquals('http://yourwebsite.com/payplug_ipn', $installment_plan->notification->url);
+        $this->assertEquals(200, $installment_plan->notification->response_code);
+
+
+        $this->assertEquals('a custom value', $installment_plan->metadata['a_custom_field']);
+        $this->assertEquals('another value', $installment_plan->metadata['another_key']);
+    }
+
     public function testCreateInstallmentPlanFromAttributes()
     {
         $installment_plan = InstallmentPlan::fromAttributes(array(
@@ -108,6 +190,21 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $installment_plan->schedule[2]->payment_ids);
 
         $this->assertNull($installment_plan->failure);
+
+        // Billing / Shiping
+        $this->assertEquals('Mr', $installment_plan->shipping->title);
+        $this->assertEquals('John', $installment_plan->billing->first_name);
+        $this->assertEquals('Doe', $installment_plan->shipping->last_name);
+        $this->assertEquals('name@customer.net', $installment_plan->billing->email);
+        $this->assertEquals('0123456789', $installment_plan->shipping->phone_number);
+        $this->assertEquals('77 rue la Boétie', $installment_plan->billing->address1);
+        $this->assertEquals(null, $installment_plan->shipping->address2);
+        $this->assertEquals('PayPlug', $installment_plan->billing->company_name);
+        $this->assertEquals('75008', $installment_plan->shipping->postcode);
+        $this->assertEquals('Paris', $installment_plan->billing->city);
+        $this->assertEquals(null, $installment_plan->billing->state);
+        $this->assertEquals('FR', $installment_plan->shipping->country);
+        $this->assertEquals('fr', $installment_plan->billing->language);
 
        // Hosted payment
         $this->assertEquals('https://www.payplug.com/p/b9868d18546711e490c612314307c934', $installment_plan->hosted_payment->payment_url);
