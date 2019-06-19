@@ -32,7 +32,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
         parent::initialize($attributes);
 
         /*
-        * @deprecated No longer used by API, used billing and shipping instead
+        * @deprecated No longer use by API, used billing and shipping instead
         */
         if (isset($attributes['customer'])) {
             $this->customer = PaymentCustomer::fromAttributes($attributes['customer']);
