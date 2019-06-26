@@ -16,7 +16,7 @@ class Config
      * The Api version
      * @var DateTime
      */
-    const API_VERSION = '2019-05-01';
+    const API_VERSION = '2019-06-14';
 
     /**
      * PHP minimal version required by this library
