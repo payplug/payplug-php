@@ -1,3 +1,28 @@
+3.0.0
+-----
+
+- **Major**: Replace customer by shipping and billing to be compliant with PSD2.
+- **NEW**: Add versionning with new API_VERSION parameter.
+
+
+2.7.0
+-----
+
+- **NEW**: Add deferred payments.
+
+
+2.6.0
+-----
+
+- **NEW**: Add installment plans.
+
+
+2.5.1
+-----
+
+- **Bugfix**: Fix packagist bundle.
+
+
 2.5.0
 -----
 
