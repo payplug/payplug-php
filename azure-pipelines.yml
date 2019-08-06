@@ -24,3 +24,5 @@ steps:
 
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
+
+- script: vendor/phpunit/phpunit/phpunit --group unit --exclude-group ignore --bootstrap tests/config.php tests
