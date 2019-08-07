@@ -1,4 +1,12 @@
-3.0.0
+4.0.0
+-----
+
+- **Major**: Improve Payplug setSecretKey with init method
+- **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
+- **NEW**: Update UnitTests
+
+
+3.0.0git 
 -----
 
 - **Major**: Replace customer by shipping and billing to be compliant with PSD2.
