@@ -14,7 +14,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug\Payplug('abc');
+        $this->_configuration = new Payplug\Payplug('abc','2019-06-14');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
@@ -103,7 +103,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
 
         $card = Card::fromAttributes(array('id' => 'a_card_id'));
         $card->delete();
-        
+
         $this->assertStringEndsWith('a_card_id', $GLOBALS['CURLOPT_URL_DATA']);
 
         unset($GLOBALS['CURLOPT_URL_DATA']);

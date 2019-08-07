@@ -13,7 +13,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug\Payplug('abc');
+        $this->_configuration = new Payplug\Payplug('abc','2019-06-14');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
