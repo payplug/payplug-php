@@ -22,7 +22,7 @@ class Payplug
     /**
      * @var string The API Version.
      */
-    private $_api_version;
+    private $_apiVersion;
 
     /**
      * Constructor for a authentication.
@@ -32,16 +32,16 @@ class Payplug
      *
      * @throws Exception\ConfigurationException when token is not set
      */
-    public function __construct($token, $api_version)
+    public function __construct($token, $apiVersion)
     {
         if (!is_string($token)) {
             throw new Exception\ConfigurationException('Expected string values for token.');
         }
-        if (!is_string($api_version)) {
+        if (!is_string($apiVersion)) {
             throw new Exception\ConfigurationException('Expected string values for api version.');
         }
         $this->_token = $token;
-        $this->_api_version = $api_version;
+        $this->_apiVersion = $apiVersion;
     }
 
     /**
@@ -115,7 +115,7 @@ class Payplug
      */
     public function getApiVersion()
     {
-        return $this->_api_version;
+        return $this->_apiVersion;
     }
 
     /**
