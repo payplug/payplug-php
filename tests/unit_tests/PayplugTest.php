@@ -1,4 +1,5 @@
 <?php
+
 namespace Payplug;
 
 /**
@@ -10,7 +11,10 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanInitializeConfiguration()
     {
-        Payplug::setSecretKey('cba');
+        Payplug::init(array(
+            'secretKey' => 'cba',
+            'apiVersion' => null
+        ));
 
         $configuration = Payplug::getDefaultConfiguration();
 
@@ -20,23 +24,27 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
     public function testCannotInitializeConfigurationWhenLiveTokenIsNotAString()
     {
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
-
-        Payplug::setSecretKey(true);
+        Payplug::init(array(
+            'secretKey' => true,
+            'apiVersion' => '2019-06-14',
+        ));
     }
 
     public function testCannotInitializeConfigurationWhenTestTokenIsArray()
     {
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
 
-        Payplug::setSecretKey(array(
-                'LIVE_TOKEN'        => 'cba'
-            )
-        );
+        Payplug::init(array(
+            'secretKey' => array(
+                'LIVE_TOKEN' => 'cba'
+            ),
+            'apiVersion' => null,
+        ));
     }
 
     public function testCanGetAToken()
     {
-        $configuration = Payplug::setSecretKey('cba');
+        $configuration = Payplug::init(array('secretKey' => 'cba', 'apiVersion' => null));
         $this->assertEquals('cba', $configuration->getToken());
     }
 
@@ -51,7 +59,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 
     public function testCanSetDefaultConfiguration()
     {
-        $configuration = Payplug::setSecretKey('abc');
+        $configuration = Payplug::init(array('secretKey' => 'abc', 'apiVersion' => null));
         Payplug::setDefaultConfiguration($configuration);
         $this->assertEquals($configuration, Payplug::getDefaultConfiguration());
     }

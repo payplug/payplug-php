@@ -2,6 +2,7 @@
 -----
 
 - **Major**: Improve Payplug setSecretKey with init method
+- **NEW**: Remove Payplug::setSecretKey function
 - **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
 - **NEW**: Update UnitTests
 

@@ -32,13 +32,10 @@ class Payplug
      *
      * @throws Exception\ConfigurationException when token is not set
      */
-    public function __construct($token, $apiVersion)
+    public function __construct($token, $apiVersion = null)
     {
         if (!is_string($token)) {
             throw new Exception\ConfigurationException('Expected string values for token.');
-        }
-        if (!is_string($apiVersion)) {
-            throw new Exception\ConfigurationException('Expected string values for api version.');
         }
         $this->_token = $token;
         $this->_apiVersion = $apiVersion;
@@ -54,11 +51,8 @@ class Payplug
      */
     public static function init($props = array())
     {
-        if (!is_string($props['secretKey'])) {
+        if (!isset($props['secretKey'])) {
             throw new Exception\ConfigurationException('Expected string values for the token.');
-        }
-        if (!is_string($props['apiVersion'])) {
-            throw new Exception\ConfigurationException('Expected string values for the api version.');
         }
 
         $clientConfiguration = new Payplug($props['secretKey'], $props['apiVersion']);
