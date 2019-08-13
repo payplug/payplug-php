@@ -1,3 +1,13 @@
+4.0.0
+-----
+
+- **Major**: Remove deprecated Payplug::setSecretKey function
+- **Major**: API version must now be specified explicitly via `Payplug::init` method 
+
+- **NEW**: Improve Payplug setSecretKey with init method
+- **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
+
+
 3.0.0
 -----
 
