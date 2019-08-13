@@ -2,8 +2,8 @@
 namespace Payplug;
 
 /**
- *
- */
+ * The Authentication DAO simplifies the access to most useful customer methods
+ **/
 class Authentication
 {
     /**

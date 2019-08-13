@@ -49,43 +49,16 @@ class Payplug
      * @return Payplug
      * @throws ConfigurationException
      */
-    public static function init($props = array())
+    public static function init($props)
     {
-        if (!isset($props['secretKey'])) {
+        $secretKey = isset($props['secretKey']) && $props['secretKey'] ? $props['secretKey'] : null;
+        $apiVersion = isset($props['apiVersion']) && $props['apiVersion'] ? $props['apiVersion'] : null;
+
+        if (!$secretKey) {
             throw new Exception\ConfigurationException('Expected string values for the token.');
         }
 
-        $clientConfiguration = new Payplug($props['secretKey'], $props['apiVersion']);
-
-        self::setDefaultConfiguration($clientConfiguration);
-
-        return $clientConfiguration;
-    }
-
-    /**
-     * Initializes a Authentication and sets it as the new default global authentication.
-     * It also performs some checks before saving the authentication.
-     *
-     * <pre>
-     * Expected array format for argument $authentication :
-     * $authentication['TOKEN'] = 'YOUR TOKEN'
-     * </pre>
-     *
-     * @deprecated 4.0.0
-     *
-     * @param  string   $token  the authentication token
-     *
-     * @return Payplug  the new client authentication
-     *
-     * @throws Exception\ConfigurationException
-     */
-    public static function setSecretKey($token)
-    {
-        if (!is_string($token)) {
-            throw new Exception\ConfigurationException('Expected string values for the token.');
-        }
-
-        $clientConfiguration = new Payplug($token, '2019-06-14');
+        $clientConfiguration = new Payplug($secretKey, $apiVersion);
 
         self::setDefaultConfiguration($clientConfiguration);
 

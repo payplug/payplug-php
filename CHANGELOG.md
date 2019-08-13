@@ -1,10 +1,11 @@
 4.0.0
 -----
 
-- **Major**: Improve Payplug setSecretKey with init method
-- **NEW**: Remove Payplug::setSecretKey function
+- **Major**: Remove deprecated Payplug::setSecretKey function
+- **Major**: API version must now be specified explicitly via `Payplug::init` method 
+
+- **NEW**: Improve Payplug setSecretKey with init method
 - **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
-- **NEW**: Update UnitTests
 
 
 3.0.0git 
