@@ -21,6 +21,15 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cba', $configuration->getToken());
     }
 
+    public function testDeprecatedCanInitializeConfiguration()
+    {
+        Payplug::setSecretKey('cba');
+
+        $configuration = Payplug::getDefaultConfiguration();
+
+        $this->assertEquals('cba', $configuration->getToken());
+    }
+
     public function testCannotInitializeConfigurationWhenLiveTokenIsNotAString()
     {
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
@@ -28,6 +37,12 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
             'secretKey' => true,
             'apiVersion' => '2019-06-14',
         ));
+    }
+
+    public function testDeprecatedCannotInitializeConfigurationWhenLiveTokenIsNotAString()
+    {
+        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+        Payplug::setSecretKey(true);
     }
 
     public function testCannotInitializeConfigurationWhenTestTokenIsArray()
@@ -42,9 +57,24 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testDeprecatedCannotInitializeConfigurationWhenTestTokenIsArray()
+    {
+        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+
+        Payplug::setSecretKey(array(
+            'LIVE_TOKEN' => 'cba'
+        ));
+    }
+
     public function testCanGetAToken()
     {
         $configuration = Payplug::init(array('secretKey' => 'cba', 'apiVersion' => null));
+        $this->assertEquals('cba', $configuration->getToken());
+    }
+
+    public function testDeprecatedCanGetAToken()
+    {
+        $configuration = Payplug::setSecretKey('cba');
         $this->assertEquals('cba', $configuration->getToken());
     }
 
@@ -60,6 +90,13 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
     public function testCanSetDefaultConfiguration()
     {
         $configuration = Payplug::init(array('secretKey' => 'abc', 'apiVersion' => null));
+        Payplug::setDefaultConfiguration($configuration);
+        $this->assertEquals($configuration, Payplug::getDefaultConfiguration());
+    }
+
+    public function testDeprecatedCanSetDefaultConfiguration()
+    {
+        $configuration = Payplug::setSecretKey('abc');
         Payplug::setDefaultConfiguration($configuration);
         $this->assertEquals($configuration, Payplug::getDefaultConfiguration());
     }
