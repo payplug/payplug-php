@@ -1,4 +1,5 @@
 <?php
+
 namespace Payplug;
 
 use Payplug\Exception\ConfigurationException;
@@ -38,7 +39,39 @@ class Payplug
             throw new Exception\ConfigurationException('Expected string values for token.');
         }
         $this->_token = $token;
-        $this->_apiVersion = $apiVersion;
+
+        // if no given version then set a default
+        $this->_apiVersion = $apiVersion ? $apiVersion : '2019-06-14';
+    }
+
+
+    /**
+     * Initializes a Authentication and sets it as the new default global authentication.
+     * It also performs some checks before saving the authentication.
+     *
+     * <pre>
+     * Expected array format for argument $authentication :
+     * $authentication['TOKEN'] = 'YOUR TOKEN'
+     * </pre>
+     *
+     * @param string $token the authentication token
+     *
+     * @return Payplug  the new client authentication
+     *
+     * @throws Exception\ConfigurationException
+     * @deprecated Use Payplug::init(array('secretKey' => 'token', 'apiVersion' => 'version'))
+     */
+    public static function setSecretKey($token)
+    {
+        if (!is_string($token)) {
+            throw new Exception\ConfigurationException('Expected string values for the token.');
+        }
+
+        $clientConfiguration = new Payplug($token);
+
+        self::setDefaultConfiguration($clientConfiguration);
+
+        return $clientConfiguration;
     }
 
     /**
@@ -95,7 +128,7 @@ class Payplug
     public static function getDefaultConfiguration()
     {
         if (self::$_defaultConfiguration === null) {
-                throw new Exception\ConfigurationNotSetException('Unable to find an authentication.');
+            throw new Exception\ConfigurationNotSetException('Unable to find an authentication.');
         }
 
         return self::$_defaultConfiguration;
@@ -105,7 +138,7 @@ class Payplug
      * Sets the new default client authentication. This authentication will be used when no authentication is explicitly
      * passed to methods.
      *
-     * @param  Payplug $defaultConfiguration   the new default authentication
+     * @param Payplug $defaultConfiguration the new default authentication
      */
     public static function setDefaultConfiguration($defaultConfiguration)
     {
