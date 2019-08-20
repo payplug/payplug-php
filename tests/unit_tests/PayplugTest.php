@@ -9,7 +9,7 @@ namespace Payplug;
  */
 class PayplugTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanInitializeConfiguration()
+    public function testCanInitializeDefaultConfiguration()
     {
         Payplug::init(array(
             'secretKey' => 'cba',
@@ -19,6 +19,19 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
         $configuration = Payplug::getDefaultConfiguration();
 
         $this->assertEquals('cba', $configuration->getToken());
+        $this->assertEquals('2019-06-14', $configuration->getApiVersion());
+    }
+    public function testCanInitializeConfiguration()
+    {
+        Payplug::init(array(
+            'secretKey' => 'cba',
+            'apiVersion' => '1970-01-01'
+        ));
+
+        $configuration = Payplug::getDefaultConfiguration();
+
+        $this->assertEquals('cba', $configuration->getToken());
+        $this->assertEquals('2012-12-21', $configuration->getApiVersion());
     }
 
     public function testDeprecatedCanInitializeConfiguration()
