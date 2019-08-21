@@ -48,7 +48,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
         Payplug::init(array(
             'secretKey' => true,
-            'apiVersion' => '2019-06-14',
+            'apiVersion' => '1970-01-01',
         ));
     }
 

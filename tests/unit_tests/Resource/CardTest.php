@@ -14,7 +14,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug\Payplug('abc','2019-06-14');
+        $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
