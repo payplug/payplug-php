@@ -31,7 +31,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
         $configuration = Payplug::getDefaultConfiguration();
 
         $this->assertEquals('cba', $configuration->getToken());
-        $this->assertEquals('2012-12-21', $configuration->getApiVersion());
+        $this->assertEquals('1970-01-01', $configuration->getApiVersion());
     }
 
     public function testDeprecatedCanInitializeConfiguration()
