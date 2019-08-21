@@ -14,7 +14,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug('abc');
+        $this->_configuration = new \Payplug\Payplug('abc');
         Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
