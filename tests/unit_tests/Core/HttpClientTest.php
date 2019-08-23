@@ -20,6 +20,14 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
+    protected function setUpTwice()
+    {
+        $this->_httpClient = new HttpClient(new Payplug('abc','1970-01-01'));
+
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
     public function testPost()
     {
 
@@ -325,7 +333,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\UnexpectedAPIResponseException');
 
-        
+
 
         $this->_requestMock
             ->expects($this->once())
@@ -349,7 +357,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\PayPlug\Exception\ConnectionException');
 
-        
+
 
         function testConnectionError_errno($option) {
             switch($option) {

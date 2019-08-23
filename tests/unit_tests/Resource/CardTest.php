@@ -21,6 +21,15 @@ class CardTest extends \PHPUnit_Framework_TestCase
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
+    protected function setUpTwice()
+    {
+        $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
     public function testCreateCardFromAttributes()
     {
         $card = Card::fromAttributes(array(
@@ -103,7 +112,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
 
         $card = Card::fromAttributes(array('id' => 'a_card_id'));
         $card->delete();
-        
+
         $this->assertStringEndsWith('a_card_id', $GLOBALS['CURLOPT_URL_DATA']);
 
         unset($GLOBALS['CURLOPT_URL_DATA']);

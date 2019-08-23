@@ -1,6 +1,7 @@
 <?php
 namespace Payplug\Resource;
 use Payplug;
+use Payplug\Core\HttpClient;
 
 /**
  * @group unit
@@ -14,7 +15,16 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug\Payplug('abc', 'cba', true);
+        $this->_configuration = new Payplug\Payplug('abc');
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+
+        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
+    protected function setUpTwice()
+    {
+        $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
@@ -179,7 +189,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
     public function testRefundRetrieveFromPaymentObject()
     {
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        
+
 
         $this->_requestMock
             ->expects($this->once())

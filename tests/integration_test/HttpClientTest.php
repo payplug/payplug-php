@@ -12,7 +12,7 @@ class HttpClientFunctionalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configuration = new Payplug('abc');
+        $this->_configuration = new Payplug('abc','1970-01-01');
     }
 
     public function testAPIRequest()
