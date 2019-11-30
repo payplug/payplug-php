@@ -79,10 +79,24 @@ Here's how simple it is to create a payment request:
     $payment = Payplug\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
-            'customer'          => array(
-                'email'             => 'john.doe@example.com',
-                'first_name'        => 'John',
-                'last_name'         => 'Doe'
+            'billing'          => array(
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'john.doe@example.com',
+                'address1' => '715  Robinson Court',
+                'postcode' => '48607',
+                'city' => 'Saginaw',
+                'country' => 'US',
+            ),
+            'shipping'          => array(
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'john.doe@example.com',
+                'address1' => '715  Robinson Court',
+                'postcode' => '48607',
+                'city' => 'Saginaw',
+                'country' => 'US',
+                'delivery_type' => 'BILLING',
             ),
             'hosted_payment'    => array(
                 'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
