@@ -18,6 +18,6 @@ class OneySimulation {
      */
     public static function get($data, Payplug $payplug = null)
     {
-        return Resource\OneySimulationResource::get($data, $payplug);
+        return Resource\OneySimulationResource::getSimulations($data, $payplug);
     }
 }
