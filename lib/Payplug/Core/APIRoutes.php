@@ -20,6 +20,7 @@ class APIRoutes
     const ACCOUNT_RESOURCE           = '/account';
     const CARD_RESOURCE              = '/cards';
     const INSTALLMENT_PLAN_RESOURCE  = '/installment_plans';
+    const ONEY_PAYMENT_SIM_RESOURCE  = '/oney_payment_simulations';
 
 
     /**
