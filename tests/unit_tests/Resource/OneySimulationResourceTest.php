@@ -39,11 +39,11 @@ class OneySimulationResourceTest extends \PHPUnit_Framework_TestCase
         $installments = $simulation->x3_with_fees['installments'];
 
         $this->assertEquals(2, count($installments));
-        foreach($installments as $installment) {
-            $date = date('Y-m-d', strtotime($installment['date']));
-            $this->assertNotEquals('1970-01-01', $date);
-            $this->assertEquals(true, is_int($installment['amount']));
-        }
+
+        $this->assertEquals('2020-03-06T01:00:00.000Z', $installments[0]['date']);
+        $this->assertEquals(16834, $installments[0]['amount']);
+        $this->assertEquals('2020-04-06T00:00:00.000Z', $installments[1]['date']);
+        $this->assertEquals(16833, $installments[1]['amount']);
 
         $this->assertEquals(17565, $simulation->x3_with_fees['down_payment_amount']);
     }
@@ -82,11 +82,13 @@ class OneySimulationResourceTest extends \PHPUnit_Framework_TestCase
         $installments = $simulation->x4_with_fees['installments'];
 
         $this->assertEquals(3, count($installments));
-        foreach($installments as $installment) {
-            $date = date('Y-m-d', strtotime($installment['date']));
-            $this->assertNotEquals('1970-01-01', $date);
-            $this->assertEquals(true, is_int($installment['amount']));
-        }
+
+        $this->assertEquals('2020-03-06T01:00:00.000Z', $installments[0]['date']);
+        $this->assertEquals(16834, $installments[0]['amount']);
+        $this->assertEquals('2020-04-06T00:00:00.000Z', $installments[1]['date']);
+        $this->assertEquals(16833, $installments[1]['amount']);
+        $this->assertEquals('2020-05-06T00:00:00.000Z', $installments[2]['date']);
+        $this->assertEquals(16833, $installments[2]['amount']);
 
         $this->assertEquals(17565, $simulation->x4_with_fees['down_payment_amount']);
     }
@@ -139,14 +141,13 @@ class OneySimulationResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(17.74, $simulation->x3_with_fees['nominal_annual_percentage_rate']);
         $this->assertEquals(732, $simulation->x3_with_fees['total_cost']);
 
-        $installments = $simulation->x3_with_fees['installments'];
+        $installments_x3 = $simulation->x3_with_fees['installments'];
 
-        $this->assertEquals(2, count($installments));
-        foreach($installments as $installment) {
-            $date = date('Y-m-d', strtotime($installment['date']));
-            $this->assertNotEquals('1970-01-01', $date);
-            $this->assertEquals(true, is_int($installment['amount']));
-        }
+        $this->assertEquals(2, count($installments_x3));
+        $this->assertEquals('2020-03-06T01:00:00.000Z', $installments_x3[0]['date']);
+        $this->assertEquals(16834, $installments_x3[0]['amount']);
+        $this->assertEquals('2020-04-06T00:00:00.000Z', $installments_x3[1]['date']);
+        $this->assertEquals(16833, $installments_x3[1]['amount']);
 
         $this->assertEquals(17565, $simulation->x3_with_fees['down_payment_amount']);
 
@@ -157,14 +158,16 @@ class OneySimulationResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(17.74, $simulation->x4_with_fees['nominal_annual_percentage_rate']);
         $this->assertEquals(732, $simulation->x4_with_fees['total_cost']);
 
-        $installments = $simulation->x4_with_fees['installments'];
+        $installments_x4 = $simulation->x4_with_fees['installments'];
 
-        $this->assertEquals(3, count($installments));
-        foreach($installments as $installment) {
-            $date = date('Y-m-d', strtotime($installment['date']));
-            $this->assertNotEquals('1970-01-01', $date);
-            $this->assertEquals(true, is_int($installment['amount']));
-        }
+        $this->assertEquals(3, count($installments_x4));
+
+        $this->assertEquals('2020-03-06T01:00:00.000Z', $installments_x4[0]['date']);
+        $this->assertEquals(16834, $installments_x4[0]['amount']);
+        $this->assertEquals('2020-04-06T00:00:00.000Z', $installments_x4[1]['date']);
+        $this->assertEquals(16833, $installments_x4[1]['amount']);
+        $this->assertEquals('2020-05-06T00:00:00.000Z', $installments_x4[2]['date']);
+        $this->assertEquals(16833, $installments_x4[2]['amount']);
 
         $this->assertEquals(17565, $simulation->x4_with_fees['down_payment_amount']);
     }
