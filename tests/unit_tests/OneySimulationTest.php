@@ -22,17 +22,13 @@ class OneySimulationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOneyPaymentSimulation()
     {
-        $amount = 50500;
-        $country = 'FR';
-        $operations = array(
-            'x3_with_fees',
-            'x4_with_fees',
-        );
-
         $data = array(
-            'amount' => $amount,
-            'country' => $country,
-            'operations' => $operations,
+            'amount' => 50500,
+            'country' => 'FR',
+            'operations' => array(
+                'x3_with_fees',
+                'x4_with_fees',
+            ),
         );
 
         $response = array(
