@@ -1,3 +1,9 @@
+3.2.0
+-----
+
+- **NEW**: Add Oney Payment Simulations
+
+
 3.0.0
 -----
 
