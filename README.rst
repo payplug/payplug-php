@@ -70,7 +70,10 @@ Here's how simple it is to create a payment request:
     require_once("PATH_TO_PAYPLUG/payplug_php/lib/init.php"); // If not using a framework
 
     // Loads your account's parameters that you've previously downloaded and saved
-    Payplug\Payplug::setSecretKey('YOUR_TOKEN');
+    Payplug\Payplug::init(array(
+      'secretKey' => 'YOUR_SECRET_KEY',
+      'apiVersion' => 'THE_API_VERSION_YOU_WANT',
+    ));
 
     // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.com/callbackURL"
     $payment = Payplug\Payment::create(array(
