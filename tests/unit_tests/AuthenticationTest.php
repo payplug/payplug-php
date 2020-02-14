@@ -115,7 +115,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 'max_amounts' => array(),
             ),
             'permissions' => array(
-                'use_live_mode' => true,
+                'can_use_oney' => true,
+                'use_live_mode' => false,
+                'can_create_deferred_payment' => true,
+                'can_create_installment_plan' => false,
                 'can_save_cards' => false,
             ),
         );
@@ -137,7 +140,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
         $permissions = Authentication::getPermissions($this->_configuration);
 
-        $this->assertEquals(true, $permissions['use_live_mode']);
+        $this->assertEquals(true, $permissions['can_use_oney']);
+        $this->assertEquals(false, $permissions['use_live_mode']);
+        $this->assertEquals(true, $permissions['can_create_deferred_payment']);
+        $this->assertEquals(false, $permissions['can_create_installment_plan']);
         $this->assertEquals(false, $permissions['can_save_cards']);
     }
 }

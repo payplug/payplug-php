@@ -1,3 +1,8 @@
+3.2.0
+-----
+
+- **NEW**: Add Oney Payment Simulations
+
 3.1.0
 -----
 
@@ -5,7 +10,6 @@
 - **NEW**: API version should now be specified explicitly from module
 - **NEW**: Improve Payplug setSecretKey with init method
 - **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
-
 
 3.0.0
 -----
