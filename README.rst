@@ -71,25 +71,51 @@ Here's how simple it is to create a payment request:
 
     // Loads your account's parameters that you've previously downloaded and saved
     Payplug\Payplug::init(array(
-      'secretKey' => 'YOUR_SECRET_KEY',
+      'secretKey' => 'sk_live_YOUR_PRIVATE_KEY',
       'apiVersion' => 'THE_API_VERSION_YOU_WANT',
     ));
 
-    // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "http://www.example.com/callbackURL"
+    // Create a payment request of €9.99. The payment confirmation (IPN) will be sent to "'https://example.net/notifications?id='.$customer_id".
+    // note that all amounts must be expressed in centimes as positive whole numbers (€9.99 = 999 centimes).
+    // Metadata allow you to include additional information when processing payments or refunds.
+    $customer_id = '42710';
+
     $payment = Payplug\Payment::create(array(
             'amount'            => 999,
             'currency'          => 'EUR',
-            'customer'          => array(
-                'email'             => 'john.doe@example.com',
-                'first_name'        => 'John',
-                'last_name'         => 'Doe'
+            'billing'          => array(
+                'title'        => 'mr',
+                'first_name'   => 'John',
+                'last_name'    => 'Watson',
+                'email'        => 'john.watson@example.net',
+                'address1'     => '221B Baker Street',
+                'postcode'     => 'NW16XE',
+                'city'         => 'London',
+                'country'      => 'GB',
+                'language'     => 'en'
             ),
-            'hosted_payment'    => array(
-                'return_url'        => 'https://www.example.com/thank_you_for_your_payment.html',
-                'cancel_url'        => 'https://www.example.com/so_bad_it_didnt_make_it.html'
+            'shipping'          => array(
+                'title'         => 'mr',
+                'first_name'    => 'John',
+                'last_name'     => 'Watson',
+                'email'         => 'john.watson@example.net',
+                'address1'      => '221B Baker Street',
+                'postcode'      => 'NW16XE',
+                'city'          => 'London',
+                'country'       => 'GB',
+                'language'      => 'en',
+                'delivery_type' => 'BILLING'
             ),
-            'notification_url'      => 'http://www.example.com/callbackURL'
+            'hosted_payment' => array(
+                'return_url' => 'https://example.net/return?id='.$customer_id,
+                'cancel_url' => 'https://example.net/cancel?id='.$customer_id
+            ),
+            'notification_url' => 'https://example.net/notifications?id='.$customer_id,
+            'metadata'         => array(
+                'customer_id'  => $customer_id
+            )
     ));
+    ?>
 
     // You will be able to find how the payment object is built in the documentation.
     // For instance, if you want to get an URL to the payment page, you get do:
@@ -97,7 +123,6 @@ Here's how simple it is to create a payment request:
 
     // Then, you can redirect the user to the payment page
     header("Location: $paymentUrl");
-    exit();
 
 Go further:
 -----------
