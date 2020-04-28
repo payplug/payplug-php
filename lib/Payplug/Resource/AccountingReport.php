@@ -63,7 +63,7 @@ class AccountingReport extends APIResource implements IVerifiableAPIResource
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE),
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::ACCOUNTING_REPORT_RESOURCE),
             $data
         );
 
