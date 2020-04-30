@@ -1,4 +1,4 @@
-3.2.1
+3.3.0
 -----
 - NEW: Add AccountingReport class to handle new API endpoint
 
