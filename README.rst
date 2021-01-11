@@ -14,6 +14,12 @@ help developers to use PayPlug as payment solution in a simple, yet robust way.
 
 You can create a PayPlug account at https://www.payplug.com/.
 
+Maintenance
+-------------
+
+CA certificate (cacert.pem) should be updated every year during the first week of December. 
+Go to https://curl.se/docs/caextract.html to get a recent one.
+
 Prerequisites
 -------------
 
