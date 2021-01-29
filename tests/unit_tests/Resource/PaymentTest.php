@@ -551,6 +551,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['CURLOPT_URL_DATA']);
     }
 
+    public function testPaymentRetrieveWithInvalidId() {
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        Payment::retrieve('');
+    }
+
+    public function testPaymentRetrieveWithIdIsNull() {
+        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        Payment::retrieve(NULL);
+    }
+
     public function testPaymentList()
     {
         $GLOBALS['CURLOPT_URL_DATA'] = null;
