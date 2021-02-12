@@ -29,6 +29,9 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+    
+    - name: php version
+      run: php -v
 
     - name: Run test suite
       run: vendor/phpunit/phpunit/phpunit --bootstrap tests/config.php tests
