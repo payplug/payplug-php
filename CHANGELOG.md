@@ -1,3 +1,12 @@
+3.3.2
+-----
+- Fix retrieve payment function when id_payment is not set
+
+3.3.1
+-----
+- Update certificate
+
+
 3.3.0
 -----
 - NEW: Add AccountingReport class to handle new API endpoint
