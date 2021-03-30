@@ -30,7 +30,7 @@ jobs:
       run: php -v
 
     - name: phpunit version
-      run: phpunit -v
+      run: phpunit --version
 
     - name: Run test suite
       run: phpunit --bootstrap tests/config.php tests
