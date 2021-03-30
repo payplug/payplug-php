@@ -13,16 +13,12 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.3', '7.4', '8.0']
-        phpunit-versions: ['latest']
+        phpunit-versions: ['7.5.20']
         include:
         - php-versions: '5.6'
           phpunit-versions: '5.7.27'
         - php-versions: '7.0'
-          phpunit-versions: '6.5.14'     
-        - php-versions: '7.1'
-          phpunit-versions: '7.5.20'  
-        - php-versions: '7.2'
-          phpunit-versions: '8.5.15'
+          phpunit-versions: '6.5.14'
     
     name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
