@@ -15,8 +15,10 @@ jobs:
         php-versions: ['7.3', '7.4', '8.0']
         phpunit-versions: ['latest']
         include:
-            - php-versions: '5.6'
-              phpunit-versions: '5.x'
+        - php-versions: '5.6'
+          phpunit-versions: '5.x'
+    
+    name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
     - uses: actions/checkout@v2
     
