@@ -16,7 +16,7 @@ jobs:
         phpunit-versions: ['latest']
         include:
         - php-versions: '5.6'
-          phpunit-versions: '5.x'
+          phpunit-versions: '5.7.27'
     
     name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
