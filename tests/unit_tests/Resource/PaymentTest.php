@@ -7,7 +7,7 @@ use Payplug;
  * @group ci
  * @group recommended
  */
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
     private $_configuration;
@@ -17,7 +17,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -26,7 +26,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -552,12 +552,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testPaymentRetrieveWithInvalidId() {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
         Payment::retrieve('');
     }
 
     public function testPaymentRetrieveWithIdIsNull() {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
         Payment::retrieve(NULL);
     }
 
@@ -624,7 +624,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     public function testPaymentRefundWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
+        $this->expectException('\PayPlug\Exception\InvalidPaymentException');
 
         $payment = Payment::fromAttributes(array('fake' => 'payment'));
         $payment->refund(array('amount' => 3300));
@@ -671,7 +671,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     public function testPaymentListRefundsWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('\PayPlug\Exception\InvalidPaymentException');
+        $this->expectException('\PayPlug\Exception\InvalidPaymentException');
 
         $payment = Payment::fromAttributes(array('fake' => 'payment'));
         $payment->listRefunds();
@@ -723,7 +723,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentPaymentWhenIdIsUndefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
 
         $payment = Payment::fromAttributes(array('this_payment' => 'has_no_id'));
         $payment->getConsistentResource();

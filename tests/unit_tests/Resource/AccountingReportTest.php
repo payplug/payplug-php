@@ -8,7 +8,7 @@ use Payplug\Core\HttpClient;
  * @group ci
  * @group recommended
  */
-class AccountingReportTest extends \PHPUnit_Framework_TestCase
+class AccountingReportTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
     private $_configuration;
@@ -18,7 +18,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -27,7 +27,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -139,7 +139,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentAccountingReportWhenIdIsUndefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
 
         $report= AccountingReport::fromAttributes(array('this_report' => 'has_no_id'));
         $report->getConsistentResource();

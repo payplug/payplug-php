@@ -7,7 +7,7 @@ use Payplug;
  * @group ci
  * @group recommended
  */
-class CardTest extends \PHPUnit_Framework_TestCase
+class CardTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
     private $_configuration;
@@ -17,7 +17,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -26,7 +26,7 @@ class CardTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 

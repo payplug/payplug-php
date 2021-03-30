@@ -6,7 +6,7 @@ namespace Payplug;
  * @group ci
  * @group recommended
  */
-class HttpClientFunctionalTest extends \PHPUnit_Framework_TestCase
+class HttpClientFunctionalTest extends \PHPUnit\Framework\TestCase
 {
     protected $_configuration;
 

@@ -8,7 +8,7 @@ use Payplug\Core\HttpClient;
 * @group ci
 * @group recommended
 */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
 
@@ -17,7 +17,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new \Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -26,7 +26,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new \Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 

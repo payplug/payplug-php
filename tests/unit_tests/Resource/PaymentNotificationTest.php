@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentNotificationTest extends \PHPUnit_Framework_TestCase
+class PaymentNotificationTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateNotificationFromAttributes()
     {

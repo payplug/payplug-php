@@ -6,7 +6,7 @@ use \Payplug\Core\APIRoutes;
  * @group ci
  * @group recommended
  */
-class APIRoutesTest extends \PHPUnit_Framework_TestCase
+class APIRoutesTest extends \PHPUnit\Framework\TestCase
 {
     public function testThatRouteStartsWithBaseURL()
     {
