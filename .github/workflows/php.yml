@@ -14,6 +14,15 @@ jobs:
       matrix:
         php-versions: ['5.6' , '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
         phpunit-versions: ['latest']
+        include:
+            - php-versions: '5.6'
+              phpunit-versions: '5.x'
+            - php-versions: '7.0'
+              phpunit-versions: '6.x'     
+            - php-versions: '7.1'
+              phpunit-versions: '7.x'  
+            - php-versions: '7.2'
+              phpunit-versions: '8.x'
 
     steps:
     - uses: actions/checkout@v2
