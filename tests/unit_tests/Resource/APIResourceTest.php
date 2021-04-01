@@ -20,7 +20,10 @@ class APIResourceTest extends \PHPUnit\Framework\TestCase
 {
     private $_myApiResource = null;
 
-    protected function setUp()
+        /**
+      * @before
+      */
+      protected function setUpTest()
     {
         $this->_myApiResource = APIResourceMock::fromAttributes(array(
             'attr1' => 'val_attr1',

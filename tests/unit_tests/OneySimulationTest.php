@@ -11,7 +11,10 @@ class OneySimulationTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
 
-    protected function setUp()
+    /**
+  * @before
+  */
+ protected function setUpTest()
     {
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);

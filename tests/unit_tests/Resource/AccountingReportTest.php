@@ -13,7 +13,10 @@ class AccountingReportTest extends \PHPUnit\Framework\TestCase
     private $_requestMock;
     private $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);

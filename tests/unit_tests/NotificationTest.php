@@ -6,13 +6,19 @@ namespace Payplug;
 * @group ci
 * @group recommended
 */
+
+
+
 class NotificationTest extends \PHPUnit\Framework\TestCase
 {
 
     private $_requestMock;
     private $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_configuration = new \Payplug\Payplug('abc');
         Payplug::setDefaultConfiguration($this->_configuration);

@@ -12,7 +12,10 @@ class HttpClientTest extends \PHPUnit\Framework\TestCase
     private $_httpClient;
     private $_requestMock;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_httpClient = new HttpClient(new Payplug('abc'));
 
