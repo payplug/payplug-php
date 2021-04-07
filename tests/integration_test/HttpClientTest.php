@@ -6,11 +6,14 @@ namespace Payplug;
  * @group ci
  * @group recommended
  */
-class HttpClientFunctionalTest extends \PHPUnit_Framework_TestCase
+class HttpClientFunctionalTest extends \PHPUnit\Framework\TestCase
 {
     protected $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_configuration = new Payplug('abc','1970-01-01');
     }

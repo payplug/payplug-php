@@ -7,7 +7,7 @@ namespace Payplug;
  * @group ci
  * @group recommended
  */
-class PayplugTest extends \PHPUnit_Framework_TestCase
+class PayplugTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanInitializeDefaultConfiguration()
     {
@@ -45,7 +45,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 
     public function testCannotInitializeConfigurationWhenLiveTokenIsNotAString()
     {
-        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
         Payplug::init(array(
             'secretKey' => true,
             'apiVersion' => '1970-01-01',
@@ -54,13 +54,13 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 
     public function testDeprecatedCannotInitializeConfigurationWhenLiveTokenIsNotAString()
     {
-        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
         Payplug::setSecretKey(true);
     }
 
     public function testCannotInitializeConfigurationWhenTestTokenIsArray()
     {
-        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
 
         Payplug::init(array(
             'secretKey' => array(
@@ -72,7 +72,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
 
     public function testDeprecatedCannotInitializeConfigurationWhenTestTokenIsArray()
     {
-        $this->setExpectedException('\PayPlug\Exception\ConfigurationException');
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
 
         Payplug::setSecretKey(array(
             'LIVE_TOKEN' => 'cba'
@@ -96,7 +96,7 @@ class PayplugTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsExceptionWhenDefaultConfigurationIsNotSet()
     {
-        $this->setExpectedException('\Payplug\Exception\ConfigurationNotSetException');
+        $this->expectException('\Payplug\Exception\ConfigurationNotSetException');
         Payplug::getDefaultConfiguration();
     }
 

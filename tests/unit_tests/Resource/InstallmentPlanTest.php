@@ -7,17 +7,20 @@ use Payplug;
  * @group ci
  * @group recommended
  */
-class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
+class InstallmentPlanTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
     private $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -26,7 +29,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -527,7 +530,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
     public function testInstallmentPlanListPaymentsWhenPaymentIsInvalid()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
         $installment_plan = InstallmentPlan::fromAttributes(array('fake' => 'payment'));
         $installment_plan->listPayments();
     }
@@ -598,7 +601,7 @@ class InstallmentPlanTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentInstallmentPlanWhenIdIsUndefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
 
         $installment_plan = InstallmentPlan::fromAttributes(array('this_installment_plan' => 'has_no_id'));
         $installment_plan->getConsistentResource();

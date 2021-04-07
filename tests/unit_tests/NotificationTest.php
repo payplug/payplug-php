@@ -6,18 +6,24 @@ namespace Payplug;
 * @group ci
 * @group recommended
 */
-class NotificationTest extends \PHPUnit_Framework_TestCase
+
+
+
+class NotificationTest extends \PHPUnit\Framework\TestCase
 {
 
     private $_requestMock;
     private $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_configuration = new \Payplug\Payplug('abc');
         Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -26,7 +32,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $this->_configuration = new Payplug('abc','1970-01-01');
         Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -80,7 +86,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
     public function testTreatWhenBodyIsNotValidJSON()
     {
-        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
+        $this->expectException('\PayPlug\Exception\UnknownAPIResourceException');
 
         $this->_requestMock
             ->expects($this->never())

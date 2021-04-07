@@ -10,33 +10,28 @@ jobs:
   tests_unit:
 
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        php-versions: ['7.3', '7.4', '8.0']
+        phpunit-versions: ['8.5.15']
+        include:
+        - php-versions: '5.6'
+          phpunit-versions: '5.7.27'
+        - php-versions: '7.0'
+          phpunit-versions: '6.5.14'
+    
+    name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
     - uses: actions/checkout@v2
     
     - name: Setup PHP with PECL extension
       uses: shivammathur/setup-php@v2
       with: 
-        php-version: '7.4'
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+        php-version: ${{ matrix.php-versions }}
+        tools: phpunit:${{ matrix.phpunit-versions }}
     
     - name: php version
       run: php -v
 
     - name: Run test suite
-      run: vendor/phpunit/phpunit/phpunit --bootstrap tests/config.php tests
+      run: phpunit --bootstrap tests/config.php tests

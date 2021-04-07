@@ -7,16 +7,19 @@ use Payplug;
  * @group ci
  * @group recommended
  */
-class OneySimulationTest extends \PHPUnit_Framework_TestCase
+class OneySimulationTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
 
-    protected function setUp()
+    /**
+  * @before
+  */
+ protected function setUpTest()
     {
         $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 

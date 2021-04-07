@@ -7,16 +7,19 @@ use \Payplug\Core\HttpClient;
  * @group ci
  * @group recommended
  */
-class HttpClientTest extends \PHPUnit_Framework_TestCase
+class HttpClientTest extends \PHPUnit\Framework\TestCase
 {
     private $_httpClient;
     private $_requestMock;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
         $this->_httpClient = new HttpClient(new Payplug('abc'));
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -24,7 +27,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->_httpClient = new HttpClient(new Payplug('abc','1970-01-01'));
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -132,7 +135,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError500()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\PayPlugServerException');
+        $this->expectException('\PayPlug\Exception\PayPlugServerException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -155,7 +158,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError400()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\BadRequestException');
+        $this->expectException('\PayPlug\Exception\BadRequestException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -178,7 +181,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError401()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\UnauthorizedException');
+        $this->expectException('\PayPlug\Exception\UnauthorizedException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -201,7 +204,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError403()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\ForbiddenException');
+        $this->expectException('\PayPlug\Exception\ForbiddenException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -224,7 +227,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError404()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\NotFoundException');
+        $this->expectException('\PayPlug\Exception\NotFoundException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -247,7 +250,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testError405()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\NotAllowedException');
+        $this->expectException('\PayPlug\Exception\NotAllowedException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -270,7 +273,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testErrorUnknown()
     {
 
-        $this->setExpectedException('\PayPlug\Exception\HttpException');
+        $this->expectException('\PayPlug\Exception\HttpException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -331,7 +334,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     function testInvalidAPIResponse()
     {
-        $this->setExpectedException('\PayPlug\Exception\UnexpectedAPIResponseException');
+        $this->expectException('\PayPlug\Exception\UnexpectedAPIResponseException');
 
 
 
@@ -355,7 +358,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     function testConnectionError()
     {
-        $this->setExpectedException('\PayPlug\Exception\ConnectionException');
+        $this->expectException('\PayPlug\Exception\ConnectionException');
 
 
 

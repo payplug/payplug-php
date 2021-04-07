@@ -7,7 +7,7 @@ use Payplug;
  * @group ci
  * @group recommended
  */
-class OneySimulationResourceTest extends \PHPUnit_Framework_TestCase
+class OneySimulationResourceTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetOneySimulation3xWithFees()
     {

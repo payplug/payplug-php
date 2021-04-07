@@ -6,7 +6,7 @@ namespace Payplug\Exception;
  * @group ci
  * @group recommended
  */
-class HttpExceptionTest extends \PHPUnit_Framework_TestCase
+class HttpExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testToString()
     {

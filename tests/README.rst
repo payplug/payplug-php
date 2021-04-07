@@ -1,3 +1,24 @@
+Contributing
+====================
+
+Troubleshooting
+----------------
+
+PHP 8 CI test is failing:
+::
+    $ ./tools/phpunit MyTest
+    PHP Fatal error: Declaration of MyTest::setUp() must be compatible
+    with PHPUnit\Framework\TestCase::setUp(): void in ...
+
+To keep compatibility through PHP 5.6 to PHP 8 the setUp method cannot be typed.  
+
+Use a homemade methode instead:
+::
+    /** @before **/
+    protected setUpTest() {
+    ...
+    }
+    
 How to run the tests
 ====================
 
