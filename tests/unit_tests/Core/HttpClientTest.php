@@ -429,11 +429,9 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     function testGetDefaultUserAgentWithAdditionalProduct()
     {
         \Payplug\Core\HttpClient::setDefaultUserAgentProduct('PayPlug-Test', '1.0.0', 'Comment/1.6.3');
-       // $defaultUserAgentProducts  = $this->_httpClient->setDefaultUserAgentProduct( 'Another-Test');
+        \Payplug\Core\HttpClient::setDefaultUserAgentProduct('Another-Test', '5.8.13');
         $userAgent = $this->_httpClient->getUserAgent();
-
-        var_dump($userAgent);
-
-        //$this->assertStringEndsWith('Another-Test/5.8.13', $userAgent);
+        
+        $this->assertStringEndsWith('Another-Test/5.8.13', $userAgent);
     }
 }

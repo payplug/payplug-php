@@ -167,7 +167,7 @@ class HttpClient
      */
     public static function setDefaultUserAgentProduct($product, $version = null, $comment = null)
     {
-        self::$defaultUserAgentProducts = array($product, $version, $comment);
+        self::$defaultUserAgentProducts[0] = array($product, $version, $comment);
     }
 
     /**
