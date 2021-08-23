@@ -11,6 +11,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 {
     private $_httpClient;
     private $_requestMock;
+//    /**
+//     * @var array  Default User-Agent products made to improve the User-Agent HTTP header
+//     * sent for each HTTP request.
+//     */
+//    private static $defaultUserAgentProducts = array();
 
     protected function setUp()
     {
@@ -419,5 +424,16 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         \Payplug\Core\HttpClient::addDefaultUserAgentProduct('Another-Test', '5.8.13');
         $userAgent = $this->_httpClient->getUserAgent();
         $this->assertStringEndsWith(' PayPlug-Test/1.0.0 (Comment/1.6.3) Another-Test/5.8.13', $userAgent);
+    }
+
+    function testGetDefaultUserAgentWithAdditionalProduct()
+    {
+        \Payplug\Core\HttpClient::setDefaultUserAgentProduct('PayPlug-Test', '1.0.0', 'Comment/1.6.3');
+       // $defaultUserAgentProducts  = $this->_httpClient->setDefaultUserAgentProduct( 'Another-Test');
+        $userAgent = $this->_httpClient->getUserAgent();
+
+        var_dump($userAgent);
+
+        //$this->assertStringEndsWith('Another-Test/5.8.13', $userAgent);
     }
 }

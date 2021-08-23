@@ -158,6 +158,19 @@ class HttpClient
     }
 
     /**
+     * Set a default product for the User-Agent HTTP header sent for each HTTP request.
+     *
+     * @param   string  $product   the product's name
+     * @param   string  $version   the product's version
+     * @param   string  $comment   a comment about the product
+     *
+     */
+    public static function setDefaultUserAgentProduct($product, $version = null, $comment = null)
+    {
+        self::$defaultUserAgentProducts = array($product, $version, $comment);
+    }
+
+    /**
      * Formats a product for a User-Agent HTTP header.
      *
      * @param   string  $product   the product name
