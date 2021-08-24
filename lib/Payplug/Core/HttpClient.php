@@ -145,7 +145,7 @@ class HttpClient
     }
 
     /**
-     * Legacy: Adds a default product for the User-Agent HTTP header sent for each HTTP request.
+     * Legacy : Adds a default product for the User-Agent HTTP header sent for each HTTP request.
      * Replaced by setDefaultUserAgentProduct()
      *
      * @param   string  $product   the product's name
