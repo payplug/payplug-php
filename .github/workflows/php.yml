@@ -3,12 +3,12 @@ name: PHP Composer
 on:
   push:
     branches: 
-    - master
-    - develop
+      - master
+      - develop
   pull_request:
     branches: 
-    - master
-    - develop
+      - master
+      - develop
 
 jobs:
   tests_unit:
