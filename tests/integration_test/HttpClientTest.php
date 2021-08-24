@@ -1,6 +1,7 @@
 <?php
 namespace Payplug;
 
+use \PHPUnit_Framework_TestCase;
 /**
  * @group functional
  * @group ci
