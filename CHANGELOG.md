@@ -1,3 +1,29 @@
+3.3.2
+-----
+- Fix retrieve payment function when id_payment is not set
+
+3.3.1
+-----
+- Update certificate
+
+
+3.3.0
+-----
+- NEW: Add AccountingReport class to handle new API endpoint
+
+3.2.0
+-----
+
+- **NEW**: Add Oney Payment Simulations
+
+3.1.0
+-----
+
+- **NEW**: Deprecated Payplug::setSecretKey function, use Payplug::init instead
+- **NEW**: API version should now be specified explicitly from module
+- **NEW**: Improve Payplug setSecretKey with init method
+- **NEW**: Excluded configuration API_VERSION versionning, it will be send from the apps nowadays
+
 3.0.0
 -----
 

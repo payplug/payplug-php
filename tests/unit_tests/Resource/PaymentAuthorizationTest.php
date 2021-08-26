@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentAuthorizationTest extends \PHPUnit_Framework_TestCase
+class PaymentAuthorizationTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateAuthorizationFromAttributes()
     {

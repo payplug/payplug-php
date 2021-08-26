@@ -10,13 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '2.6.0';
-
-    /**
-     * The Api version
-     * @var DateTime
-     */
-    const API_VERSION = '2019-06-14';
+    const LIBRARY_VERSION = '3.3.2';
 
     /**
      * PHP minimal version required by this library

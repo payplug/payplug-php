@@ -1,23 +1,36 @@
 <?php
 namespace Payplug\Resource;
 use Payplug;
+use Payplug\Core\HttpClient;
 
 /**
  * @group unit
  * @group ci
  * @group recommended
  */
-class RefundTest extends \PHPUnit_Framework_TestCase
+class RefundTest extends \PHPUnit\Framework\TestCase
 {
     private $_requestMock;
     private $_configuration;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTest()
     {
-        $this->_configuration = new Payplug\Payplug('abc', 'cba', true);
+        $this->_configuration = new Payplug\Payplug('abc');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
-        $this->_requestMock = $this->getMock('\Payplug\Core\IHttpRequest');
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
+        Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
+    }
+
+    protected function setUpTwice()
+    {
+        $this->_configuration = new Payplug\Payplug('abc','1970-01-01');
+        Payplug\Payplug::setDefaultConfiguration($this->_configuration);
+
+        $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
         Payplug\Core\HttpClient::$REQUEST_HANDLER = $this->_requestMock;
     }
 
@@ -179,7 +192,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
     public function testRefundRetrieveFromPaymentObject()
     {
         $GLOBALS['CURLOPT_URL_DATA'] = null;
-        
+
 
         $this->_requestMock
             ->expects($this->once())
@@ -222,7 +235,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
     public function testRefundsListThrowsExceptionOnWongAPIResponse()
     {
-        $this->setExpectedException('\PayPlug\Exception\UnexpectedAPIResponseException');
+        $this->expectException('\PayPlug\Exception\UnexpectedAPIResponseException');
 
         $this->_requestMock
             ->expects($this->once())
@@ -335,7 +348,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentRefundWhenIdIsUndefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
 
         $payment = Refund::fromAttributes(array('this_refund' => 'has_no_id', 'payment_id' => 'pay_id'));
         $payment->getConsistentResource();
@@ -343,7 +356,7 @@ class RefundTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveConsistentRefundWhenPaymentIdIsUndefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
 
         $payment = Refund::fromAttributes(array('id' => 'an_id', 'no_payment_id' => ''));
         $payment->getConsistentResource();

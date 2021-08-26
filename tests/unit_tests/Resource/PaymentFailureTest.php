@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentPaymentFailureTest extends \PHPUnit_Framework_TestCase
+class PaymentPaymentFailureTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreatePaymentFailureFromAttributes()
     {

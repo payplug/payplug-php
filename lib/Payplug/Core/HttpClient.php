@@ -145,7 +145,8 @@ class HttpClient
     }
 
     /**
-     * Adds a default product for the User-Agent HTTP header sent for each HTTP request.
+     * Legacy : Adds a default product for the User-Agent HTTP header sent for each HTTP request.
+     * Replaced by setDefaultUserAgentProduct()
      *
      * @param   string  $product   the product's name
      * @param   string  $version   the product's version
@@ -154,7 +155,20 @@ class HttpClient
      */
     public static function addDefaultUserAgentProduct($product, $version = null, $comment = null)
     {
-        self::$defaultUserAgentProducts[] = array($product, $version, $comment);
+        self::setDefaultUserAgentProduct($product, $version, $comment);
+    }
+
+    /**
+     * Set a default product for the User-Agent HTTP header sent for each HTTP request.
+     *
+     * @param   string  $product   the product's name
+     * @param   string  $version   the product's version
+     * @param   string  $comment   a comment about the product
+     *
+     */
+    public static function setDefaultUserAgentProduct($product, $version = null, $comment = null)
+    {
+        self::$defaultUserAgentProducts[0] = array($product, $version, $comment);
     }
 
     /**
@@ -195,16 +209,6 @@ class HttpClient
     }
 
     /**
-     * Gets the API Version HTTP header sent for each HTTP request.
-     *
-     * @return  string  The current version
-     */
-    public function getVersion()
-    {
-        return Payplug\Core\Config::API_VERSION;
-    }
-
-    /**
      * Performs a request.
      *
      * @param   string  $httpVerb       the HTTP verb (PUT, POST, GET, …)
@@ -239,9 +243,8 @@ class HttpClient
         );
         if ($authenticated) {
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
+            $headers[] = 'PayPlug-Version: ' . $this->_configuration->getApiVersion();
         }
-
-        $headers[] = 'PayPlug-Version: ' . $this->getVersion();
 
         $request->setopt(CURLOPT_FAILONERROR, false);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
