@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentCardTest extends \PHPUnit_Framework_TestCase
+class PaymentCardTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateCardFromAttributes()
     {

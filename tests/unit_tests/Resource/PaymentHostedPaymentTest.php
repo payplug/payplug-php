@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentHostedPaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentHostedPaymentTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateHostedPaymentFromAttributes()
     {

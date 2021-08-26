@@ -16,11 +16,14 @@ class APIResourceMock extends Resource\APIResource
  * @group ci
  * @group recommended
  */
-class APIResourceTest extends \PHPUnit_Framework_TestCase
+class APIResourceTest extends \PHPUnit\Framework\TestCase
 {
     private $_myApiResource = null;
 
-    protected function setUp()
+        /**
+      * @before
+      */
+      protected function setUpTest()
     {
         $this->_myApiResource = APIResourceMock::fromAttributes(array(
             'attr1' => 'val_attr1',
@@ -30,7 +33,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionWhenKeyDoesNotExist()
     {
-        $this->setExpectedException('\PayPlug\Exception\UndefinedAttributeException');
+        $this->expectException('\PayPlug\Exception\UndefinedAttributeException');
         $this->_myApiResource->an_undefined_attribute;
     }
 
@@ -68,7 +71,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testAPIResourceFactoryWhenObjectIsNotDefined()
     {
-        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
+        $this->expectException('\PayPlug\Exception\UnknownAPIResourceException');
         $attributes = array(
             'id'    => 'a_random_object'
         );
@@ -77,7 +80,7 @@ class APIResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testAPIResourceFactoryWhenObjectIsUnknown()
     {
-        $this->setExpectedException('\PayPlug\Exception\UnknownAPIResourceException');
+        $this->expectException('\PayPlug\Exception\UnknownAPIResourceException');
         $attributes = array(
             'id'        => 'a_random_object',
             'object'    => 'an_unknown_object'

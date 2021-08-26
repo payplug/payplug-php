@@ -2,8 +2,8 @@
 namespace Payplug;
 
 /**
- * 
- */
+ * The Authentication DAO simplifies the access to most useful customer methods
+ **/
 class Authentication
 {
     /**
@@ -86,7 +86,11 @@ class Authentication
     public static function getPermissionsByLogin($email, $password)
     {
         $keys = self::getKeysByLogin($email, $password);
-        $payplug = Payplug::setSecretKey($keys['httpResponse']['secret_keys']['live']);
+        $payplug = Payplug::init(array(
+            'secretKey' => $keys['httpResponse']['secret_keys']['live'],
+            'apiVersion' => null,
+        ));
+
         $httpClient = new Core\HttpClient($payplug);
         $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
 

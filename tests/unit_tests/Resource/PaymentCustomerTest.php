@@ -6,7 +6,7 @@ namespace Payplug\Resource;
  * @group ci
  * @group recommended
  */
-class PaymentCustomerTest extends \PHPUnit_Framework_TestCase
+class PaymentCustomerTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateCustomerFromAttributes()
     {

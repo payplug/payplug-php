@@ -153,14 +153,20 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @param   string             $paymentId  the payment ID
      * @param   Payplug\Payplug    $payplug    the client configuration
      *
-     * @return  null|Payment the retrieved payment or null on error
+     * @return  Payment the retrieved payment
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Payplug\Exception\UndefinedAttributeException
+     * @throws  Payplug\Exception\NotFoundException
      */
     public static function retrieve($paymentId, Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        if (!$paymentId) {
+            throw new Payplug\Exception\UndefinedAttributeException('The parameter paymentId is not set.');
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
