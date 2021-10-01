@@ -1,3 +1,7 @@
+3.4.0
+-----
+- **NEW**: Add method to get publishable keys
+
 3.3.2
 -----
 - Fix retrieve payment function when id_payment is not set
