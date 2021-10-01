@@ -149,4 +149,32 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $permissions['can_create_installment_plan']);
         $this->assertEquals(false, $permissions['can_save_cards']);
     }
+
+    public function testPublishableKeys()
+    {
+        $response = array(
+            'publishable_key' => 'pk_test_everythingIsUnderControl'
+        );
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $publishable_keys = Authentication::getPublishableKeys($this->_configuration);
+
+        $this->assertEquals(200, $publishable_keys['httpStatus']);
+        $this->assertEquals('pk_test_everythingIsUnderControl', $publishable_keys['httpResponse']['publishable_key']);
+    }
 }

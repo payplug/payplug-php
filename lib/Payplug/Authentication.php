@@ -96,4 +96,25 @@ class Authentication
 
         return $response['httpResponse']['permissions'];
     }
+
+    /**
+     * Retrieve publisable keys
+     *
+     * @param   Payplug $payplug the client configuration
+     *
+     * @return  null|array the publishable keys
+     *
+     * @throws  Exception\ConfigurationNotSetException
+     */
+    public static function getPublishableKeys(Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Core\HttpClient($payplug);
+        $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::PUBLISHABLE_KEYS));
+
+        return $response;
+    }
 }
