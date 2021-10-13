@@ -1,6 +1,8 @@
 <?php
 namespace Payplug\Core;
 
+use Symfony\Component\Dotenv\Dotenv;
+
 /**
  * Defines the routes to PayPlug's API.
  */
@@ -62,4 +64,13 @@ class APIRoutes
     }
 }
 
-APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
+if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] == "localhost" || preg_match("/(shopshelf|notpayplug.com|payplug.com|payplug.fr|ngrok.io)/i", $_SERVER['SERVER_NAME'])) {
+    $dotenv = new Dotenv();
+    $envFile = __DIR__ . '/../../../../../../../payplugroutes/.env';
+    if (file_exists($envFile)) {
+        $dotenv->load($envFile);
+    }
+}
+
+
+APIRoutes::$API_BASE_URL = isset($_ENV['API_BASE_URL']) ?  $_ENV['API_BASE_URL'] : 'https://api.payplug.com';
