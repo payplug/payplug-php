@@ -2,6 +2,7 @@
 *.swp
 _build/
 .idea/
+.env
 vendor/
 *.iml
 *.phar
