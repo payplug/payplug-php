@@ -174,6 +174,17 @@ class Payment extends APIResource implements IVerifiableAPIResource
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $paymentId)
         );
 
+        //  todo: REMOVE WIP BANCONTACT TEMPORARY CODE
+        if (isset($response['httpResponse']['metadata']['isBancontact'])) {
+            $response['httpResponse']['payment_method'] = [
+                "type" => "bancontact",
+                "is_pending" => "false",
+                "transactionflow" => "qrcode"
+            ];
+            unset($response['httpResponse']['metadata']['isBancontact']);
+        }
+        // TEMPORARY CODE
+
         return Payment::fromAttributes($response['httpResponse']);
     }
 
@@ -232,6 +243,13 @@ class Payment extends APIResource implements IVerifiableAPIResource
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
+
+        //  todo: REMOVE WIP BANCONTACT TEMPORARY CODE
+        if (isset($data["payment_method"]) && $data["payment_method"] == "bancontact") {
+            unset($data["payment_method"]);
+            $data["metadata"]["isBancontact"] = true;
+        }
+        // TEMPORARY CODE
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->post(

@@ -47,6 +47,13 @@ class Authentication
         $httpClient = new Core\HttpClient($payplug);
         $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
 
+        // todo: REMOVE WIP BANCONTACT TEMPORARY CODE
+        if ($response['httpResponse']) {
+            $response['httpResponse']['payment_methods']['bancontact']['enabled'] =
+                !(substr($response['httpResponse']['id'], -3) == 528);
+        }
+        // TEMPORARY CODE
+
         return $response;
     }
 
