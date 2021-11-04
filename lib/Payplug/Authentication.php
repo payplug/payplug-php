@@ -111,9 +111,8 @@ class Authentication
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();
         }
-
         $httpClient = new Core\HttpClient($payplug);
-        $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::PUBLISHABLE_KEYS));
+        $response = $httpClient->post(Core\APIRoutes::getRoute(Core\APIRoutes::PUBLISHABLE_KEYS));
 
         return $response;
     }
