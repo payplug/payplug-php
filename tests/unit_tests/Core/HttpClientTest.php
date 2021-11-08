@@ -411,7 +411,7 @@ class HttpClientTest extends \PHPUnit\Framework\TestCase
         $userAgent = $this->_httpClient->getUserAgent();
         // Expected result is something like 'PayPlug-PHP/1.0.0 (PHP/5.5.35; curl/7.44.0)'
         $this->assertRegExp(
-            '/^PayPlug-PHP\/(\d+\.?){1,3} \(PHP\/(\d+\.?){1,3}(\w|\+|\.|\-)*; curl\/(\d+\.?){1,3}\)$/',
+            '/^PayPlug-PHP\/(\d+\.?){1,3} \(PHP\/(\d+\.?){1,3}(\w|\+|\~|\.|\-)*; curl\/(\d+\.?){1,3}\)$/',
             $userAgent
         );
     }
