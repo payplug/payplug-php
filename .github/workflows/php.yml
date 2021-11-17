@@ -38,4 +38,5 @@ jobs:
       run: php -v
 
     - name: Run test suite
-      run: phpunit --bootstrap tests/config.php tests
+      run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
+
