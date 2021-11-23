@@ -64,4 +64,12 @@ class APIRoutesTest extends \PHPUnit\Framework\TestCase
         $endRoute = substr($route, -strlen($expected));
         $this->assertEquals($expected, $endRoute);
     }
+
+    public function testSetApiBaseUrl()
+    {
+        APIRoutes::setApiBaseUrl('https://api.payplug.com');
+        $this->assertEquals('https://api.payplug.com', APIRoutes::$API_BASE_URL);
+
+
+    }
 }
