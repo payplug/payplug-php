@@ -54,6 +54,14 @@ class APIRoutes
     }
 
     /**
+     * @description set $API_BASE_URL from plugin
+     * @param $apiBaseUrl
+     */
+    public static function setApiBaseUrl($apiBaseUrl){
+        self::$API_BASE_URL = $apiBaseUrl;
+    }
+
+    /**
      * Gets a route that allows to check whether the remote API is up.
      *
      * @return  string  the full URL to the test resource
@@ -64,13 +72,5 @@ class APIRoutes
     }
 }
 
-if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] == "localhost" || preg_match("/(shopshelf|notpayplug.com|payplug.com|payplug.fr|ngrok.io)/i", $_SERVER['SERVER_NAME'])) {
-    $dotenv = new Dotenv();
-    $envFile = __DIR__ . '/../../../../../../../payplugroutes/.env';
-    if (file_exists($envFile)) {
-        $dotenv->load($envFile);
-    }
-}
+APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
 
-
-APIRoutes::$API_BASE_URL = isset($_ENV['API_BASE_URL']) ?  $_ENV['API_BASE_URL'] : 'https://api.payplug.com';
