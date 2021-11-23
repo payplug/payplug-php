@@ -57,7 +57,8 @@ class APIRoutes
      * @description set $API_BASE_URL from plugin
      * @param $apiBaseUrl
      */
-    public static function setApiBaseUrl($apiBaseUrl){
+    public static function setApiBaseUrl($apiBaseUrl)
+    {
         self::$API_BASE_URL = $apiBaseUrl;
     }
 
