@@ -1,6 +1,7 @@
 <?php
 namespace Payplug\Core;
 use Payplug\Exception;
+define( 'TAG', trim(exec('git describe --tags --abbrev=0')));
 
 /**
  * Minimal configuration to launch the script.
@@ -10,7 +11,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION= '';
+    const LIBRARY_VERSION= TAG;
 
     /**
      * PHP minimal version required by this library
@@ -32,9 +33,6 @@ class Config
         'json_encode'   => 'php5-json',
         'curl_version'  => 'php5-curl'
     );
-    public function __construct() {
-        $this->LIBRARY_VERSION  = trim(exec('git describe --tags --abbrev=0'));
-    }
 
 }
 
