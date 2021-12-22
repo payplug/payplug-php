@@ -10,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '3.5.1';
+    const LIBRARY_VERSION= '';
 
     /**
      * PHP minimal version required by this library
@@ -32,6 +32,10 @@ class Config
         'json_encode'   => 'php5-json',
         'curl_version'  => 'php5-curl'
     );
+    public function __construct() {
+        $this->LIBRARY_VERSION  = trim(exec('git describe --tags --abbrev=0'));
+    }
+
 }
 
 // Check PHP version
