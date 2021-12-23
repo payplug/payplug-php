@@ -1,6 +1,8 @@
 <?php
 namespace Payplug;
 
+use Exception;
+
 /**
  * The Authentication DAO simplifies the access to most useful customer methods
  **/
@@ -102,9 +104,9 @@ class Authentication
      *
      * @param   Payplug $payplug the client configuration
      *
-     * @return  null|array the publishable keys
+     * @return array|false
      *
-     * @throws  Exception\ConfigurationNotSetException
+     * @throws  Exception
      */
     public static function getPublishableKeys(Payplug $payplug = null)
     {
@@ -112,8 +114,11 @@ class Authentication
             $payplug = Payplug::getDefaultConfiguration();
         }
         $httpClient = new Core\HttpClient($payplug);
-        $response = $httpClient->post(Core\APIRoutes::getRoute(Core\APIRoutes::PUBLISHABLE_KEYS));
-
-        return $response;
+        try {
+            $response = $httpClient->post(Core\APIRoutes::getRoute(Core\APIRoutes::PUBLISHABLE_KEYS));
+            return $response;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
