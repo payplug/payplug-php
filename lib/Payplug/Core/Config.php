@@ -10,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '3.5.3';
+    const LIBRARY_VERSION = 'test-tag-1.0.0';
 
     /**
      * PHP minimal version required by this library
