@@ -5,7 +5,7 @@ on:
     tags:
       - "*"
   workflow_run:
-    workflows: [ "PHP Composer" ]
+    workflows: [PHP Composer]
     types:
       - completed
 jobs:
