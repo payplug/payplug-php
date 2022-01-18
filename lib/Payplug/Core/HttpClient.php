@@ -200,7 +200,7 @@ class HttpClient
         $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
                                        // PHP < 5.4 doesn't support call()['value'] directly.
         $userAgent = self::formatUserAgentProduct('PayPlug-PHP',
-                                                  Payplug\Core\Config::LIBRARY_VERSION,
+                                                  'test',
                                                   sprintf('PHP/%s; curl/%s', phpversion(), $curlVersion['version']));
         foreach (self::$defaultUserAgentProducts as $product) {
             $userAgent .= ' ' . self::formatUserAgentProduct($product[0], $product[1], $product[2]);

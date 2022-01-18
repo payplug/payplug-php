@@ -10,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = 'test.99.2'99.99.99';
+    const LIBRARY_VERSION = '99.99.99';
 
     /**
      * PHP minimal version required by this library
