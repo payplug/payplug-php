@@ -8,7 +8,7 @@ on:
     workflows: [PHP Composer]
     types:
       - completed
-    branches: [test-tag]
+      - requested
 jobs:
   test:
     runs-on: ubuntu-18.04
