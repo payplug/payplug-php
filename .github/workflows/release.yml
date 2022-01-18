@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+
+  update_lib_version:
+    needs: tests_unit
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+      - name: Fetch library version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Apply new version from tag
+        run: |
+          echo  $RELEASE_VERSION
+          sed -i "s/LIBRARY_VERSION = '*'/LIBRARY_VERSION = '${{ env.RELEASE_VERSION }}'/" lib/Payplug/Core/Config.php
+          git config user.email actions@github.com
+          git config user.name "GitHub Actions"
+          git add .
+          git commit -m "[Automated Release Action]"
+          git push origin HEAD:test-tag
