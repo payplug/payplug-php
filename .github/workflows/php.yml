@@ -6,6 +6,9 @@ on:
       - master
       - develop
       - test-tag
+    tags:
+      - "*"
+
   pull_request:
     branches:
       - master
