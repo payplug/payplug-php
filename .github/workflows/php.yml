@@ -59,7 +59,7 @@ jobs:
       - name: Apply new version from tag
         run: |
           echo  $RELEASE_VERSION
-          sed -i "s/LIBRARY_VERSION = '*'/LIBRARY_VERSION = '${{ env.RELEASE_VERSION }}'/" lib/Payplug/Core/Config.php
+          sed -i "s/LIBRARY_VERSION = '*.*'/LIBRARY_VERSION = '${{ env.RELEASE_VERSION }}'/" lib/Payplug/Core/Config.php
           git config user.email actions@github.com
           git config user.name "GitHub Actions"
           git add .
