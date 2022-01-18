@@ -9,6 +9,12 @@ on:
     types:
       - completed
 jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: test echo
+      run: echo ${{ github.event.workflow_run.conclusion }}
 
   on-success:
 
