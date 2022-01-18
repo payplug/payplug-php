@@ -49,7 +49,6 @@ jobs:
         - name: Test
           run: |
             echo  $RELEASE_VERSION
-#            sed -i 's/"version": "*.*"/"version": "${{ env.RELEASE_VERSION }}"/' Config.json
             sed -i "s/LIBRARY_VERSION = '*.*.*'/LIBRARY_VERSION = '${{ env.RELEASE_VERSION }}'/" lib/Payplug/Core/Config.php
             git config --global user.email "ilajili@payplug.com"
             git config --global user.name "ilajili"
