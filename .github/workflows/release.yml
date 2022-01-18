@@ -5,7 +5,7 @@ on:
     tags:
       - "*"
   workflow_run:
-    workflows: [PHP Composer]
+    workflows: [PHP]
     types:
       - completed
       - requested
@@ -15,7 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: test echo
-      run: echo ${{ github.event.workflow_run.conclusion }}
+      run: |
+        echo "Log level: ${{ github.event.inputs.logLevel }}"
+        echo ${{ github.event.workflow_run.conclusion }}
 
   on-success:
 
