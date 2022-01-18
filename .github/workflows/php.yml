@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - develop
+      - test-tag
   pull_request:
     branches:
       - master
       - develop
+      - test-tag
 
 jobs:
   tests_unit:
