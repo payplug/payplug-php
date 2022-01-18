@@ -4,10 +4,13 @@ on:
   push:
     tags:
       - "*"
+  workflow_run:
+    workflows: [ "PHP Composer" ]
+    types:
+      - completed
 jobs:
 
   update_lib_version:
-    needs: tests_unit
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
