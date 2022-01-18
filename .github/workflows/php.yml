@@ -3,12 +3,12 @@ name: PHP Composer
 on:
   push:
     branches: 
-      - master
-      - develop
+      - test-tag
+    tags:
+      - "*"
   pull_request:
     branches: 
-      - master
-      - develop
+      - test-tag
 
 jobs:
   tests_unit:
@@ -40,3 +40,19 @@ jobs:
     - name: Run test suite
       run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
 
+  update_lib_version:
+      runs-on: ubuntu-18.04
+      steps:
+        - uses: actions/checkout@master
+        - name: Get the version
+          run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        - name: Test
+          run: |
+            echo  $RELEASE_VERSION
+            sed -i 's/"version": "*.*"/"version": "${{ env.RELEASE_VERSION }}"/' version.json
+            git config --global user.email "ilajili@payplug.com"
+            git config --global user.name "ilajili"
+            git remote set-url origin https://github.com/payplug/payplug-php
+            git add .
+            git commit -m "update version"
+            git push origin HEAD:test-tag
