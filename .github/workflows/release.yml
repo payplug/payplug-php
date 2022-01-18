@@ -11,6 +11,8 @@ on:
 jobs:
 
   update_lib_version:
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
@@ -27,3 +29,10 @@ jobs:
           git add .
           git commit -m "[Automated Release Action]"
           git push origin HEAD:test-tag
+
+  release_has_failed:
+
+      if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+      runs-on: ubuntu-18.04
+      steps:
+        - run: echo 'Unit tests previously failed, abording release !'
