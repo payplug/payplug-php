@@ -5,6 +5,8 @@ on:
     branches: 
       - master
       - develop
+    tags:
+      - "*"
   pull_request:
     branches: 
       - master
@@ -39,4 +41,25 @@ jobs:
 
     - name: Run test suite
       run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
+
+  release:
+
+    runs-on: ubuntu-18.04
+    needs: tests_unit
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+      - name: Fetch library version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Apply new version from tag
+        run: |
+          echo  $RELEASE_VERSION
+          sed -i "s/LIBRARY_VERSION = '*.*'/LIBRARY_VERSION = '${{ env.RELEASE_VERSION }}'/" lib/Payplug/Core/Config.php
+          git config user.email actions@github.com
+          git config user.name "GitHub Actions"
+          git add .
+          git commit -m "[Automated Release Action]"
+          git push origin HEAD:master
 
