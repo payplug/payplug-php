@@ -3,14 +3,12 @@ name: PHP Composer
 on:
   push:
     branches: 
-      - master
-      - develop
+      - demo-test
     tags:
       - "*"
   pull_request:
     branches: 
-      - master
-      - develop
+      - demo-test
 
 jobs:
   tests_unit:
@@ -61,5 +59,5 @@ jobs:
           git config user.name "GitHub Actions"
           git add .
           git commit -m "[Automated Release Action]"
-          git push origin HEAD:master
+          git push origin HEAD:demo-test
 
