@@ -1,4 +1,4 @@
-PHP library for the PayPlug API
+PHP library for the Payplug API
 ===============================
 
 .. image:: https://travis-ci.org/payplug/payplug-php.svg?branch=master
@@ -9,10 +9,10 @@ PHP library for the PayPlug API
    :target: https://packagist.org/packages/payplug/payplug-php
    :alt: Packagist
 
-This is the documentation of PayPlug's PHP library. It is designed to
-help developers to use PayPlug as payment solution in a simple, yet robust way.
+This is the documentation of Payplug's PHP library. It is designed to
+help developers to use Payplug as payment solution in a simple, yet robust way.
 
-You can create a PayPlug account at https://www.payplug.com/.
+You can create a Payplug account at https://www.payplug.com/.
 
 Maintenance
 -------------
@@ -23,9 +23,9 @@ Go to https://curl.se/docs/caextract.html to get a recent one.
 Prerequisites
 -------------
 
-PayPlug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL (1.0.1 or newer)** to secure transactions. You also need **PHP 5.3** or newer for the PayPlug PHP V2.
+Payplug's library relies on **cURL** to perform HTTP requests and requires **OpenSSL (1.0.1 or newer)** to secure transactions. You also need **PHP 5.3** or newer for the Payplug PHP V2.
 
-For version **PHP 5.2** or older you must refer to PayPlug PHP V1.
+For version **PHP 5.2** or older you must refer to Payplug PHP V1.
 
 Documentation
 -------------
