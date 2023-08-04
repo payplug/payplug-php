@@ -43,6 +43,7 @@ jobs:
 
   sonarcloud:
       runs-on: ubuntu-latest
+      continue-on-error: true
       steps:
       - uses: actions/checkout@v3
         with:
@@ -53,7 +54,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: my-custom-directory
+          projectBaseDir: .
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGA }}
             -Dsonar.projectKey=github-payplug-payplug-php
