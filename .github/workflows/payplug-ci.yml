@@ -29,7 +29,6 @@ jobs:
     name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
     - uses: actions/checkout@v2
-    
     - name: Setup PHP with PECL extension
       uses: shivammathur/setup-php@v2
       with: 
@@ -42,6 +41,27 @@ jobs:
     - name: Run test suite
       run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
 
+  sonarcloud:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: my-custom-directory
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORGA }}
+            -Dsonar.projectKey=github-payplug-payplug-php
+            -Dsonar.sources=lib/
+            -Dsonar.test.exclusions=tests/**
+            -Dsonar.tests=tests/
+            -Dsonar.verbose=true
+  
   release:
 
     runs-on: ubuntu-18.04
