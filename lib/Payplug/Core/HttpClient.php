@@ -348,6 +348,10 @@ class HttpClient
                 throw new Payplug\Exception\NotAllowedException('The requested method is not supported by this resource.',
                     $httpResponse, $httpStatus);
                 break;
+            case 422:
+                throw new Payplug\Exception\UnprocessableEntityException('The server encountered an error while processing the request. The submitted data could not be processed.',
+                     $httpResponse, $httpStatus);
+                break;
         }
 
         throw new Payplug\Exception\HttpException('Unhandled HTTP error.', $httpResponse, $httpStatus);

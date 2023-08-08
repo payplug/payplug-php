@@ -13,6 +13,11 @@ class APIRoutes
      */
     public static $API_BASE_URL;
 
+    /**
+     * @var string the root URL of the MPDC microService
+     */
+    public static $MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE;
+
     const API_VERSION = 1;
 
     // Resources routes
@@ -25,6 +30,7 @@ class APIRoutes
     const ONEY_PAYMENT_SIM_RESOURCE  = '/oney_payment_simulations';
     const ACCOUNTING_REPORT_RESOURCE = '/accounting_reports';
     const PUBLISHABLE_KEYS           = '/publishable_keys';
+
 
 
     /**
@@ -63,6 +69,15 @@ class APIRoutes
     }
 
     /**
+     * @description set $MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE from plugin
+     * @param $microServiceBaseUrl
+     */
+    public static function setMerchantPluginsDataCollectorService($microServiceBaseUrl)
+    {
+        self::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = $microServiceBaseUrl;
+    }
+
+    /**
      * Gets a route that allows to check whether the remote API is up.
      *
      * @return  string  the full URL to the test resource
@@ -74,4 +89,5 @@ class APIRoutes
 }
 
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
+APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'Microservice Url';
 
