@@ -64,6 +64,7 @@ class HttpClient
         return $this->request('POST', $resource, $data, $authenticated);
     }
 
+
     /**
      * Sends a PATCH request to the API.
      *
@@ -293,6 +294,8 @@ class HttpClient
 
         return $result;
     }
+
+
 
     /**
      * Throws an exception from a given curl error.
