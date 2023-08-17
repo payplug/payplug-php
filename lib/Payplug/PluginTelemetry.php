@@ -35,4 +35,26 @@ class PluginTelemetry
         );
 
     }
+
+
+    public static function mockSend(array $data, Payplug\Payplug $payplug = null)
+    {
+        // Simulate API response
+        if (!isset($data['version']) || !isset($data['php_version'])) {
+            throw new Payplug\Exception\UnprocessableEntityException('The server encountered an error while processing the request. The submitted data could not be processed.',
+                                                                     '{"detail":[{"loc":["body","version"],"msg":"field required","type":"value_error.missing"}]}',422);
+        } else {
+            return array(
+                'httpStatus' => 201,
+                'httpResponse' => json_encode(
+                    array(
+                        'id' => '64de13f259a577c644d0fb61',
+                        'version' => $data['version'],
+                        'php_version' => $data['php_version']
+                    )
+                )
+            );
+        }
+    }
+
 }
