@@ -47,21 +47,67 @@ class PluginTelemetry
     public static function mockSend(array $data, Payplug\Payplug $payplug = null)
     {
         // Simulate API response
-        if (!isset($data['version']) || !isset($data['php_version'])) {
-            throw new Payplug\Exception\UnprocessableEntityException('The server encountered an error while processing the request. The submitted data could not be processed.',
-                                                                     '{"detail":[{"loc":["body","version"],"msg":"field required","type":"value_error.missing"}]}',422);
-        } else {
+
+        self::validateData($data);
+
+        $responseData = array(
+            'id' => '64de13f259a577c644d0fb61',
+            'data' => $data
+        );
             return array(
                 'httpStatus' => 201,
                 'httpResponse' => json_encode(
-                    array(
-                        'id' => '64de13f259a577c644d0fb61',
-                        'version' => $data['version'],
-                        'php_version' => $data['php_version']
-                    )
+                    $responseData
                 )
             );
+
+    }
+
+    /**
+     * Validate the $data and return UnprocessableEntityException
+     *
+     * @param array $data
+     * @throws Exception\UnprocessableEntityException
+     */
+    public static function validateData(array $data)
+    {
+        $requiredFields = array('version', 'php_version', 'name', 'from', 'domains', 'configurations', 'modules');
+
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field])) {
+                throw new Payplug\Exception\UnprocessableEntityException(
+                    'The server encountered an error while processing the request. The submitted data could not be processed.',
+                    '{"detail":[{"loc":["body","' . $field . '"],"msg":"field required","type":"value_error.missing"}]}',
+                    422
+                );
+            }
         }
+        if (!is_array($data['domains']) || empty($data['domains']) || !isset($data['domains'][0]['url']) || !isset($data['domains'][0]['default'])) {
+            throw new Payplug\Exception\UnprocessableEntityException(
+                'The server encountered an error while processing the request. The submitted data could not be processed.',
+                '{"detail":[{"loc":["body","domains"],"msg":"invalid structure","type":"value_error.invalid_structure"}]}',
+                422
+            );
+        }
+
+        if (!is_array($data['configurations']) || empty($data['configurations']) || !isset($data['configurations']['name'])) {
+            throw new Payplug\Exception\UnprocessableEntityException(
+                'The server encountered an error while processing the request. The submitted data could not be processed.',
+                '{"detail":[{"loc":["body","configurations"],"msg":"invalid structure","type":"value_error.invalid_structure"}]}',
+                422
+            );
+        }
+
+        if (!is_array($data['modules']) || empty($data['modules']) || !isset($data['modules'][0]['name']) || !isset($data['modules'][0]['version'])) {
+            throw new Payplug\Exception\UnprocessableEntityException(
+                'The server encountered an error while processing the request. The submitted data could not be processed.',
+                '{"detail":[{"loc":["body","modules"],"msg":"invalid structure","type":"value_error.invalid_structure"}]}',
+                422
+            );
+        }
+
+
+
     }
 
 }
