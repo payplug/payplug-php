@@ -39,14 +39,15 @@ class PluginTelemetry
     /**
      * this is a mock for send function
      *
-     * @param array $data
+     * @param string $data
      * @param \Payplug\Payplug|null $payplug
      * @return array
      * @throws Exception\UnprocessableEntityException
      */
-    public static function mockSend(array $data, Payplug\Payplug $payplug = null)
+    public static function mockSend(string $data, Payplug\Payplug $payplug = null)
     {
         // Simulate API response
+        $data = json_decode($data, true);
 
         self::validateData($data);
 
