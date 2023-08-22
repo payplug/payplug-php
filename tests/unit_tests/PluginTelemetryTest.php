@@ -49,10 +49,29 @@ class PluginTelemetryTest extends TestCase
         $result = $this->_httpClient->post(APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE);
 
 
+        // Data to send to the MPDC microservice
         $data = array(
-            "version" => "4.0.0",
-            "php_version" => "8.2.1"
+            'version' => '4.0.0',
+            'php_version' => '8.2.1',
+            'name' => 'value',
+            'from' => 'save',
+            'domains' => array(
+                array(
+                    'url' => 'www.mywebsite.com',
+                    'default' => true
+                )
+            ),
+            'configurations' => array(
+                'name' => 'value'
+            ),
+            'modules' => array(
+                array(
+                    'name' => 'value',
+                    'version' => 'value'
+                )
+            )
         );
+        $data = json_encode($data);
 
         // call send and assert
         PluginTelemetry::send($data);
