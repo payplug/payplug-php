@@ -62,7 +62,10 @@ class PluginTelemetryTest extends TestCase
                 )
             ),
             'configurations' => array(
-                'name' => 'value'
+                array(
+                'name' => 'text1',
+                'value' => 'text2'
+                 )
             ),
             'modules' => array(
                 array(
