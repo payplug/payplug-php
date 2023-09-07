@@ -91,7 +91,7 @@ class PluginTelemetry
             );
         }
 
-        if (!is_array($data['configurations']) || empty($data['configurations']) || !isset($data['configurations']['name'])) {
+        if (!is_array($data['configurations']) || empty($data['configurations']) || !isset($data['configurations'][0]['name']) || !isset($data['configurations'][0]['value'])) {
             throw new Payplug\Exception\UnprocessableEntityException(
                 'The server encountered an error while processing the request. The submitted data could not be processed.',
                 '{"detail":[{"loc":["body","configurations"],"msg":"invalid structure","type":"value_error.invalid_structure"}]}',
