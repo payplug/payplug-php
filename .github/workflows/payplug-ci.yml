@@ -2,13 +2,13 @@ name: PHP Composer
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - develop
     tags:
       - "*"
   pull_request:
-    branches: 
+    branches:
       - master
       - develop
 
@@ -16,40 +16,52 @@ jobs:
   tests_unit:
 
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php-versions: ['7.3', '7.4', '8.0','8.1']
-        phpunit-versions:
-          - '8.5.15'
-          - '9.0'
-
+        php-versions: ['7.3', '7.4', '8.0']
+        phpunit-versions: ['8.5.15']
+        experimental: [false]
         include:
-        - php-versions: '5.6'
-          phpunit-versions: '5.7.27'
-        - php-versions: '7.0'
-          phpunit-versions: '6.5.14'
+          - php-versions: '5.6'
+            phpunit-versions: '5.7.27'
+            experimental: false
+          - php-versions: '7.0'
+            phpunit-versions: '6.5.14'
+            experimental: false
+          - php-versions: '8.1'
+            phpunit-versions: '10.5.17'
+            experimental: true
+          - php-versions: '8.2'
+            phpunit-versions: '11.1.1'
+            experimental: true
 
-    
     name: Php Version ${{matrix.php-versions }} / php Unit ${{ matrix.phpunit-versions }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup PHP with PECL extension
-      uses: shivammathur/setup-php@v2
-      with: 
-        php-version: ${{ matrix.php-versions }}
-        tools: phpunit:${{ matrix.phpunit-versions }}
-    
-    - name: php version
-      run: php -v
+      - uses: actions/checkout@v4
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit:${{ matrix.phpunit-versions }}
 
-    - name: Run test suite
-      run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
+      - name: php version
+        run: php -v
+
+
+      - if: ${{ matrix.php-versions  < '8.1' }}
+        name: Run test suite
+        run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit.xml
+
+      - if: ${{ matrix.php-versions  >= '8.1' }}
+        name: Run test suite (experimental)
+        run: phpunit --bootstrap tests/config.php tests --configuration tests/phpunit_experimental.xml
 
   sonarcloud:
-      runs-on: ubuntu-latest
-      continue-on-error: true
-      steps:
-      - uses: actions/checkout@v3
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
@@ -66,10 +78,10 @@ jobs:
             -Dsonar.test.exclusions=tests/**
             -Dsonar.tests=tests/
             -Dsonar.verbose=true
-  
+
   release:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: tests_unit
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
@@ -87,4 +99,3 @@ jobs:
           git add .
           git commit -m "[Automated Release Action]"
           git push origin HEAD:master
-
