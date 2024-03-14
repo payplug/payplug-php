@@ -124,6 +124,30 @@ class Payment extends APIResource implements IVerifiableAPIResource
     }
 
     /**
+     * Aborts a ApplePay Payment.
+     *
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  null|Payment the aborted payment or null on error
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     */
+    public function abortApplePay(Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::UPD_APPLEPAY, $this->id),
+            array('aborted' => true)
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
      * Captures a Payment.
      * 
      * @param   Payplug\Payplug    $payplug    the client configuration
@@ -261,6 +285,30 @@ class Payment extends APIResource implements IVerifiableAPIResource
         $httpClient = new Payplug\Core\HttpClient($payplug);
         $response = $httpClient->patch(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
+            $data
+        );
+
+        return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
+     * Update a ApplePay Payment.
+     *
+     * @param   array               $data       API data for payment creation
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  null|Payment the updated payment instance
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     */
+    public function updateApplePay(array $data, Payplug\Payplug $payplug = null) {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        $response = $httpClient->patch(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::UPD_APPLEPAY, $this->id),
             $data
         );
 
