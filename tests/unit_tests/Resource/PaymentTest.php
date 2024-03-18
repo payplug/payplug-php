@@ -474,6 +474,118 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
     }
 
+    public function testPaymentAbortApplePay()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = Payplug\Payment::abortApplePay('a_payment_id');
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertTrue($GLOBALS['CURLOPT_POSTFIELDS_DATA'] === array('aborted' => true));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
+    public function testPaymentUpdateApplePay()
+    {
+        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue('{"status":"ok"}'));
+
+        $this->_requestMock
+            ->expects($this->atLeastOnce())
+            ->method('setopt')
+            ->will($this->returnCallback(function($option, $value = null) {
+                switch($option) {
+                    case CURLOPT_POSTFIELDS:
+                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+                        return true;
+                }
+                return true;
+            }));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $payment = Payment::updateApplePay(array(
+            'amount'            => 999,
+            'payment_token'     => 'applepay_payment_token',
+            'billing'           => array(
+                'administrativeArea' => 'Île-de-France',
+                'country' => 'France',
+                'countryCode' => 'FR',
+                'emailAddress' => 'name@customer.net',
+                'familyName' => 'Doe',
+                'givenName' => 'John',
+                'locality' => 'Paris',
+                'phoneNumber' => '0123456789',
+                'phoneticFamilyName' => '',
+                'phoneticGivenName' => '',
+                'postalCode' => '75009',
+                'subAdministrativeArea' => 'Paris',
+                'subLocality' => '9e Arr.',
+            ),
+            'shipping'          => array(
+                'administrativeArea' => 'Île-de-France',
+                'country' => 'France',
+                'countryCode' => 'FR',
+                'emailAddress' => 'name@customer.net',
+                'familyName' => 'Doe',
+                'givenName' => 'John',
+                'locality' => 'Paris',
+                'phoneNumber' => '0123456789',
+                'phoneticFamilyName' => '',
+                'phoneticGivenName' => '',
+                'postalCode' => '75009',
+                'subAdministrativeArea' => 'Paris',
+                'subLocality' => '9e Arr.',
+            ),
+        ));
+
+        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+        $this->assertEquals('ok', $payment->status);
+
+        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+    }
+
     public function testPaymentCapture()
     {
         $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
