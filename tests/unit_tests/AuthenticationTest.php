@@ -106,6 +106,12 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('12345', $account['httpResponse']['id']);
     }
 
+    public function testGetAccountWithoutSecretKey()
+    {
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
+        Authentication::getAccount();
+    }
+    
     public function testGetPermissions()
     {
         $response = array(
@@ -149,6 +155,12 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $permissions['can_create_installment_plan']);
         $this->assertEquals(false, $permissions['can_save_cards']);
     }
+
+    public function testGetPermissionsWithoutSecretKey()
+    {
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
+        Authentication::getPermissions();
+    }    
 
     public function testPublishableKeys()
     {
