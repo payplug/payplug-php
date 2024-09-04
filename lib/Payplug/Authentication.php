@@ -46,7 +46,8 @@ class Authentication
             $payplug = Payplug::getDefaultConfiguration();
         }
 
-        if (!isset($payplug->getToken()) || empty($payplug->getToken()) {
+        $token = $payplug->getToken();
+        if (!isset($token) || empty($token)) {
             throw new Exception\ConfigurationException('Expected string values for the token.');
         }
         
@@ -71,9 +72,10 @@ class Authentication
             $payplug = Payplug::getDefaultConfiguration();
         }
 
-        if (!isset($payplug->getToken()) || empty($payplug->getToken()) {
+        $token = $payplug->getToken();
+        if (!isset($token) || empty($token)) {
             throw new Exception\ConfigurationException('Expected string values for the token.');
-        }        
+        }      
 
         $httpClient = new Core\HttpClient($payplug);
         $response = $httpClient->get(Core\APIRoutes::getRoute(Core\APIRoutes::ACCOUNT_RESOURCE));
