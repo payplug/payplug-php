@@ -2,6 +2,7 @@
 namespace Payplug;
 use Payplug;
 use Payplug\Core\HttpClient;
+use PayPlug\Exception\ConfigurationException;
 
 /**
 * @group unit
