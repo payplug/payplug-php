@@ -56,7 +56,7 @@ jobs:
         with:
           projectBaseDir: .
           args: >
-            -Dsonar.organization=${{ secrets.SONAR_ORGA }}
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=github-payplug-payplug-php
             -Dsonar.sources=lib/
             -Dsonar.test.exclusions=tests/**
