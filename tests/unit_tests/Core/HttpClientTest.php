@@ -25,6 +25,7 @@ class HttpClientTest extends \PHPUnit\Framework\TestCase
 
     protected function setUpTwice()
     {
+        // this is a test
         $this->_httpClient = new HttpClient(new Payplug('abc','1970-01-01'));
 
         $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
