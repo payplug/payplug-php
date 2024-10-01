@@ -128,7 +128,7 @@ Git Workflow Steps
 
        git checkout master
        git pull origin master
-       git tag -a v<version-number> -m "Release <version-number>"
+       git tag -a <version-number> -m "Release <version-number>"
        git push origin master --tags
 
 Usage

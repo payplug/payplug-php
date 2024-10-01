@@ -122,9 +122,9 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function get($resource, $data = null)
+    public function get($resource, $data = null, $cookie=null)
     {
-        return $this->request('GET', $resource, $data);
+        return $this->request('GET', $resource, $data, true, $cookie);
     }
 
     /**
@@ -226,7 +226,7 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    private function request($httpVerb, $resource, array $data = null, $authenticated = true)
+    private function request($httpVerb, $resource, array $data = null, $authenticated = true, $cookie = null)
     {
         if (self::$REQUEST_HANDLER === null) {
             $request = new CurlRequest();
@@ -246,6 +246,10 @@ class HttpClient
             $headers[] = 'PayPlug-Version: ' . $this->_configuration->getApiVersion();
         }
 
+        if (!empty($cookie)) {
+            $headers[] = 'Cookie:' . $cookie;
+        }
+
         $request->setopt(CURLOPT_FAILONERROR, false);
         $request->setopt(CURLOPT_RETURNTRANSFER, true);
         $request->setopt(CURLOPT_CUSTOMREQUEST, $httpVerb);
@@ -254,6 +258,7 @@ class HttpClient
         $request->setopt(CURLOPT_SSL_VERIFYPEER, true);
         $request->setopt(CURLOPT_SSL_VERIFYHOST, 2);
         $request->setopt(CURLOPT_CAINFO, self::$CACERT_PATH);
+        $request->setopt(CURLOPT_FOLLOWLOCATION, true);
         if (!empty($data)) {
             $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
         }
