@@ -65,7 +65,7 @@ jobs:
   
   release:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: tests_unit
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
