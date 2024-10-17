@@ -2,6 +2,7 @@
 namespace Payplug;
 use Payplug;
 use Payplug\Core\HttpClient;
+use Payplug\Exception\ConfigurationException;
 
 /**
 * @group unit
@@ -106,6 +107,22 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('12345', $account['httpResponse']['id']);
     }
 
+    /**
+     *  Tests the getAccount method when no secret key is provided.
+     *
+     * @return void
+     * @throws ConfigurationException
+     */
+    public function testGetAccountWithoutSecretKey()
+    {
+        $payplug = new \Payplug\Payplug('');
+        Payplug\Payplug::setDefaultConfiguration($payplug);
+
+        $this->expectException('\Payplug\Exception\ConfigurationException');
+        $this->expectExceptionMessage('The Payplug configuration requires a valid token.');
+
+        Authentication::getAccount();
+    }
     public function testGetPermissions()
     {
         $response = array(
@@ -149,6 +166,23 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $permissions['can_create_installment_plan']);
         $this->assertEquals(false, $permissions['can_save_cards']);
     }
+
+
+    /**
+     * Tests the getPermissions method when no secret key is provided.
+     * @return void
+     * @throws ConfigurationException
+     */
+    public function testGetPermissionsWithoutSecretKey()
+    {
+        $payplug = new \Payplug\Payplug('');
+        Payplug\Payplug::setDefaultConfiguration($payplug);
+
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
+        $this->expectExceptionMessage('The Payplug configuration requires a valid token.');
+        Authentication::getPermissions();
+    }
+
 
     public function testPublishableKeys()
     {
