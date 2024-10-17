@@ -131,6 +131,36 @@ class Authentication
     }
 
     /**
+     * Generate a token JWT.
+     *
+     * @param   Payplug $payplug the client configuration
+     *
+     * @return  array the token JWT
+     *
+     * @throws  Exception
+     */
+    public static function generateJWT($client_id = '', Payplug $payplug = null)
+    {
+        if ($client_id == '') {
+            return array();
+        }
+
+        if ($payplug === null) {
+            $payplug = Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Core\HttpClient($payplug);
+        try {
+            return $httpClient->post(
+                Core\APIRoutes::getRoute(Core\APIRoutes::$HYDRA_RESOURCE),
+                array('client_id' => $client_id, 'grant_type' => 'client_credentials')
+            );
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
+    /**
      * Validates the Payplug token
      *
      * @param Payplug $payplug
