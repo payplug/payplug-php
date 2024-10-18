@@ -27,12 +27,15 @@ class PluginTelemetry
     public static function send(string $data,  Payplug\Payplug $payplug = null) {
 
         $data = json_decode($data,true);
-        $httpClient = new Payplug\Core\HttpClient();
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
 
         return $response = $httpClient->post(
             Payplug\Core\APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE,
-            $data,
-            false
+            $data
         );
 
     }
