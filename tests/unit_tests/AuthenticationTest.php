@@ -211,4 +211,101 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $publishable_keys['httpStatus']);
         $this->assertEquals('pk_test_everythingIsUnderControl', $publishable_keys['httpResponse']['publishable_key']);
     }
+
+    /**
+     * Test the getClientIdAndSecretMask method.
+     *
+     * This test verifies that the getClientData method correctly retrieves
+     * the client_id, client_secret_mask , client_name client_type and mode from the user manager resource.
+     *
+     * @throws \Exception
+     */
+    public function testGetClientData()
+    {
+        $response = array(
+            array(
+                'client_id' => 'test_client_id',
+                'client_secret_mask' => 'test_secret_mask',
+                'client_name' => 'test_client_name',
+                'client_type' => 'test_client_type',
+                'mode' => 'test_mode',
+            ),
+        );
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $session = 'test_session_value';
+        $result = Authentication::getClientData($session, $this->_configuration);
+        $this->assertCount(1, $result);
+        $this->assertEquals('test_client_id', $result[0]['client_id']);
+        $this->assertEquals('test_secret_mask', $result[0]['client_secret_mask']);
+        $this->assertEquals('test_client_name', $result[0]['client_name']);
+        $this->assertEquals('test_client_type', $result[0]['client_type']);
+        $this->assertEquals('test_mode', $result[0]['mode']);
+
+    }
+
+    /**
+     * Test the createClientIdAndSecret correctly creates
+     *  a client ID and client secret.
+     *
+     * @throws \Exception
+     */
+    public function testCreateClientIdAndSecret()
+    {
+        $response = array(
+        array(
+                'client_id' => 'test_client_id',
+                'client_secret' => 'test_client_secret',
+            ),
+        );
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+        $session = 'test_session_value';
+        $company_id = 'test_company_id';
+        $client_name = 'test_client_name';
+        $mode = 'test';
+        $result = Authentication::createClientIdAndSecret($company_id, $client_name, $mode, $session, $this->_configuration);
+        $this->assertCount(1, $result);
+        $this->assertEquals('test_client_id', $result[0]['client_id']);
+        $this->assertEquals('test_client_secret', $result[0]['client_secret']);
+    }
+
+    /**
+     * Test the setKratosSession method with a null session.
+     */
+    public function testSetKratosSessionNull()
+    {
+        $this->expectException('\PayPlug\Exception\ConfigurationException');
+        $this->expectExceptionMessage('The session value must be set.');
+        Authentication::setKratosSession(null);
+    }
 }

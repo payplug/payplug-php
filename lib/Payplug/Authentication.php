@@ -14,8 +14,8 @@ class Authentication
      * This function is for user-friendly interface purpose only.
      * You should probably not use this more than once, login/password MUST NOT be stored and API Keys are enough to interact with API.
      *
-     * @param   string $email the user email
-     * @param   string $password the user password
+     * @param  string $email the user email
+     * @param  string $password the user password
      *
      * @return  null|array the API keys
      *
@@ -144,4 +144,98 @@ class Authentication
             throw new ConfigurationException('The Payplug configuration requires a valid token.');
         }
     }
+
+    /**
+     * Retrieve client datas from the user manager resource.
+     *
+     * @param   Payplug $payplug the client configuration
+     *
+     * @return  array the client id and client_secret_mask
+     *
+     * @throws  Exception
+     */
+    public static function getClientData($session = null, Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug::getDefaultConfiguration();
+        }
+        $kratosSession = self::setKratosSession($session);
+
+        $httpClient = new Core\HttpClient($payplug);
+        $response = $httpClient->get(Core\APIRoutes::$USER_MANAGER_RESOURCE, null, $kratosSession);
+        $result = array();
+        foreach ($response['httpResponse'] as $client) {
+            $result[] = array(
+                'client_id' => $client['client_id'],
+                'client_secret_mask' => $client['client_secret_mask'],
+                    'client_name' => $client['client_name'],
+                'client_type' => $client['client_type'],
+                'mode' => $client['mode'],
+
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Create a client ID and secret for a given mode
+     *
+     * @param $company_id
+     * @param $client_name
+     * @param $mode
+     * @param $session
+     * @param Payplug|null $payplug
+     * @return array
+     * @throws ConfigurationException
+     * @throws Exception\ConfigurationNotSetException
+     * @throws Exception\ConnectionException
+     * @throws Exception\HttpException
+     * @throws Exception\UnexpectedAPIResponseException
+     */
+    public static function createClientIdAndSecret($company_id='', $client_name='', $mode='', $session = null, Payplug $payplug = null)
+    {
+
+        if ($payplug === null) {
+            $payplug = Payplug::getDefaultConfiguration();
+        }
+        $kratosSession = self::setKratosSession($session);
+
+        $httpClient = new Core\HttpClient($payplug);
+        $result = array();
+
+            $response = $httpClient->post(Core\APIRoutes::$USER_MANAGER_RESOURCE, array(
+                'company_id' => $company_id,
+                'client_name' => $client_name,
+                'client_type' =>'oauth2',
+                'mode' => $mode,
+               ),  $kratosSession);
+        foreach ($response['httpResponse'] as $client) {
+             $result[] = array(
+                 'client_id' => $client['client_id'],
+                 'client_secret' => $client['client_secret'],
+             );
+        }
+
+        return $result;
+    }
+
+
+
+    /**
+     * Set the Kratos session cookie.
+     *
+     * @param string $session The session value to be set in the cookie.
+     *
+     * @return string The formatted Kratos session cookie string.
+     * @throws ConfigurationException
+     */
+    public static function setKratosSession($session)
+    {
+        if (empty($session)) {
+            throw new ConfigurationException('The session value must be set.');
+        }
+        return 'ory_kratos_session=' . $session;
+    }
+
 }
