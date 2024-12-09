@@ -117,6 +117,6 @@ class APIRoutes
 }
 
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
-APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'Microservice Url';
+APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'https://retail.service.payplug.com/merchant-plugin-data-collectors/api/v1/plugin_telemetry';
 APIRoutes::$USER_MANAGER_RESOURCE ='User manager resource';
 APIRoutes::$HYDRA_RESOURCE = 'Microservice Url';
