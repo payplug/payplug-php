@@ -19,6 +19,11 @@ class APIRoutes
     public static $MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE;
 
     /**
+     * @var string the root URL of the Plugin setup route
+     */
+    public static $PLUGIN_SETUP_URL;
+
+    /**
      * @var string the root URL of the Hydra microService
      */
     public static $HYDRA_RESOURCE;
@@ -88,6 +93,15 @@ class APIRoutes
     }
 
     /**
+     * @description set $PLUGIN_SETUP_URL from plugin
+     * @param $pluginSetupUrl
+     */
+    public static function setPluginSetupUrl($pluginSetupUrl)
+    {
+        self::$PLUGIN_SETUP_URL = $pluginSetupUrl;
+    }
+
+    /**
      * @description set $HYDRA_RESOURCE from plugin
      * @param $microServiceBaseUrl
      */
@@ -118,5 +132,6 @@ class APIRoutes
 
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
 APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'https://retail.service.payplug.com/merchant-plugin-data-collectors/api/v1/plugin_telemetry';
+APIRoutes::$PLUGIN_SETUP_URL = "https://retail.service.payplug.com/users/api/v1/plugin_setup";
 APIRoutes::$USER_MANAGER_RESOURCE ='User manager resource';
 APIRoutes::$HYDRA_RESOURCE = 'Microservice Url';

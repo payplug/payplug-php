@@ -1,14 +1,16 @@
 <?php
+
 namespace Payplug;
+
 use Payplug;
 use Payplug\Core\HttpClient;
 use Payplug\Exception\ConfigurationException;
 
 /**
-* @group unit
-* @group ci
-* @group recommended
-*/
+ * @group unit
+ * @group ci
+ * @group recommended
+ */
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     private $_configuration;
@@ -28,7 +30,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUpTwice()
     {
-        $this->_configuration = new \Payplug\Payplug('abc','1970-01-01');
+        $this->_configuration = new \Payplug\Payplug('abc', '1970-01-01');
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->createMock('\Payplug\Core\IHttpRequest');
@@ -53,8 +55,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 201;
                 }
@@ -92,8 +94,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -124,6 +126,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
         Authentication::getAccount();
     }
+
     public function testGetPermissions()
     {
         $response = array(
@@ -151,8 +154,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -167,7 +170,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $permissions['can_create_installment_plan']);
         $this->assertEquals(false, $permissions['can_save_cards']);
     }
-
 
     /**
      * Tests the getPermissions method when no secret key is provided.
@@ -184,7 +186,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         Authentication::getPermissions();
     }
 
-
     public function testPublishableKeys()
     {
         $response = array(
@@ -199,8 +200,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -241,8 +242,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -269,7 +270,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     public function testCreateClientIdAndSecret()
     {
         $response = array(
-        array(
+            array(
                 'client_id' => 'test_client_id',
                 'client_secret' => 'test_client_secret',
             ),
@@ -283,8 +284,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -333,8 +334,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 401;
                 }
@@ -363,8 +364,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock
             ->expects($this->any())
             ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
                     case CURLINFO_HTTP_CODE:
                         return 200;
                 }
@@ -375,5 +376,33 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(200, $jwt['httpStatus']);
         $this->assertEquals($response, $jwt['httpResponse']);
+    }
+
+    public function testGetRegisterUrl()
+    {
+        $setup_redirection_uri = 'setup.redirection.uri.com';
+        $oauth_callback_uri = 'oauth.callback.uri.com';
+        $response = array(
+            'redirect_to' => 'portal.uri.com'
+        );
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function ($option) {
+                switch ($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $authentication = Authentication::getRegisterUrl($setup_redirection_uri, $oauth_callback_uri);
+        $this->assertEquals(200, $authentication['httpStatus']);
+        $this->assertEquals($response, $authentication['httpResponse']);
     }
 }

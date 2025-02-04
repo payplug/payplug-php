@@ -1,4 +1,5 @@
 <?php
+
 namespace Payplug;
 
 use Exception;
@@ -14,8 +15,8 @@ class Authentication
      * This function is for user-friendly interface purpose only.
      * You should probably not use this more than once, login/password MUST NOT be stored and API Keys are enough to interact with API.
      *
-     * @param  string $email the user email
-     * @param  string $password the user password
+     * @param string $email the user email
+     * @param string $password the user password
      *
      * @return  null|array the API keys
      *
@@ -35,7 +36,7 @@ class Authentication
     /**
      * Retrieve account info.
      *
-     * @param   Payplug $payplug the client configuration
+     * @param Payplug $payplug the client configuration
      *
      * @return  null|array the account settings
      *
@@ -58,7 +59,7 @@ class Authentication
     /**
      * Retrieve the account permissions
      *
-     * @param  Payplug $payplug the client configuration
+     * @param Payplug $payplug the client configuration
      *
      * @return  null|array the account permissions
      *
@@ -110,7 +111,7 @@ class Authentication
     /**
      * Retrieve publisable keys
      *
-     * @param   Payplug $payplug the client configuration
+     * @param Payplug $payplug the client configuration
      *
      * @return array|false
      *
@@ -133,7 +134,7 @@ class Authentication
     /**
      * Generate a token JWT.
      *
-     * @param   Payplug $payplug the client configuration
+     * @param Payplug $payplug the client configuration
      *
      * @return  array the token JWT
      *
@@ -178,7 +179,7 @@ class Authentication
     /**
      * Retrieve client datas from the user manager resource.
      *
-     * @param   Payplug $payplug the client configuration
+     * @param Payplug $payplug the client configuration
      *
      * @return  array the client id and client_secret_mask
      *
@@ -198,7 +199,7 @@ class Authentication
             $result[] = array(
                 'client_id' => $client['client_id'],
                 'client_secret_mask' => $client['client_secret_mask'],
-                    'client_name' => $client['client_name'],
+                'client_name' => $client['client_name'],
                 'client_type' => $client['client_type'],
                 'mode' => $client['mode'],
 
@@ -223,7 +224,7 @@ class Authentication
      * @throws Exception\HttpException
      * @throws Exception\UnexpectedAPIResponseException
      */
-    public static function createClientIdAndSecret($company_id='', $client_name='', $mode='', $session = null, Payplug $payplug = null)
+    public static function createClientIdAndSecret($company_id = '', $client_name = '', $mode = '', $session = null, Payplug $payplug = null)
     {
 
         if ($payplug === null) {
@@ -234,23 +235,21 @@ class Authentication
         $httpClient = new Core\HttpClient($payplug);
         $result = array();
 
-            $response = $httpClient->post(Core\APIRoutes::$USER_MANAGER_RESOURCE, array(
-                'company_id' => $company_id,
-                'client_name' => $client_name,
-                'client_type' =>'oauth2',
-                'mode' => $mode,
-               ),  $kratosSession);
+        $response = $httpClient->post(Core\APIRoutes::$USER_MANAGER_RESOURCE, array(
+            'company_id' => $company_id,
+            'client_name' => $client_name,
+            'client_type' => 'oauth2',
+            'mode' => $mode,
+        ), $kratosSession);
         foreach ($response['httpResponse'] as $client) {
-             $result[] = array(
-                 'client_id' => $client['client_id'],
-                 'client_secret' => $client['client_secret'],
-             );
+            $result[] = array(
+                'client_id' => $client['client_id'],
+                'client_secret' => $client['client_secret'],
+            );
         }
 
         return $result;
     }
-
-
 
     /**
      * Set the Kratos session cookie.
@@ -268,4 +267,37 @@ class Authentication
         return 'ory_kratos_session=' . $session;
     }
 
+    /**
+     * Get the return url to register user through the portal
+     *
+     * @param string $setup_redirection_uri
+     * @param string $oauth_callback_uri
+     *
+     * @return array
+     * @throws Exception\ConnectionException
+     * @throws Exception\HttpException
+     * @throws Exception\UnexpectedAPIResponseException
+     */
+    public static function getRegisterUrl($setup_redirection_uri = '', $oauth_callback_uri = '')
+    {
+        if (empty($setup_redirection_uri)) {
+            throw new Exception\ConfigurationException('Expected string values for setup redirection uri.');
+        }
+        if (empty($oauth_callback_uri)) {
+            throw new Exception\ConfigurationException('Expected string values for oauth callback uri.');
+        }
+        $httpClient = new Core\HttpClient(null);
+
+        $url_datas = array(
+            'setup_redirection_uri' => $setup_redirection_uri,
+            'oauth_callback_uri' => $oauth_callback_uri,
+        );
+        $register_uri = Core\APIRoutes::$PLUGIN_SETUP_URL . '?' . http_build_query($url_datas);
+
+        return $httpClient->get(
+            $register_uri,
+            null,
+            false
+        );
+    }
 }

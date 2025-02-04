@@ -111,6 +111,8 @@ class HttpClient
      *
      * @param   string  $resource       the path to the remote resource
      * @param   array   $data           Request data
+     * @param   bool   $authenticated
+     * @param   bool   $cookie
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -122,9 +124,9 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function get($resource, $data = null, $cookie=null)
+    public function get($resource, $data = null, $authenticated = true, $cookie=null)
     {
-        return $this->request('GET', $resource, $data, true, $cookie);
+        return $this->request('GET', $resource, $data, $authenticated, $cookie);
     }
 
     /**
