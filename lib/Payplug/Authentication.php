@@ -134,14 +134,25 @@ class Authentication
     /**
      * Generate a token JWT.
      *
-     * @param Payplug $payplug the client configuration
+     * @param string $authorization_code
+     * @param string $callback_uri
+     * @param string $client_id
+     * @param   Payplug $payplug the client configuration
      *
      * @return  array the token JWT
      *
      * @throws  Exception
      */
-    public static function generateJWT($client_id = '', Payplug $payplug = null)
+    public static function generateJWT($authorization_code='', $callback_uri='', $client_id = '', Payplug $payplug = null)
     {
+        if ($authorization_code == '') {
+            return array();
+        }
+
+        if ($callback_uri == '') {
+            return array();
+        }
+
         if ($client_id == '') {
             return array();
         }
@@ -154,7 +165,12 @@ class Authentication
         try {
             return $httpClient->post(
                 Core\APIRoutes::getRoute(Core\APIRoutes::$HYDRA_RESOURCE),
-                array('client_id' => $client_id, 'grant_type' => 'client_credentials')
+                array(
+                    'grant_type' => 'authorization_code',
+                    'code' => $authorization_code,
+                    'redirect_uri' => $callback_uri,
+                    'client_id' => $client_id
+                )
             );
         } catch (Exception $e) {
             return array();
@@ -280,6 +296,7 @@ class Authentication
      */
     public static function getRegisterUrl($setup_redirection_uri = '', $oauth_callback_uri = '')
     {
+
         if (empty($setup_redirection_uri)) {
             throw new Exception\ConfigurationException('Expected string values for setup redirection uri.');
         }
@@ -299,5 +316,50 @@ class Authentication
             null,
             false
         );
+    }
+
+    /**
+     * Redirect to callback page and provide an authorization_code
+     *
+     * @param $client_id
+     * @param $redirect_uri
+     * @param Payplug|null $payplug
+     * @return array
+     * @throws ConfigurationException
+     * @throws Exception\ConfigurationNotSetException
+     * @throws Exception\ConnectionException
+     * @throws Exception\HttpException
+     * @throws Exception\UnexpectedAPIResponseException
+     */
+    public function initiateOAuth($client_id='', $redirect_uri='', Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug::getDefaultConfiguration();
+        }
+
+        $code_verifier = bin2hex(openssl_random_pseudo_bytes(32));
+        $hash = hash("sha256", $code_verifier);
+        $code_challenge = base64_encode(pack("H*", $hash));
+        $code_challenge = strtr($code_challenge, "+/", "-_");
+        $code_challenge = rtrim($code_challenge, "=");
+
+        $httpClient = new Core\HttpClient($payplug);
+        try {
+            return $httpClient->post(
+                Core\APIRoutes::$HYDRA_RESOURCE,
+                array(
+                    'client_id' => $client_id,
+                    'redirect_uri' => $redirect_uri,
+                    'response_code' => 'code',
+                    'state' => bin2hex(openssl_random_pseudo_bytes(10)),
+                    'scopes' => 'openid, offline, profile, email',
+                    'audiance' => 'https://www.payplug.com',
+                    'code_challenge' => $code_challenge,
+                    'code_challenge_method' => 'S256',
+                )
+            );
+        } catch (Exception $e) {
+            return array();
+        }
     }
 }
