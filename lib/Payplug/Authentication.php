@@ -114,7 +114,7 @@ class Authentication
      * @param Payplug $payplug the client configuration
      *
      * @return array|false
-     *
+     *createClientIdAndSecret
      * @throws  Exception
      */
     public static function getPublishableKeys(Payplug $payplug = null)
@@ -132,19 +132,53 @@ class Authentication
     }
 
     /**
+     * Generate a token JWT from a given client id and secret
+     *
+     * @param string $client_id
+     * @param string $client_secret
+     *
+     * @return array
+     */
+    public static function generateJWT($client_id = '', $client_secret = '')
+    {
+        if ($client_id == '') {
+            return array();
+        }
+        if ($client_secret == '') {
+            return array();
+        }
+
+        $httpClient = new Core\HttpClient(null);
+        try {
+            $route = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_TOKEN_RESOURCE, null, array(), array(), false);
+            return $httpClient->post(
+                $route,
+                array(
+                    'grant_type' => 'client_credentials',
+                    'audience' => 'https://www.payplug.com',
+                ), false, null, array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Authorization: Basic ' . base64_encode($client_id . ':' . $client_secret)
+            ),
+                'x-www-form-urlencoded');
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
+    /**
      * Generate a token JWT OneShot.
      *
      * @param string $authorization_code
      * @param string $callback_uri
      * @param string $client_id
      * @param string $code_verifier
-     * @param   Payplug $payplug the client configuration
      *
      * @return  array the token JWT OneShot
      *
      * @throws  Exception
      */
-    public static function generateJWTOneShot($authorization_code='', $callback_uri='', $client_id = '', $code_verifier = '', Payplug $payplug = null)
+    public static function generateJWTOneShot($authorization_code='', $callback_uri='', $client_id = '', $code_verifier = '')
     {
         if ($authorization_code == '') {
             return array();
@@ -162,14 +196,15 @@ class Authentication
             return array();
         }
 
-        $httpClient = new Core\HttpClient($payplug);
+        $httpClient = new Core\HttpClient(null);
         try {
+            $route = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_TOKEN_RESOURCE, null, array(), array(), false);
             $response = $httpClient->post(
-                Core\APIRoutes::$HYDRA_RESOURCE . '/token',
+                $route,
                 array(
                     'grant_type' => 'authorization_code',
                     'code' => $authorization_code,
-                    'redirect_uri' => str_replace('&', '%26', $callback_uri),
+                    'redirect_uri' => $callback_uri,
                     'client_id' => $client_id,
                     'code_verifier' => $code_verifier
                 ),
@@ -181,11 +216,11 @@ class Authentication
                 ),
                 'application/x-www-form-urlencoded'
             );
-
-            return $response;
         } catch (Exception $e) {
-            return array();
+            $response = array();
         }
+
+        return $response;
     }
 
     /**
@@ -204,39 +239,6 @@ class Authentication
     }
 
     /**
-     * Retrieve client datas from the user manager resource.
-     *
-     * @param Payplug $payplug the client configuration
-     *
-     * @return  array the client id and client_secret_mask
-     *
-     * @throws  Exception
-     */
-    public static function getClientData($session = null, Payplug $payplug = null)
-    {
-        if ($payplug === null) {
-            $payplug = Payplug::getDefaultConfiguration();
-        }
-        $kratosSession = self::setKratosSession($session);
-
-        $httpClient = new Core\HttpClient($payplug);
-        $response = $httpClient->get(Core\APIRoutes::$USER_MANAGER_RESOURCE, null, $kratosSession);
-        $result = array();
-        foreach ($response['httpResponse'] as $client) {
-            $result[] = array(
-                'client_id' => $client['client_id'],
-                'client_secret_mask' => $client['client_secret_mask'],
-                'client_name' => $client['client_name'],
-                'client_type' => $client['client_type'],
-                'mode' => $client['mode'],
-
-            );
-        }
-
-        return $result;
-    }
-
-    /**
      * Create a client ID and secret for a given mode
      *
      * @param $company_id
@@ -244,6 +246,7 @@ class Authentication
      * @param $mode
      * @param $session
      * @param Payplug|null $payplug
+     *
      * @return array
      * @throws ConfigurationException
      * @throws Exception\ConfigurationNotSetException
@@ -253,45 +256,27 @@ class Authentication
      */
     public static function createClientIdAndSecret($company_id = '', $client_name = '', $mode = '', $session = null, Payplug $payplug = null)
     {
-
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();
         }
-        $kratosSession = self::setKratosSession($session);
 
         $httpClient = new Core\HttpClient($payplug);
-        $result = array();
-
-        $response = $httpClient->post(Core\APIRoutes::$USER_MANAGER_RESOURCE, array(
-            'company_id' => $company_id,
-            'client_name' => $client_name,
-            'client_type' => 'oauth2',
-            'mode' => $mode,
-        ), $kratosSession);
-        foreach ($response['httpResponse'] as $client) {
-            $result[] = array(
-                'client_id' => $client['client_id'],
-                'client_secret' => $client['client_secret'],
-            );
+        $response = array();
+        $route = Core\APIRoutes::getServiceRoute(Core\APIRoutes::CLIENT_RESOURCE);
+        try {
+            $response = $httpClient->post(
+                $route,
+                array(
+                    'company_id' => $company_id,
+                    'client_name' => $client_name,
+                    'client_type' => 'client_credentials_flow',
+                    'mode' => $mode,
+                ));
+        } catch (Exception $e) {
+            return $response;
         }
 
-        return $result;
-    }
-
-    /**
-     * Set the Kratos session cookie.
-     *
-     * @param string $session The session value to be set in the cookie.
-     *
-     * @return string The formatted Kratos session cookie string.
-     * @throws ConfigurationException
-     */
-    public static function setKratosSession($session)
-    {
-        if (empty($session)) {
-            throw new ConfigurationException('The session value must be set.');
-        }
-        return 'ory_kratos_session=' . $session;
+        return $response;
     }
 
     /**
@@ -319,10 +304,11 @@ class Authentication
             'setup_redirection_uri' => $setup_redirection_uri,
             'oauth_callback_uri' => $oauth_callback_uri,
         );
-        $register_uri = Core\APIRoutes::$PLUGIN_SETUP_URL . '?' . http_build_query($url_datas);
+
+        $route = Core\APIRoutes::getServiceRoute(Core\APIRoutes::PLUGIN_SETUP_SERVICE, $url_datas);
 
         return $httpClient->get(
-            $register_uri,
+            $route,
             null,
             false
         );
@@ -348,15 +334,18 @@ class Authentication
         $code_challenge = strtr($code_challenge, "+/", "-_");
         $code_challenge = rtrim($code_challenge, "=");
 
-        $portal_url = Core\APIRoutes::$HYDRA_RESOURCE . '/auth?';
-        $portal_url .= 'client_id=' . $client_id . '&';
-        $portal_url .= str_replace('&', '%26', $redirect_uri) . '&';
-        $portal_url .= 'response_type=code&';
-        $portal_url .= 'state=' . bin2hex(openssl_random_pseudo_bytes(10)) . '&';
-        $portal_url .= 'scopes=openid,offline,profile,email&';
-        $portal_url .= 'audiance=https://www.payplug.com&';
-        $portal_url .= 'code_challenge=' . $code_challenge . '&';
-        $portal_url .= 'code_challenge_method=S256';
+        $portal_url_datas = array(
+            'client_id' => $client_id,
+            'redirect_uri' => $redirect_uri,
+            'response_type' => 'code',
+            'state' => bin2hex(openssl_random_pseudo_bytes(10)),
+            'scope' => 'openid offline profile email',
+            'audience' => 'https://www.payplug.com',
+            'code_challenge' => $code_challenge,
+            'code_challenge_method' => 'S256',
+        );
+
+        $portal_url = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_AUTH_RESOURCE, null, array(), $portal_url_datas, false);
 
         header("Location: $portal_url");
     }
