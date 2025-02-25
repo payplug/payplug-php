@@ -132,30 +132,57 @@ class Authentication
     }
 
     /**
-     * Generate a token JWT.
+     * Generate a token JWT OneShot.
      *
-     * @param Payplug $payplug the client configuration
+     * @param string $authorization_code
+     * @param string $callback_uri
+     * @param string $client_id
+     * @param string $code_verifier
+     * @param   Payplug $payplug the client configuration
      *
-     * @return  array the token JWT
+     * @return  array the token JWT OneShot
      *
      * @throws  Exception
      */
-    public static function generateJWT($client_id = '', Payplug $payplug = null)
+    public static function generateJWTOneShot($authorization_code='', $callback_uri='', $client_id = '', $code_verifier = '', Payplug $payplug = null)
     {
+        if ($authorization_code == '') {
+            return array();
+        }
+
+        if ($callback_uri == '') {
+            return array();
+        }
+
         if ($client_id == '') {
             return array();
         }
 
-        if ($payplug === null) {
-            $payplug = Payplug::getDefaultConfiguration();
+        if ($code_verifier == '') {
+            return array();
         }
 
         $httpClient = new Core\HttpClient($payplug);
         try {
-            return $httpClient->post(
-                Core\APIRoutes::getRoute(Core\APIRoutes::$HYDRA_RESOURCE),
-                array('client_id' => $client_id, 'grant_type' => 'client_credentials')
+            $response = $httpClient->post(
+                Core\APIRoutes::$HYDRA_RESOURCE . '/token',
+                array(
+                    'grant_type' => 'authorization_code',
+                    'code' => $authorization_code,
+                    'redirect_uri' => str_replace('&', '%26', $callback_uri),
+                    'client_id' => $client_id,
+                    'code_verifier' => $code_verifier
+                ),
+                false,
+                null,
+                array(
+                    'Accept: application/json',
+                    'Content-Type: application/x-www-form-urlencoded'
+                ),
+                'application/x-www-form-urlencoded'
             );
+
+            return $response;
         } catch (Exception $e) {
             return array();
         }
@@ -299,5 +326,38 @@ class Authentication
             null,
             false
         );
+    }
+
+    /**
+     * Redirect to callback page and provide an authorization_code
+     *
+     * @param $client_id
+     * @param $redirect_uri
+     * @param $code_verifier
+     * @param Payplug|null $payplug
+     * @throws ConfigurationException
+     * @throws Exception\ConfigurationNotSetException
+     * @throws Exception\ConnectionException
+     * @throws Exception\HttpException
+     * @throws Exception\UnexpectedAPIResponseException
+     */
+    public static function initiateOAuth($client_id='', $redirect_uri='', $code_verifier='')
+    {
+        $hash = hash("sha256", $code_verifier);
+        $code_challenge = base64_encode(pack("H*", $hash));
+        $code_challenge = strtr($code_challenge, "+/", "-_");
+        $code_challenge = rtrim($code_challenge, "=");
+
+        $portal_url = Core\APIRoutes::$HYDRA_RESOURCE . '/auth?';
+        $portal_url .= 'client_id=' . $client_id . '&';
+        $portal_url .= str_replace('&', '%26', $redirect_uri) . '&';
+        $portal_url .= 'response_type=code&';
+        $portal_url .= 'state=' . bin2hex(openssl_random_pseudo_bytes(10)) . '&';
+        $portal_url .= 'scopes=openid,offline,profile,email&';
+        $portal_url .= 'audiance=https://www.payplug.com&';
+        $portal_url .= 'code_challenge=' . $code_challenge . '&';
+        $portal_url .= 'code_challenge_method=S256';
+
+        header("Location: $portal_url");
     }
 }
