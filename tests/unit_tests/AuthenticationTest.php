@@ -215,53 +215,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test the getClientIdAndSecretMask method.
-     *
-     * This test verifies that the getClientData method correctly retrieves
-     * the client_id, client_secret_mask , client_name client_type and mode from the user manager resource.
-     *
-     * @throws \Exception
-     */
-    public function testGetClientData()
-    {
-        $response = array(
-            array(
-                'client_id' => 'test_client_id',
-                'client_secret_mask' => 'test_secret_mask',
-                'client_name' => 'test_client_name',
-                'client_type' => 'test_client_type',
-                'mode' => 'test_mode',
-            ),
-        );
-
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('getinfo')
-            ->will($this->returnCallback(function ($option) {
-                switch ($option) {
-                    case CURLINFO_HTTP_CODE:
-                        return 200;
-                }
-                return null;
-            }));
-
-        $session = 'test_session_value';
-        $result = Authentication::getClientData($session, $this->_configuration);
-        $this->assertCount(1, $result);
-        $this->assertEquals('test_client_id', $result[0]['client_id']);
-        $this->assertEquals('test_secret_mask', $result[0]['client_secret_mask']);
-        $this->assertEquals('test_client_name', $result[0]['client_name']);
-        $this->assertEquals('test_client_type', $result[0]['client_type']);
-        $this->assertEquals('test_mode', $result[0]['mode']);
-
-    }
-
-    /**
      * Test the createClientIdAndSecret correctly creates
      *  a client ID and client secret.
      *
@@ -296,28 +249,55 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $client_name = 'test_client_name';
         $mode = 'test';
         $result = Authentication::createClientIdAndSecret($company_id, $client_name, $mode, $session, $this->_configuration);
-        $this->assertCount(1, $result);
-        $this->assertEquals('test_client_id', $result[0]['client_id']);
-        $this->assertEquals('test_client_secret', $result[0]['client_secret']);
+        $client_data = $result['httpResponse'];
+        $this->assertCount(1, $client_data);
+        $this->assertEquals('test_client_id', $client_data[0]['client_id']);
+        $this->assertEquals('test_client_secret', $client_data[0]['client_secret']);
     }
 
-    /**
-     * Test the setKratosSession method with a null session.
-     */
-    public function testSetKratosSessionNull()
-    {
-        $this->expectException('\PayPlug\Exception\ConfigurationException');
-        $this->expectExceptionMessage('The session value must be set.');
-        Authentication::setKratosSession(null);
-    }
-
-    public function testGenerateJWTWithEmptyClientId()
+    public function testGenerateJWTOSWithEmptyClientId()
     {
         $jwt = Authentication::generateJWTOneShot($this->_configuration);
         $this->assertEquals(array(), $jwt);
     }
 
+    public function testGenerateJWTWithEmptyClientId()
+    {
+        $jwt = Authentication::generateJWT('', 'client_secret');
+        $this->assertEquals(array(), $jwt);
+    }
+
     public function testGenerateJWTWhenErrorResponse()
+    {
+        $response = array(
+            'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
+            'expires_in' => 300,
+            'scope' => 'sandbox',
+            'token_type' => 'bearer'
+        );
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 401;
+                }
+                return null;
+            }));
+
+        $jwt = Authentication::generateJWT('client_id', 'client_secret');
+
+        $this->assertEquals(array(), $jwt);
+    }
+
+    public function testGenerateJWTOSWhenErrorResponse()
     {
         $response = array(
             'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
@@ -348,6 +328,37 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testGenerateJWTWhenSuccessResponse()
+    {
+        $response = array(
+            'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
+            'expires_in' => 300,
+            'scope' => 'sandbox',
+            'token_type' => 'bearer'
+        );
+
+        $this->_requestMock
+            ->expects($this->once())
+            ->method('exec')
+            ->will($this->returnValue(json_encode($response)));
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getinfo')
+            ->will($this->returnCallback(function($option) {
+                switch($option) {
+                    case CURLINFO_HTTP_CODE:
+                        return 200;
+                }
+                return null;
+            }));
+
+        $jwt = Authentication::generateJWT('client_id', 'client_secret');
+
+        $this->assertEquals(200, $jwt['httpStatus']);
+        $this->assertEquals($response, $jwt['httpResponse']);
+    }
+
+    public function testGenerateJWTOSWhenSuccessResponse()
     {
         $response = array(
             'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',

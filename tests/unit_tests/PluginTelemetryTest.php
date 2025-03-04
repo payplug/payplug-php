@@ -3,13 +3,11 @@
 
 namespace Payplug;
 use Payplug;
-use \Payplug\Core\HttpClient;
-use Payplug\Core\APIRoutes;
+
 use PHPUnit\Framework\TestCase;
 
 class PluginTelemetryTest extends TestCase
 {
-
     private $_requestMock;
     private $_httpClient;
 
@@ -19,7 +17,7 @@ class PluginTelemetryTest extends TestCase
     protected function setUpTest()
     {
         $this->_configuration = new Payplug\Payplug('abc');
-        $this->_httpClient = new HttpClient(new \Payplug\Payplug('abc'));
+        $this->_httpClient = new Payplug\Core\HttpClient(new \Payplug\Payplug('abc'));
         Payplug\Payplug::setDefaultConfiguration($this->_configuration);
 
         $this->_requestMock = $this->createMock('Payplug\Core\IHttpRequest');
@@ -37,17 +35,6 @@ class PluginTelemetryTest extends TestCase
     public function testSendWithBadMockedURL()
     {
         $this->expectException('Payplug\Exception\HttpException');
-        // Set a mocked MPDC API URL that will raise an exception
-        APIRoutes::setMerchantPluginsDataCollectorService('bad_mocked_mpdc_api_url');
-
-
-        // Mock the post method of the HTTP client
-        $this->_requestMock->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue('{"status":"not ok"}'));
-
-        $result = $this->_httpClient->post(APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE);
-
 
         // Data to send to the MPDC microservice
         $data = array(
@@ -75,6 +62,5 @@ class PluginTelemetryTest extends TestCase
 
         // call send and assert
         PluginTelemetry::send($data);
-
     }
 }

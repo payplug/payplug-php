@@ -1,5 +1,7 @@
 <?php
+
 namespace Payplug\Core;
+
 use Payplug;
 
 /**
@@ -35,7 +37,7 @@ class HttpClient
     /**
      * HttpClient constructor.
      *
-     * @param   Payplug\Payplug    $authentication  the client configuration
+     * @param Payplug\Payplug $authentication the client configuration
      */
     public function __construct(Payplug\Payplug $authentication = null)
     {
@@ -45,9 +47,9 @@ class HttpClient
     /**
      * Sends a POST request to the API.
      *
-     * @param   string  $resource   the path to the remote resource
-     * @param   array   $data       Request data
-     * @param   bool    $authenticated  the request should be authenticated
+     * @param string $resource the path to the remote resource
+     * @param array $data Request data
+     * @param bool $authenticated the request should be authenticated
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -59,16 +61,16 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function post($resource, $data = null, $authenticated = true)
+    public function post($resource, $data = null, $authenticated = true, $cookie = null, $headers = null, $data_type = 'json')
     {
-        return $this->request('POST', $resource, $data, $authenticated);
+        return $this->request('POST', $resource, $data, $authenticated, $cookie, $headers, $data_type);
     }
 
     /**
      * Sends a PATCH request to the API.
      *
-     * @param   string  $resource   the path to the remote resource
-     * @param   array   $data       Request data
+     * @param string $resource the path to the remote resource
+     * @param array $data Request data
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -88,8 +90,8 @@ class HttpClient
     /**
      * Sends a DELETE request to the API.
      *
-     * @param   string  $resource   the path to the remote resource
-     * @param   array   $data       Request data
+     * @param string $resource the path to the remote resource
+     * @param array $data Request data
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -109,10 +111,8 @@ class HttpClient
     /**
      * Sends a GET request to the API.
      *
-     * @param   string  $resource       the path to the remote resource
-     * @param   array   $data           Request data
-     * @param   bool   $authenticated
-     * @param   bool   $cookie
+     * @param string $resource the path to the remote resource
+     * @param array $data Request data
      *
      * @return  array   the response in a dictionary with following keys:
      * <pre>
@@ -124,7 +124,7 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function get($resource, $data = null, $authenticated = true, $cookie=null)
+    public function get($resource, $data = null, $authenticated = true, $cookie = null)
     {
         return $this->request('GET', $resource, $data, $authenticated, $cookie);
     }
@@ -142,7 +142,8 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    public function testRemote() {
+    public function testRemote()
+    {
         return $this->request('GET', APIRoutes::getTestRoute(), null, false);
     }
 
@@ -150,9 +151,9 @@ class HttpClient
      * Legacy : Adds a default product for the User-Agent HTTP header sent for each HTTP request.
      * Replaced by setDefaultUserAgentProduct()
      *
-     * @param   string  $product   the product's name
-     * @param   string  $version   the product's version
-     * @param   string  $comment   a comment about the product
+     * @param string $product the product's name
+     * @param string $version the product's version
+     * @param string $comment a comment about the product
      *
      */
     public static function addDefaultUserAgentProduct($product, $version = null, $comment = null)
@@ -163,9 +164,9 @@ class HttpClient
     /**
      * Set a default product for the User-Agent HTTP header sent for each HTTP request.
      *
-     * @param   string  $product   the product's name
-     * @param   string  $version   the product's version
-     * @param   string  $comment   a comment about the product
+     * @param string $product the product's name
+     * @param string $version the product's version
+     * @param string $comment a comment about the product
      *
      */
     public static function setDefaultUserAgentProduct($product, $version = null, $comment = null)
@@ -176,9 +177,9 @@ class HttpClient
     /**
      * Formats a product for a User-Agent HTTP header.
      *
-     * @param   string  $product   the product name
-     * @param   string  $version   (optional) product version
-     * @param   string  $comment   (optional) comment about the product.
+     * @param string $product the product name
+     * @param string $version (optional) product version
+     * @param string $comment (optional) comment about the product.
      *
      * @return  string  a formatted User-Agent string (`PRODUCT/VERSION (COMMENT)`)
      */
@@ -200,10 +201,10 @@ class HttpClient
     public static function getUserAgent()
     {
         $curlVersion = curl_version(); // Do not move this inside $headers even if it is used only there.
-                                       // PHP < 5.4 doesn't support call()['value'] directly.
+        // PHP < 5.4 doesn't support call()['value'] directly.
         $userAgent = self::formatUserAgentProduct('PayPlug-PHP',
-                                                  Payplug\Core\Config::LIBRARY_VERSION,
-                                                  sprintf('PHP/%s; curl/%s', phpversion(), $curlVersion['version']));
+            Payplug\Core\Config::LIBRARY_VERSION,
+            sprintf('PHP/%s; curl/%s', phpversion(), $curlVersion['version']));
         foreach (self::$defaultUserAgentProducts as $product) {
             $userAgent .= ' ' . self::formatUserAgentProduct($product[0], $product[1], $product[2]);
         }
@@ -213,10 +214,10 @@ class HttpClient
     /**
      * Performs a request.
      *
-     * @param   string  $httpVerb       the HTTP verb (PUT, POST, GET, …)
-     * @param   string  $resource       the path to the resource queried
-     * @param   array   $data           the request content
-     * @param   bool    $authenticated  the request should be authenticated
+     * @param string $httpVerb the HTTP verb (PUT, POST, GET, …)
+     * @param string $resource the path to the resource queried
+     * @param array $data the request content
+     * @param bool $authenticated the request should be authenticated
      *
      * @return array the response in a dictionary with following keys:
      * <pre>
@@ -228,21 +229,37 @@ class HttpClient
      * @throws  Payplug\Exception\HttpException                   When status code is not 2xx.
      * @throws  Payplug\Exception\ConnectionException             When an error was encountered while connecting to the resource.
      */
-    private function request($httpVerb, $resource, array $data = null, $authenticated = true, $cookie = null)
+    private function request(
+        $httpVerb,
+        $resource,
+        array $data = null,
+        $authenticated = true,
+        $cookie = null,
+        $headersParams = null,
+        $data_type = 'json'
+    )
     {
+
         if (self::$REQUEST_HANDLER === null) {
             $request = new CurlRequest();
-        }
-        else {
+        } else {
             $request = self::$REQUEST_HANDLER;
         }
 
         $userAgent = self::getUserAgent();
-        $headers = array(
-            'Accept: application/json',
-            'Content-Type: application/json',
-            'User-Agent: ' . $userAgent
-        );
+
+        $headers = array();
+
+        if ($headersParams) {
+            foreach ($headersParams as $header) {
+                $headers[] = $header;
+            }
+        } else {
+            $headers[] = 'Accept: application/json';
+            $headers[] = 'Content-Type: application/json';
+        }
+
+        $headers[] = 'User-Agent: ' . $userAgent;
         if ($authenticated) {
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
             $headers[] = 'PayPlug-Version: ' . $this->_configuration->getApiVersion();
@@ -262,12 +279,16 @@ class HttpClient
         $request->setopt(CURLOPT_CAINFO, self::$CACERT_PATH);
         $request->setopt(CURLOPT_FOLLOWLOCATION, true);
         if (!empty($data)) {
-            $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
+            if ('json' == $data_type) {
+                $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
+            } else {
+                $request->setopt(CURLOPT_POSTFIELDS, http_build_query($data));
+            }
         }
 
         $result = array(
-            'httpResponse'  => $request->exec(),
-            'httpStatus'    => $request->getInfo(CURLINFO_HTTP_CODE)
+            'httpResponse' => $request->exec(),
+            'httpStatus' => $request->getInfo(CURLINFO_HTTP_CODE)
         );
 
         // We must do this before closing curl
@@ -285,11 +306,11 @@ class HttpClient
         // If there was an HTTP error
         if (in_array($errorCode, $curlStatusNotManage) && substr($result['httpStatus'], 0, 1) !== '2') {
             $this->throwRequestException($result['httpResponse'], $result['httpStatus']);
-        // Unreachable bracket marked as executable by old versions of XDebug
+            // Unreachable bracket marked as executable by old versions of XDebug
         } // If there was an error with curl
         elseif ($result['httpResponse'] === false || $errorCode) {
             $this->throwConnectionException($result['httpStatus'], $errorMessage);
-        // Unreachable bracket marked as executable by old versions of XDebug
+            // Unreachable bracket marked as executable by old versions of XDebug
         }
 
         $result['httpResponse'] = json_decode($result['httpResponse'], true);
@@ -304,8 +325,8 @@ class HttpClient
     /**
      * Throws an exception from a given curl error.
      *
-     * @param   int     $errorCode      the curl error code
-     * @param   string  $errorMessage   the error message
+     * @param int $errorCode the curl error code
+     * @param string $errorMessage the error message
      *
      * @throws  Payplug\Exception\ConnectionException
      */
@@ -319,8 +340,8 @@ class HttpClient
     /**
      * Throws an exception from a given HTTP response and status.
      *
-     * @param   string  $httpResponse   the HTTP response
-     * @param   int     $httpStatus     the HTTP status
+     * @param string $httpResponse the HTTP response
+     * @param int $httpStatus the HTTP status
      *
      * @throws  Payplug\Exception\HttpException   the generated exception from the request
      */
@@ -357,7 +378,7 @@ class HttpClient
                 break;
             case 422:
                 throw new Payplug\Exception\UnprocessableEntityException('The server encountered an error while processing the request. The submitted data could not be processed.',
-                     $httpResponse, $httpStatus);
+                    $httpResponse, $httpStatus);
                 break;
         }
 
