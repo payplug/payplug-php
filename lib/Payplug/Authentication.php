@@ -298,7 +298,6 @@ class Authentication
         if (empty($oauth_callback_uri)) {
             throw new Exception\ConfigurationException('Expected string values for oauth callback uri.');
         }
-        $httpClient = new Core\HttpClient(null);
 
         $url_datas = array(
             'setup_redirection_uri' => $setup_redirection_uri,
@@ -307,11 +306,7 @@ class Authentication
 
         $route = Core\APIRoutes::getServiceRoute(Core\APIRoutes::PLUGIN_SETUP_SERVICE, $url_datas);
 
-        return $httpClient->get(
-            $route,
-            null,
-            false
-        );
+        return $route;
     }
 
     /**

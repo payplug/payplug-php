@@ -393,27 +393,12 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     {
         $setup_redirection_uri = 'setup.redirection.uri.com';
         $oauth_callback_uri = 'oauth.callback.uri.com';
-        $response = array(
-            'redirect_to' => 'portal.uri.com'
+        $register_url = Authentication::getRegisterUrl($setup_redirection_uri, $oauth_callback_uri);
+        $parameters = array(
+            'setup_redirection_uri' => $setup_redirection_uri,
+            'oauth_callback_uri' => $oauth_callback_uri,
         );
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('getinfo')
-            ->will($this->returnCallback(function ($option) {
-                switch ($option) {
-                    case CURLINFO_HTTP_CODE:
-                        return 200;
-                }
-                return null;
-            }));
-
-        $authentication = Authentication::getRegisterUrl($setup_redirection_uri, $oauth_callback_uri);
-        $this->assertEquals(200, $authentication['httpStatus']);
-        $this->assertEquals($response, $authentication['httpResponse']);
+        $expect = Core\APIRoutes::$SERVICE_BASE_URL . Core\APIRoutes::PLUGIN_SETUP_SERVICE . '?' . http_build_query($parameters);
+        $this->assertEquals($expect, $register_url);
     }
 }
