@@ -307,11 +307,7 @@ class Authentication
 
         $route = Core\APIRoutes::getServiceRoute(Core\APIRoutes::PLUGIN_SETUP_SERVICE, $url_datas);
 
-        return $httpClient->get(
-            $route,
-            null,
-            false
-        );
+        return $route;
     }
 
     /**
