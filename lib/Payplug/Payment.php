@@ -65,7 +65,8 @@ class Payment
      */
     public static function create(array $data, $payplug = null)
     {
-    	return Resource\Payment::create($data, $payplug);
+        return Resource\Payment::create($data, $payplug);
+
     }
 
     /**
