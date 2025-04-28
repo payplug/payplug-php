@@ -234,12 +234,44 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
+        if( $data['params']['HFTOKEN'])
+        {
+            $response = $httpClient->post(
+                Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE),
+                $data
+            );
+            return $response['httpResponse'];
+        }
         $response = $httpClient->post(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE),
             $data
         );
 
         return Payment::fromAttributes($response['httpResponse']);
+    }
+
+    /**
+     * @param array $data
+     * @param Payplug\Payplug|null $payplug
+     * @return array
+     * @throws Payplug\Exception\ConfigurationNotSetException
+     * @throws Payplug\Exception\ConnectionException
+     * @throws Payplug\Exception\HttpException
+     * @throws Payplug\Exception\UnexpectedAPIResponseException
+     */
+    public static function createHostedFieldPayment(array $data, Payplug\Payplug $payplug = null)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        return $httpClient->post(
+            Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
+            $data,
+            false
+        );
+
     }
 
     /**
