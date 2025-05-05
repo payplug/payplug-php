@@ -273,7 +273,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
             'expires_in' => 300,
             'scope' => 'sandbox',
-            'token_type' => 'bearer'
+            'token_type' => 'bearer',
+            'expires_date' => time() + 300
         );
 
         $this->_requestMock
@@ -303,7 +304,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
             'expires_in' => 300,
             'scope' => 'sandbox',
-            'token_type' => 'bearer'
+            'token_type' => 'bearer',
+            'expires_date' => time() + 300
         );
 
         $this->_requestMock
@@ -333,7 +335,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'access_token' => 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2NmQxZWU3LTQzMWMtNDNiYS04NzA4LWQ1MzNkNTVmZjhlZCIsInR5cCI6IkpXVCJ9.eyJhdWQiOltdLCJjbGllbnRfaWQiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQiLCJleHAiOjE3Mjc5NjU3OTQsImV4dCI6eyJjb21wYW55X2lkIjoiZDE0NzQ1ZmQtMTc5Yy00N2IxLTlkZDgtMTk3OTVmMzQ1MjJiIiwicmVhbG1faWQiOiIxNTM0N2NjNy0xZThmLTQzYzMtYjJjZi1iZDMxY2M5ZWU4YTEiLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYXBpIjp7InJvbGVzIjpbIk1FUkNIQU5UX0FQUFMiXX19fSwiaWF0IjoxNzI3OTYyMTk0LCJpc3MiOiJodHRwczovLzEyNy4wLjAuMTo0NDQ0IiwianRpIjoiMGNhMzUyOWItOGQ5Zi00NDQxLWEyNDAtMGZhY2YyNDNmN2JiIiwibmJmIjoxNzI3OTYyMTk0LCJzY3AiOltdLCJzdWIiOiIyNzdlNDk4MS0yYTBjLTQ4NGEtYTE3Ni1hZWNhOWRjNDhkNTQifQ.K1pavlVMz4D4cAJtL8IklLXIos7ZjiC9YSofb343uLkjXdhbgel23k0GyEE_JkQ2xSSB46XLYQp0j-M1AaJIoNjCfVR-O1yWNpLYnLM07ECETO3kQc63vcvzOm5trn5oBq_T3FE78EmAIA5B3oaSu_m5_qUBci_C7oM0ItMMIpFnKYqk2ta8y2eUFFPu7detxJRLlBK4I7hW0xAt07GNhfyRl8eN7twC3aYFFkUejZmuEB_FmZkj7OqZDsNblDR21Ci_cahuZmt9WOmIqTW58l7wxXOB9vq5APtBi2LpQtE52ARofUNCWWOK1KHz_vSQlGiGDM6_56K85Whfkkj-LYvLRRZUuIXE2m528JTtnCarZr7Md5P9zHQOZyIbcWrjiUdM_daI1vELPT4UaCBIfpy-vY0wywiPtoosokNsFQNrwxo8f9affUkiuEwZedK9sreDfVL_tmrz5Bh6XzxMZB5ZiVQckUUPF7LKrBB8qDwotYvwdLIN-Wy3l2IeeTzF_NOFmO6mrNift2RhSQZP0s7Xfn2dVK1eiyO4gERNrsPvasb9nB15PIQ57wwWKzN8ue6z9utAX6YThTgc2fadrOWYMeo2W4c7KmuKr9hhLK2ThIWRM7H5rQq3H7Ke5AzlKyCQdgFlQzSl0O1gjzA0T4AnfuNW1zNedSfUsqMJCfM',
             'expires_in' => 300,
             'scope' => 'sandbox',
-            'token_type' => 'bearer'
+            'token_type' => 'bearer',
+            'expires_date' => time() + 300
         );
 
         $this->_requestMock
