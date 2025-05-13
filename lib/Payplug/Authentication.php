@@ -352,4 +352,54 @@ class Authentication
 
         header("Location: $portal_url");
     }
+
+    /**
+     * Check if given token is expired and if so, regenerate a new one
+     *
+     * @param array $client_data
+     * @param array $token
+     *
+     * @return array
+     */
+    public static function validateJWT($client_data = array(), $token = array())
+    {
+        if (!is_array($client_data) || empty($client_data)) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+        if (!is_array($token) || empty($token)) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+
+        $current_date = time();
+        if ($token['expires_date'] > $current_date) {
+            return array(
+                'result' => true,
+                'token' => $token,
+                'need_update' => false,
+            );
+        }
+
+        $token = self::generateJWT($client_data['client_id'], $client_data['client_secret']);
+        if (empty($token) || !isset($token['httpResponse'])) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+
+        return array(
+            'result' => true,
+            'token' => $token['httpResponse'],
+            'need_update' => true,
+        );
+    }
 }
