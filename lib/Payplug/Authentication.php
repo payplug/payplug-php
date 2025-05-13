@@ -151,7 +151,7 @@ class Authentication
         $httpClient = new Core\HttpClient(null);
         try {
             $route = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_TOKEN_RESOURCE, null, array(), array(), false);
-            return $httpClient->post(
+            $response = $httpClient->post(
                 $route,
                 array(
                     'grant_type' => 'client_credentials',
@@ -161,6 +161,14 @@ class Authentication
                 'Authorization: Basic ' . base64_encode($client_id . ':' . $client_secret)
             ),
                 'x-www-form-urlencoded');
+
+            if (!isset($response['httpResponse']) || empty($response['httpResponse'])) {
+                return array();
+            }
+
+            $response['httpResponse']['expires_date'] = time() + $response['httpResponse']['expires_in'];
+
+            return $response;
         } catch (Exception $e) {
             return array();
         }
