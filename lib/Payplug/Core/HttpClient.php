@@ -236,7 +236,7 @@ class HttpClient
         }
 
         $userAgent = self::getUserAgent();
-        if ($data['params']['HFTOKEN']) {
+        if ($data['params']) {
             $headers = array(
                 'Content-Type: Content-Type: application/x-www-form-urlencoded',
             );
