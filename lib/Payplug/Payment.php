@@ -9,16 +9,18 @@ class Payment
 	/**
      * Retrieves a Payment.
      *
-     * @param   string                      $paymentId      the payment ID
+     * @param   $data
      * @param   Payplug $payplug  the client configuration
+     * @param $isHostedField
      *
      * @return  null|Resource\Payment the retrieved payment or null on error
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($paymentId, $payplug = null)
+
+    public static function retrieve($data, Payplug $payplug = null, $isHostedField = false)
     {
-    	return Resource\Payment::retrieve($paymentId, $payplug);
+        return Resource\Payment::retrieve($data, $payplug, $isHostedField);
     }
 
 	/**
