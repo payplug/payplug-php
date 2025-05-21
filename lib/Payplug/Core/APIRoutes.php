@@ -20,6 +20,11 @@ class APIRoutes
      */
     public static $HOSTED_FIELDS_RESOURCE;
 
+    /**
+     * @var string the root URL of the Hosted Fields
+     */
+    public static $HOSTED_FIELDS_RESOURCE_RETRIEVE;
+
     const API_VERSION = 1;
 
     // Resources routes
@@ -112,6 +117,14 @@ class APIRoutes
     }
 
     /**
+     * @param $hostedFieldsRetrieveUrl
+     * @return void
+     */
+    public static function setHostedFieldsResourceRetrieve($hostedFieldsRetrieveUrl){
+        self::$HOSTED_FIELDS_RESOURCE = $hostedFieldsRetrieveUrl;
+    }
+
+    /**
      * Gets a route that allows to check whether the remote API is up.
      *
      * @return  string  the full URL to the test resource
@@ -123,5 +136,8 @@ class APIRoutes
 }
 
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
-APIRoutes::$SERVICE_BASE_URL = 'https://retail.service.payplug.com';
-APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://secure-test.dalenys.com/front/service/rest/process';
+APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'https://retail.service.payplug.com/merchant-plugin-data-collectors/api/v1/plugin_telemetry';
+APIRoutes::$USER_MANAGER_RESOURCE ='User manager resource';
+APIRoutes::$HYDRA_RESOURCE = 'Microservice Url';
+APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://staging-epayment.dlns.io/ecom';
+APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE = 'https://staging-payment.secure.dalenys.com/front/service/rest/export';
