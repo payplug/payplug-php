@@ -164,13 +164,13 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         if (!is_string($data) || empty($data)) {
-            throw new Payplug\Exception\UndefinedAttributeException('The parameter paymentId is not set.');
+            throw new Payplug\Exception\UndefinedAttributeException('The parameter $data is not set.');
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
         if ($is_hosted_field) {
             $response = $httpClient->post(
-                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
+                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE,
                 $data,
                 false
             );
@@ -244,7 +244,8 @@ class Payment extends APIResource implements IVerifiableAPIResource
         {
             $response = $httpClient->post(
                 Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE),
-                $data
+                $data,
+                false
             );
             return $response['httpResponse'];
         }
