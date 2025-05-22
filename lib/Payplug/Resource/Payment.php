@@ -163,7 +163,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
 
-        if (!is_string($data) || empty($data)) {
+        if (empty($data)) {
             throw new Payplug\Exception\UndefinedAttributeException('The parameter $data is not set.');
         }
 
