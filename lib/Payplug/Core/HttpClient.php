@@ -247,7 +247,11 @@ class HttpClient
         }
 
         $userAgent = self::getUserAgent();
-        if ($data['params']) {
+        if (is_array($data) && isset($data['params']['OPERATIONTYPE']) && $data['params']['OPERATIONTYPE'] === "getTransaction")
+        {
+            $headers = array();
+        }
+        elseif (is_array($data) && isset($data['params'])) {
             $headers = array(
                 'Content-Type: Content-Type: application/x-www-form-urlencoded',
             );
