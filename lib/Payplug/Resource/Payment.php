@@ -157,6 +157,39 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
         return Payment::fromAttributes($response['httpResponse']);
     }
+
+    /**
+     * @description Authorize a Payment.
+     * @param $data
+     * @param Payplug\Payplug|null $payplug
+     * @param $is_hosted_field
+     * @return mixed|void
+     * @throws Payplug\Exception\ConfigurationNotSetException
+     * @throws Payplug\Exception\ConnectionException
+     * @throws Payplug\Exception\HttpException
+     * @throws Payplug\Exception\UndefinedAttributeException
+     * @throws Payplug\Exception\UnexpectedAPIResponseException
+     */
+    public static function authorize($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    {
+        if ($payplug === null) {
+            $payplug = Payplug\Payplug::getDefaultConfiguration();
+        }
+
+        if (empty($data)) {
+            throw new Payplug\Exception\UndefinedAttributeException('The parameter paymentId is not set.');
+        }
+
+        $httpClient = new Payplug\Core\HttpClient($payplug);
+        if ($is_hosted_field) {
+            $response = $httpClient->post(
+                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
+                $data,
+                false
+            );
+            return $response['httpResponse'];
+        }
+    }
     /**
      * @param $data
      * @param Payplug\Payplug|null $payplug
