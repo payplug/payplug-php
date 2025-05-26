@@ -49,9 +49,20 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function capture($paymentId, $payplug = null)
+
+    /**
+     * @param $data the payment data or id
+     * @param Payplug|null $payplug the client configuration
+     * @param $is_hosted_field indicates if the payment is using hosted fields
+     * @return Resource\Payment|null the captured payment or null on error
+     * @throws Exception\ConfigurationNotSetException
+     */
+    public static function capture($data, Payplug $payplug = null, $is_hosted_field = false)
     {
-        $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
+        if ($is_hosted_field) {
+            return Resource\Payment::capture($data, $payplug, $is_hosted_field);
+        }
+        $payment = Resource\Payment::fromAttributes(array('id' => $data));
         return $payment->capture($payplug);
     }
 
