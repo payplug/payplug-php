@@ -67,6 +67,19 @@ class Payment
     }
 
     /**
+     * @description Authorize a Payment.
+     * @param $data
+     * @param Payplug|null $payplug
+     * @param $is_hosted_field
+     * @return mixed
+     */
+    public static  function authorize($data, Payplug $payplug = null, $is_hosted_field = false)
+    {
+        return Resource\Payment::authorize($data, $payplug, $is_hosted_field);
+
+    }
+
+    /**
      * Creates a Payment.
      *
      * @param   array                       $data           API data for payment creation
