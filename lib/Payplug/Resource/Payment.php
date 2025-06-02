@@ -287,7 +287,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
         if( $data['params']['HFTOKEN'])
         {
             $response = $httpClient->post(
-                Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE),
+                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
                 $data,
                 false
             );
