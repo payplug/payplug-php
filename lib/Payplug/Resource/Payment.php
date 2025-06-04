@@ -125,7 +125,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
     /**
      * Captures a Payment.
-     * 
+     *
      * @param   Payplug\Payplug    $payplug    the client configuration
      *
      * @return  null|Payment the captured payment or null on error
@@ -218,11 +218,15 @@ class Payment extends APIResource implements IVerifiableAPIResource
                 $data,
                 false
             );
-            return $response['httpResponse'];
+
+			$hostedField_resource = new Payplug\Responses\HostedFieldTransactionResource($response['httpResponse']);
+			$response['httpResponse'] = get_object_vars($hostedField_resource);
+
+        }else{
+	        $response = $httpClient->get(
+	            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $data)
+	        );
         }
-        $response = $httpClient->get(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $data)
-        );
 
         return Payment::fromAttributes($response['httpResponse']);
     }
