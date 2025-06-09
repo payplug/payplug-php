@@ -11,13 +11,14 @@ class Refund {
      * @param   string|Payment      $payment        the payment id or the payment object
      * @param   array                       $data           API data for refund
      * @param   Payplug $payplug  the client configuration
+     * @param $is_hosted_field indicates if the payment is using hosted fields
      *
      * @return  null|Refund the refund object
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create($payment, $data = null, $payplug = null)
+    public static function create($payment, array $data = null, Payplug $payplug = null,  $is_hosted_field = false)
     {
-    	return Resource\Refund::create($payment, $data, $payplug);
+        return Resource\Refund::create($payment, $data, $payplug,  $is_hosted_field);
     }
 
     /**
