@@ -24,23 +24,34 @@ class Refund extends APIResource implements IVerifiableAPIResource
     /**
      * Creates a refund on a payment.
      *
-     * @param   string|Payment      $payment        the payment id or the payment object
+     * @param   string|Payment      $refund_data        the payment id or the payment object
      * @param   array                       $data           API data for refund
      * @param   Payplug\Payplug $payplug  the client configuration
+     * @param $is_hosted_field
      *
      * @return  null|Refund the refund object
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, Payplug\Payplug $payplug = null)
+    public static function create($refund_data, array $data = null, Payplug\Payplug $payplug = null, $is_hosted_field = false)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
-        if ($payment instanceof Payment) {
-            $payment = $payment->id;
+
+
+        if ($refund_data instanceof Payment) {
+            $payment = $refund_data->id;
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
+        if ($is_hosted_field){
+            $response = $httpClient->post(
+                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
+                $refund_data,
+                false
+            );
+            return $response['httpResponse'];
+        }
         $response = $httpClient->post(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => $payment)),
             $data
@@ -48,6 +59,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
 
         return Refund::fromAttributes($response['httpResponse']);
     }
+
 
     /**
      * Retrieves a refund object on a payment.
