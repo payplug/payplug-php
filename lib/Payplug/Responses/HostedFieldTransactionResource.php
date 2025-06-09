@@ -57,34 +57,34 @@ class HostedFieldTransactionResource
 		}
 
 		$payment_data = !empty($data['DATA'][0]) ? $data['DATA'][0] : null;
-		$this->id = $payment_data['TRANSACTIONID'] ?? null;
-		$this->object = $payment_data['OPERATIONTYPE'] ?? null;
-		$this->amount = $payment_data['AMOUNT'] ?? 0;
-		$this->currency = $payment_data['CURRENCY'] ?? 'EUR';
-		$this->created_at = $payment_data['DATE'] ?? null;
-		$this->description = $payment_data['DESCRIPTION'] ?? '';
-		$this->is_paid = $payment_data['DATE'] ?? false;
-		$this->paid_at = $payment_data['DATE'] ?? null;
-		$this->is_3ds = $payment_data['3DSECURE'] ?? false;
+		$this->id = !empty($payment_data['TRANSACTIONID']) ? $payment_data['TRANSACTIONID'] : null;
+		$this->object = !empty($payment_data['OPERATIONTYPE']) ? $payment_data['OPERATIONTYPE'] : null;
+		$this->amount = !empty($payment_data['AMOUNT']) ? $payment_data['AMOUNT'] : 0;
+		$this->currency = !empty($payment_data['CURRENCY']) ? $payment_data['CURRENCY'] : 'EUR';
+		$this->created_at = !empty($payment_data['DATE']) ? $payment_data['DATE'] : null;
+		$this->description = !empty($payment_data['DESCRIPTION']) ? $payment_data['DESCRIPTION'] : '';
+		$this->is_paid = !empty($payment_data['DATE']) ? $payment_data['DATE'] : false;
+		$this->paid_at = !empty($payment_data['DATE']) ? $payment_data['DATE'] : null;
+		$this->is_3ds = !empty($payment_data['3DSECURE']) ? $payment_data['3DSECURE'] : false;
 		$this->card = [
 			'last4' => null,
 			'exp_month' => null,
 			'exp_year' => null,
-			'brand' => $payment_data['CARDTYPE'] ?? null,
-			'country' => $payment_data['CARDCOUNTRY'] ?? null,
+			'brand' => !empty($payment_data['CARDTYPE']) ? $payment_data['CARDTYPE'] : null,
+			'country' => !empty($payment_data['CARDCOUNTRY']) ? $payment_data['CARDCOUNTRY'] : null,
 		];
 
-		$this->notification['response_code'] = $payment_data['EXECCODE'] ?? false;
-		$this->metadata["order_id"] = $payment_data['ORDERID'] ?? null;
-		$this->metadata["customer_id"] = $payment_data['IDENTIFIER'] ?? null;
-		$this->hosted_payment['paid_at'] = $payment_data['DATE'] ?? null;
+		$this->notification['response_code'] = !empty($payment_data['EXECCODE']) ? $payment_data['EXECCODE'] : false;
+		$this->metadata["order_id"] = !empty($payment_data['ORDERID']) ? $payment_data['ORDERID'] : null;
+		$this->metadata["customer_id"] = !empty($payment_data['IDENTIFIER']) ? $payment_data['IDENTIFIER'] : null;
+		$this->hosted_payment['paid_at'] = !empty($payment_data['DATE']) ? $payment_data['DATE'] : null;
 
 		//handling error codes
 		if($payment_data['EXECCODE'] != "0000" ){
 			$this->failure = Array(
-				'code' => $payment_data['EXECCODE'] ?? null,
-				'message' => $payment_data['MESSAGE'] ?? null,
-				'details' => $payment_data['DETAILS'] ?? null,
+				'code' => !empty($payment_data['EXECCODE']) ? $payment_data['EXECCODE'] : null,
+				'message' => !empty($payment_data['MESSAGE']) ? $payment_data['MESSAGE'] : null,
+				'details' => !empty($payment_data['DETAILS']) ? $payment_data['DETAILS'] : null,
 			);
 		}
 	}
