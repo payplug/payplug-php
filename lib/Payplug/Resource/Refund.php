@@ -50,12 +50,18 @@ class Refund extends APIResource implements IVerifiableAPIResource
                 $refund_data,
                 false
             );
-            return $response['httpResponse'];
+            $hostedField_resource = new Payplug\Responses\HostedFieldRefundTransaction($response['httpResponse']);
+            $response['httpResponse'] = get_object_vars($hostedField_resource);
+        }else {
+            $response = $httpClient->post(
+                Payplug\Core\APIRoutes::getRoute(
+                    Payplug\Core\APIRoutes::REFUND_RESOURCE,
+                    null,
+                    array('PAYMENT_ID' => $payment)
+                ),
+                $data
+            );
         }
-        $response = $httpClient->post(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::REFUND_RESOURCE, null, array('PAYMENT_ID' => $payment)),
-            $data
-        );
 
         return Refund::fromAttributes($response['httpResponse']);
     }
