@@ -151,7 +151,7 @@ class Authentication
         $httpClient = new Core\HttpClient(null);
         try {
             $route = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_TOKEN_RESOURCE, null, array(), array(), false);
-            return $httpClient->post(
+            $response = $httpClient->post(
                 $route,
                 array(
                     'grant_type' => 'client_credentials',
@@ -161,6 +161,14 @@ class Authentication
                 'Authorization: Basic ' . base64_encode($client_id . ':' . $client_secret)
             ),
                 'x-www-form-urlencoded');
+
+            if (!isset($response['httpResponse']) || empty($response['httpResponse'])) {
+                return array();
+            }
+
+            $response['httpResponse']['expires_date'] = time() + $response['httpResponse']['expires_in'];
+
+            return $response;
         } catch (Exception $e) {
             return array();
         }
@@ -343,5 +351,55 @@ class Authentication
         $portal_url = Core\APIRoutes::getRoute(Core\APIRoutes::OAUTH2_AUTH_RESOURCE, null, array(), $portal_url_datas, false);
 
         header("Location: $portal_url");
+    }
+
+    /**
+     * Check if given token is expired and if so, regenerate a new one
+     *
+     * @param array $client_data
+     * @param array $token
+     *
+     * @return array
+     */
+    public static function validateJWT($client_data = array(), $token = array())
+    {
+        if (!is_array($client_data) || empty($client_data)) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+        if (!is_array($token) || empty($token)) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+
+        $current_date = time();
+        if ($token['expires_date'] > $current_date) {
+            return array(
+                'result' => true,
+                'token' => $token,
+                'need_update' => false,
+            );
+        }
+
+        $token = self::generateJWT($client_data['client_id'], $client_data['client_secret']);
+        if (empty($token) || !isset($token['httpResponse'])) {
+            return array(
+                'result' => false,
+                'token' => null,
+                'need_update' => false,
+            );
+        }
+
+        return array(
+            'result' => true,
+            'token' => $token['httpResponse'],
+            'need_update' => true,
+        );
     }
 }
