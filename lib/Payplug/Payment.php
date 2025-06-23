@@ -18,6 +18,7 @@ class Payment
      * @throws  Exception\ConfigurationNotSetException
      */
 
+
     public static function retrieve($data, Payplug $payplug = null, $isHostedField = false)
     {
         return Resource\Payment::retrieve($data, $payplug, $isHostedField);
@@ -51,18 +52,16 @@ class Payment
      */
 
     /**
-     * @param $data the payment data or id
-     * @param Payplug|null $payplug the client configuration
-     * @param $is_hosted_field indicates if the payment is using hosted fields
-     * @return Resource\Payment|null the captured payment or null on error
+     * Capture a payment by its ID or data array.
+     *
+     * @param string|array $paymentId The payment ID as a string, or an array of payment data.
+     * @param Payplug|null $payplug The client configuration (optional).
+     * @return Resource\Payment|null The captured payment or null on error.
      * @throws Exception\ConfigurationNotSetException
      */
-    public static function capture($data, Payplug $payplug = null, $is_hosted_field = false)
+    public static function capture($paymentId, Payplug $payplug = null)
     {
-        if ($is_hosted_field) {
-            return Resource\Payment::capture($data, $payplug, $is_hosted_field);
-        }
-        $payment = Resource\Payment::fromAttributes(array('id' => $data));
+        $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
         return $payment->capture($payplug);
     }
 
