@@ -132,26 +132,15 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function capture($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    public function capture(Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
-        if (empty($data)) {
-            throw new Payplug\Exception\UndefinedAttributeException('The parameter paymentId is not set.');
-        }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        if ($is_hosted_field) {
-            $response = $httpClient->post(
-                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
-                $data,
-                false
-            );
-            return $response['httpResponse'];
-        }
         $response = $httpClient->patch(
-            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $data),
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
             array('captured' => true)
         );
 
@@ -288,7 +277,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        if( $data['params']['HFTOKEN'])
+        if (isset($data['params']['HFTOKEN']) && $data['params']['HFTOKEN'])
         {
             $response = $httpClient->post(
                 Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
