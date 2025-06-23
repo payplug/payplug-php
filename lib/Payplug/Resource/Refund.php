@@ -38,9 +38,15 @@ class Refund extends APIResource implements IVerifiableAPIResource
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
 
-
+        // Always resolve $payment from $refund_data
         if ($refund_data instanceof Payment) {
             $payment = $refund_data->id;
+        } elseif (is_string($refund_data)) {
+            $payment = $refund_data;
+        } elseif (is_array($refund_data) && isset($refund_data['id'])) {
+            $payment = $refund_data['id'];
+        } else {
+            throw new \InvalidArgumentException('A valid payment id or Payment object must be provided.');
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);

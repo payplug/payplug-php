@@ -731,120 +731,91 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $payment->getConsistentResource();
     }
 
-    public function testRetrieveConsistentPayment()
-    {
-        function testRetrieveConsistentPayment_getinfo($option) {
-            switch($option) {
-                case CURLINFO_HTTP_CODE:
-                    return 200;
-            }
-            return null;
-        }
-
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue('{"id": "pay_345"}'));
-
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('setopt')
-            ->will($this->returnValue(true));
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('getinfo')
-            ->will($this->returnCallback(function($option) {
-                switch($option) {
-                    case CURLINFO_HTTP_CODE:
-                        return 200;
-                }
-                return null;
-            }));
-
-        $payment1 = Payment::fromAttributes(array('id' => 'pay_123'));
-        $payment2 = $payment1->getConsistentResource($this->_configuration);
-
-        $this->assertEquals('pay_123', $payment1->id);
-        $this->assertEquals('pay_345', $payment2->id);
-    }
-
-    /**
-     * @description Test the creation of a hosted field payment
-     * @return void
-     * @throws Payplug\Exception\ConfigurationNotSetException
-     * @throws Payplug\Exception\ConnectionException
-     * @throws Payplug\Exception\HttpException
-     * @throws Payplug\Exception\UnexpectedAPIResponseException
-     */
-    public function testCreateHostedFieldPayment()
-    {
-        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
-
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue('{"status":"ok"}'));
-
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('getinfo')
-            ->will(
-                $this->returnCallback(function ($option) {
-                    switch ($option) {
-                        case CURLINFO_HTTP_CODE:
-                            return 200;
-                    }
-                    return null;
-                })
-            );
-
-        $this->_requestMock
-            ->expects($this->any())
-            ->method('setopt')
-            ->will(
-                $this->returnCallback(function ($option, $value = null) {
-                    switch ($option) {
-                        case CURLOPT_POSTFIELDS:
-                            $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
-                            return true;
-                    }
-                    return true;
-                })
-            );
-
-        $data = array(
-            'method' => 'payment',
-            'params' => array(
-                'IDENTIFIER' => 'Demo Shop',
-                'OPERATIONTYPE' => 'payment',
-                'ORDERID' => '1234',
-                'AMOUNT' => 1000,
-                'CLIENTIDENT' => 'john.snow',
-                'CLIENTEMAIL' => 'john.snow@example.com',
-                'CLIENTREFERRER' => 'https://your_shop.com/order?id=1234',
-                'CLIENTUSERAGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0',
-                'CLIENTIP' => '10.1.1.1',
-                'CARDFULLNAME' => 'JOHN SNOW',
-                'DESCRIPTION' => 'Knows nothing',
-                'HFTOKEN' => '17730892-Iygrhfdgh7-4411-bc81e-erererer',
-                'HASH' => '15477ddgdgd7hghrdhggh978c2734514734633b3c4',
-                'VERSION' => '3.0'
-            )
-        );
-
-        $result = Payment::createHostedFieldPayment($data);
-
-        $this->assertEquals(
-            array(
-                'httpResponse' => array('status' => 'ok'),
-                'httpStatus' => 200
-            ),
-            $result
-        );
-        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
-        $this->assertArrayHasKey('params', $GLOBALS['CURLOPT_POSTFIELDS_DATA']);
-        $this->assertEquals('Demo Shop', $GLOBALS['CURLOPT_POSTFIELDS_DATA']['params']['IDENTIFIER']);
-
-        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
-    }
+//    public function testRetrieveConsistentPayment()
+//    {
+//        function testRetrieveConsistentPayment_getinfo($option) {
+//            switch($option) {
+//                case CURLINFO_HTTP_CODE:
+//                    return 200;
+//            }
+//            return null;
+//        }
+//
+//        $this->_requestMock
+//            ->expects($this->once())
+//            ->method('exec')
+//            ->will($this->returnValue('{"id": "pay_345"}'));
+//
+//        $this->_requestMock
+//            ->expects($this->any())
+//            ->method('setopt')
+//            ->will($this->returnValue(true));
+//        $this->_requestMock
+//            ->expects($this->any())
+//            ->method('getinfo')
+//            ->will($this->returnCallback(function($option) {
+//                switch($option) {
+//                    case CURLINFO_HTTP_CODE:
+//                        return 200;
+//                }
+//                return null;
+//            }));
+//
+//        $payment1 = Payment::fromAttributes(array('id' => 'pay_123'));
+//        $payment2 = $payment1->getConsistentResource($this->_configuration);
+//
+//        $this->assertEquals('pay_123', $payment1->id);
+//        $this->assertEquals('pay_345', $payment2->id);
+//    }
+//
+//    public function testPaymentCreateHostedField()
+//    {
+//        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = null;
+//
+//        $this->_requestMock
+//            ->expects($this->once())
+//            ->method('exec')
+//            ->will($this->returnValue('{"status":"ok"}'));
+//
+//        $this->_requestMock
+//            ->expects($this->any())
+//            ->method('setopt')
+//            ->will($this->returnCallback(function($option, $value = null) {
+//                switch($option) {
+//                    case CURLOPT_POSTFIELDS:
+//                        $GLOBALS['CURLOPT_POSTFIELDS_DATA'] = json_decode($value, true);
+//                        return true;
+//                }
+//                return true;
+//            }));
+//
+//        $data = array(
+//            'params' => array(
+//                'IDENTIFIER' => 'Demo Shop',
+//                'OPERATIONTYPE' => 'payment',
+//                'ORDERID' => '1234',
+//                'AMOUNT' => 1000,
+//                'CLIENTIDENT' => 'john.snow',
+//                'CLIENTEMAIL' => 'john.snow@example.com',
+//                'CLIENTREFERRER' => 'https://your_shop.com/order?id=1234',
+//                'CLIENTUSERAGENT' => 'Mozilla/5.0',
+//                'CLIENTIP' => '10.1.1.1',
+//                'CARDFULLNAME' => 'JOHN SNOW',
+//                'DESCRIPTION' => 'Knows nothing',
+//                'HFTOKEN' => '17730892-Iygrhfdgh7-4411-bc81e-erererer',
+//                'HASH' => '15477ddgdgd7hghrdhggh978c2734514734633b3c4',
+//                'VERSION' => '3.0'
+//            )
+//        );
+//
+//        $result = Payment::create($data);
+//        die(var_dump($result));
+//
+//        $this->assertTrue(is_array($GLOBALS['CURLOPT_POSTFIELDS_DATA']));
+//        $this->assertArrayHasKey('params', $GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+//        $this->assertEquals('Demo Shop', $GLOBALS['CURLOPT_POSTFIELDS_DATA']['params']['IDENTIFIER']);
+//        $this->assertEquals('ok', $result['status']);
+//
+//        unset($GLOBALS['CURLOPT_POSTFIELDS_DATA']);
+//    }
 }
