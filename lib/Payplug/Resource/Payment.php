@@ -71,7 +71,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\InvalidPaymentException when the id of the payment is invalid
      */
-    public function refund(array $data = null, Payplug\Payplug $payplug = null)
+    public function refund(array $data = null, ?Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) {
             throw new Payplug\Exception\InvalidPaymentException("This payment object has no id. It can't be refunded.");
@@ -90,7 +90,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws  Payplug\Exception\InvalidPaymentException
      * @throws  Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listRefunds(Payplug\Payplug $payplug = null)
+    public function listRefunds(?Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) {
             throw new Payplug\Exception\InvalidPaymentException("This payment object has no id. You can't list refunds on it.");
@@ -108,7 +108,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function abort(Payplug\Payplug $payplug = null)
+    public function abort(?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -132,7 +132,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function capture(Payplug\Payplug $payplug = null)
+    public function capture(?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -159,7 +159,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws  Payplug\Exception\UndefinedAttributeException
      * @throws  Payplug\Exception\NotFoundException
      */
-    public static function retrieve($paymentId, Payplug\Payplug $payplug = null)
+    public static function retrieve($paymentId, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -189,7 +189,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws  Payplug\Exception\InvalidPaymentException
      * @throws  Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function listPayments($perPage = null, $page = null, Payplug\Payplug $payplug = null)
+    public static function listPayments($perPage = null, $page = null, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -227,7 +227,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, Payplug\Payplug $payplug = null)
+    public static function create(array $data, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -252,7 +252,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function update(array $data, Payplug\Payplug $payplug = null)
+    public function update(array $data, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -276,7 +276,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource(Payplug\Payplug $payplug = null)
+    function getConsistentResource(?Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->_attributes)) {
             throw new Payplug\Exception\UndefinedAttributeException('The id of the payment is not set.');

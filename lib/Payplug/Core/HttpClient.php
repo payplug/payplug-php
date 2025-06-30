@@ -39,7 +39,7 @@ class HttpClient
      *
      * @param Payplug\Payplug $authentication the client configuration
      */
-    public function __construct(Payplug\Payplug $authentication = null)
+    public function __construct(?Payplug\Payplug $authentication = null)
     {
         $this->_configuration = $authentication;
     }
@@ -232,7 +232,7 @@ class HttpClient
     private function request(
         $httpVerb,
         $resource,
-        array $data = null,
+        ?array $data = null,
         $authenticated = true,
         $cookie = null,
         $headersParams = null,

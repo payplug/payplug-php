@@ -16,7 +16,7 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($paymentId, Payplug $payplug = null)
+    public static function retrieve($paymentId, ?Payplug $payplug = null)
     {
     	return Resource\Payment::retrieve($paymentId, $payplug);
     }
@@ -31,7 +31,7 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function abort($paymentId, Payplug $payplug = null)
+    public static function abort($paymentId, ?Payplug $payplug = null)
     {
         $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
     	return $payment->abort($payplug);
@@ -47,7 +47,7 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function capture($paymentId, Payplug $payplug = null)
+    public static function capture($paymentId, ?Payplug $payplug = null)
     {
         $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
         return $payment->capture($payplug);
@@ -63,7 +63,7 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, Payplug $payplug = null)
+    public static function create(array $data, ?Payplug $payplug = null)
     {
     	return Resource\Payment::create($data, $payplug);
     }
@@ -80,7 +80,7 @@ class Payment
      * @throws  Exception\InvalidPaymentException
      * @throws  Exception\UnexpectedAPIResponseException
      */
-    public static function listPayments($perPage = null, $page = null, Payplug $payplug = null)
+    public static function listPayments($perPage = null, $page = null, ?Payplug $payplug = null)
     {
     	return Resource\Payment::listPayments($perPage, $page, $payplug);
     }    
