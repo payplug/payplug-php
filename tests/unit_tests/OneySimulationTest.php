@@ -9,6 +9,7 @@ use Payplug;
  */
 class OneySimulationTest extends \PHPUnit\Framework\TestCase
 {
+    public $_configuration;
     private $_requestMock;
 
     /**

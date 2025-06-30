@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class PluginTelemetryTest extends TestCase
 {
+    public $_configuration;
     private $_requestMock;
     private $_httpClient;
 
