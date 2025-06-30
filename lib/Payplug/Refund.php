@@ -15,7 +15,7 @@ class Refund {
      * @return  null|Refund the refund object
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, Payplug $payplug = null)
+    public static function create($payment, ?array $data = null, ?Payplug $payplug = null)
     {
     	return Resource\Refund::create($payment, $data, $payplug);
     }
@@ -31,7 +31,7 @@ class Refund {
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($payment, $refundId, Payplug $payplug = null)
+    public static function retrieve($payment, $refundId, ?Payplug $payplug = null)
     {
     	return Resource\Refund::retrieve($payment, $refundId, $payplug);
     }
@@ -47,7 +47,7 @@ class Refund {
      * @throws Exception\ConfigurationNotSetException
      * @throws Exception\UnexpectedAPIResponseException
      */
-    public static function listRefunds($payment, Payplug $payplug = null)
+    public static function listRefunds($payment, ?Payplug $payplug = null)
     {
     	return Resource\Refund::listRefunds($payment, $payplug);
     }
