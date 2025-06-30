@@ -71,7 +71,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      * @throws  Payplug\Exception\UndefinedAttributeException
      * @throws  Payplug\Exception\UnexpectedAPIResponseException
      */
-    public function listPayments($payplug = null)
+    public function listPayments(?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -106,7 +106,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function abort($payplug = null)
+    public function abort(?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -131,7 +131,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function retrieve($installmentPlanId, $payplug = null)
+    public static function retrieve($installmentPlanId, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -156,7 +156,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, $payplug = null)
+    public static function create(array $data, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -180,7 +180,7 @@ class InstallmentPlan extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource($payplug = null)
+    function getConsistentResource(?Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->_attributes)) {
             throw new Payplug\Exception\UndefinedAttributeException(

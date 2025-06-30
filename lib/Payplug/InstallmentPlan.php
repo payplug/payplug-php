@@ -16,7 +16,7 @@ class InstallmentPlan
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($installmentPlanId, $payplug = null)
+    public static function retrieve($installmentPlanId, ?Payplug $payplug = null)
     {
         return Resource\InstallmentPlan::retrieve($installmentPlanId, $payplug);
     }
@@ -31,7 +31,7 @@ class InstallmentPlan
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function abort($installmentPlanId, $payplug = null)
+    public static function abort($installmentPlanId, ?Payplug $payplug = null)
     {
         $installmentPlan = Resource\InstallmentPlan::fromAttributes(array('id' => $installmentPlanId));
         return $installmentPlan->abort($payplug);
@@ -47,7 +47,7 @@ class InstallmentPlan
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, $payplug = null)
+    public static function create(array $data, ?Payplug $payplug = null)
     {
     	return Resource\InstallmentPlan::create($data, $payplug);
     }

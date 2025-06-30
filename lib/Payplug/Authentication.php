@@ -43,7 +43,7 @@ class Authentication
      * @throws  Exception\ConfigurationNotSetException
      * @throws ConfigurationException
      */
-    public static function getAccount($payplug = null)
+    public static function getAccount(?Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();
@@ -66,7 +66,7 @@ class Authentication
      * @throws  Exception\ConfigurationNotSetException
      * @throws ConfigurationException
      */
-    public static function getPermissions($payplug = null)
+    public static function getPermissions(?Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();
@@ -117,7 +117,7 @@ class Authentication
      *createClientIdAndSecret
      * @throws  Exception
      */
-    public static function getPublishableKeys($payplug = null)
+    public static function getPublishableKeys(?Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();
@@ -238,7 +238,7 @@ class Authentication
      * @return void
      * @throws ConfigurationException
      */
-    private static function validateToken($payplug)
+    private static function validateToken(Payplug $payplug)
     {
         $token = $payplug->getToken();
         if (empty($token)) {
@@ -262,7 +262,7 @@ class Authentication
      * @throws Exception\HttpException
      * @throws Exception\UnexpectedAPIResponseException
      */
-    public static function createClientIdAndSecret($company_id = '', $client_name = '', $mode = '', $session = null, $payplug = null)
+    public static function createClientIdAndSecret($company_id = '', $client_name = '', $mode = '', $session = null, ?Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug::getDefaultConfiguration();

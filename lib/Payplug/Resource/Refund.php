@@ -31,7 +31,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
      * @return  null|Refund the refund object
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, $payplug = null)
+    public static function create($payment, ?array $data = null, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -60,7 +60,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function retrieve($payment, $refundId, $payplug = null)
+    public static function retrieve($payment, $refundId, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -90,7 +90,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
      * @throws Payplug\Exception\ConfigurationNotSetException
      * @throws Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function listRefunds($payment, $payplug = null)
+    public static function listRefunds($payment, ?Payplug\Payplug $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -129,7 +129,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource($payplug = null)
+    function getConsistentResource(?Payplug\Payplug $payplug = null)
     {
         if (!array_key_exists('id', $this->_attributes)) {
             throw new Payplug\Exception\UndefinedAttributeException('The id of the refund is not set.');

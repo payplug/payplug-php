@@ -232,7 +232,7 @@ class HttpClient
     private function request(
         $httpVerb,
         $resource,
-        array $data = null,
+        $data = null,
         $authenticated = true,
         $cookie = null,
         $headersParams = null,

@@ -20,7 +20,7 @@ class PluginTelemetry
      * @throws Exception\HttpException
      * @throws Exception\UnexpectedAPIResponseException
      */
-    public static function send($data = '{}', $payplug = null)
+    public static function send($data = '{}', ?Payplug $payplug = null)
     {
         $data = json_decode($data, true);
 
