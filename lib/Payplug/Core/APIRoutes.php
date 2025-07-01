@@ -139,5 +139,5 @@ APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
 APIRoutes::$MERCHANT_PLUGINS_DATA_COLLECTOR_RESOURCE = 'https://retail.service.payplug.com/merchant-plugin-data-collectors/api/v1/plugin_telemetry';
 APIRoutes::$USER_MANAGER_RESOURCE ='User manager resource';
 APIRoutes::$HYDRA_RESOURCE = 'Microservice Url';
-APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://staging-epayment.dlns.io/ecom';
-APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE = 'https://staging-payment.secure.dalenys.com/front/service/rest/export';
+APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://payment.dalenys.com/';
+APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE = 'https://secure-magenta.dalenys.com/front/service/rest/export';
