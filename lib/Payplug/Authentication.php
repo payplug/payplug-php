@@ -293,7 +293,7 @@ class Authentication
      * @param string $setup_redirection_uri
      * @param string $oauth_callback_uri
      *
-     * @return array
+     * @return string
      * @throws Exception\ConnectionException
      * @throws Exception\HttpException
      * @throws Exception\UnexpectedAPIResponseException
