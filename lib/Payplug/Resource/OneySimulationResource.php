@@ -58,7 +58,7 @@ class OneySimulationResource extends APIResource
      * @throws Payplug\Exception\HttpException
      * @throws Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function getSimulations($sim_data, Payplug\Payplug $payplug = null)
+    public static function getSimulations($sim_data, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();

@@ -16,7 +16,7 @@ class AccountingReport
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function retrieve($reportId, Payplug $payplug = null)
+    public static function retrieve($reportId, $payplug = null)
     {
         return Resource\AccountingReport::retrieve($reportId, $payplug);
     }
@@ -31,7 +31,7 @@ class AccountingReport
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, Payplug $payplug = null)
+    public static function create(array $data, $payplug = null)
     {
         return Resource\AccountingReport::create($data, $payplug);
     }

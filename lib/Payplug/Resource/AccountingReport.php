@@ -31,7 +31,7 @@ class AccountingReport extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function retrieve($reportId, Payplug\Payplug $payplug = null)
+    public static function retrieve($reportId, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -55,7 +55,7 @@ class AccountingReport extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create(array $data, Payplug\Payplug $payplug = null)
+    public static function create(array $data, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -79,7 +79,7 @@ class AccountingReport extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource(Payplug\Payplug $payplug = null)
+    function getConsistentResource($payplug = null)
     {
         if (!array_key_exists('id', $this->_attributes)) {
             throw new Payplug\Exception\UndefinedAttributeException('The id of the accounting report is not set.');

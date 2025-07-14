@@ -18,5 +18,5 @@ interface IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\UndefinedAttributeException when the local resource is invalid.
      */
-    function getConsistentResource(Payplug\Payplug $payplug = null);
+    function getConsistentResource($payplug = null);
 }

@@ -16,7 +16,7 @@ class OneySimulation {
      * @throws Exception\HttpException
      * @throws Exception\UnexpectedAPIResponseException
      */
-    public static function getSimulations($data, Payplug $payplug = null)
+    public static function getSimulations($data, $payplug = null)
     {
         return Resource\OneySimulationResource::getSimulations($data, $payplug);
     }
