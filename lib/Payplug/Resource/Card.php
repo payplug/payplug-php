@@ -31,7 +31,7 @@ class Card extends APIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function deleteCard($card, Payplug\Payplug $payplug = null)
+    public static function deleteCard($card, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -54,7 +54,7 @@ class Card extends APIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function delete(Payplug\Payplug $payplug = null)
+    public function delete($payplug = null)
     {
         self::deleteCard($this->id, $payplug);
     }
