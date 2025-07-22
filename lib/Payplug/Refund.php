@@ -15,7 +15,7 @@ class Refund {
      * @return  null|Refund the refund object
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, $payplug = null)
+    public static function create($payment, $data = null, $payplug = null)
     {
     	return Resource\Refund::create($payment, $data, $payplug);
     }

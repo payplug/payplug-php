@@ -31,7 +31,7 @@ class Refund extends APIResource implements IVerifiableAPIResource
      * @return  null|Refund the refund object
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, $payplug = null)
+    public static function create($payment, $data = null, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
