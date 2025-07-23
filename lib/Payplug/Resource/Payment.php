@@ -71,7 +71,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\InvalidPaymentException when the id of the payment is invalid
      */
-    public function refund(array $data = null, $payplug = null)
+    public function refund($data = null, $payplug = null)
     {
         if (!array_key_exists('id', $this->getAttributes())) {
             throw new Payplug\Exception\InvalidPaymentException("This payment object has no id. It can't be refunded.");
