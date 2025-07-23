@@ -10,7 +10,7 @@ class Config
     /**
      * The library version
      */
-    const LIBRARY_VERSION = '3.7.0';
+    const LIBRARY_VERSION = '4.0.0';
 
     /**
      * PHP minimal version required by this library
