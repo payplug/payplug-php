@@ -277,7 +277,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        if (isset($data['params']['HFTOKEN']) && $data['params']['HFTOKEN'])
+        if ((isset($data['params']['HFTOKEN']) && $data['params']['HFTOKEN']) || (isset($data['params']['ALIAS']) && $data['params']['ALIAS']))
         {
             $response = $httpClient->post(
                 Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
