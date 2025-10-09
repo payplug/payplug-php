@@ -132,7 +132,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      *
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public function capture(Payplug\Payplug $payplug = null)
+    public function capture($payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -148,74 +148,31 @@ class Payment extends APIResource implements IVerifiableAPIResource
     }
 
     /**
-     * @description Authorize a Payment.
-     * @param $data
-     * @param Payplug\Payplug|null $payplug
-     * @param $is_hosted_field
-     * @return mixed|void
-     * @throws Payplug\Exception\ConfigurationNotSetException
-     * @throws Payplug\Exception\ConnectionException
-     * @throws Payplug\Exception\HttpException
-     * @throws Payplug\Exception\UndefinedAttributeException
-     * @throws Payplug\Exception\UnexpectedAPIResponseException
+     * Retrieves a Payment.
+     *
+     * @param   string             $paymentId  the payment ID
+     * @param   Payplug\Payplug    $payplug    the client configuration
+     *
+     * @return  Payment the retrieved payment
+     *
+     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws  Payplug\Exception\UndefinedAttributeException
+     * @throws  Payplug\Exception\NotFoundException
      */
-    public static function authorize($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    public static function retrieve($paymentId, $payplug = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
 
-        if (empty($data)) {
+        if (!$paymentId) {
             throw new Payplug\Exception\UndefinedAttributeException('The parameter paymentId is not set.');
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        if ($is_hosted_field) {
-            $response = $httpClient->post(
-                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
-                $data,
-                false
-            );
-            return $response['httpResponse'];
-        }
-    }
-    /**
-     * @param $data
-     * @param Payplug\Payplug|null $payplug
-     * @param $is_hosted_field
-     * @return array|Payment
-     * @throws Payplug\Exception\ConfigurationNotSetException
-     * @throws Payplug\Exception\ConnectionException
-     * @throws Payplug\Exception\HttpException
-     * @throws Payplug\Exception\UndefinedAttributeException
-     * @throws Payplug\Exception\UnexpectedAPIResponseException
-     */
-    public static function retrieve($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
-    {
-        if ($payplug === null) {
-            $payplug = Payplug\Payplug::getDefaultConfiguration();
-        }
-
-        if (empty($data)) {
-            throw new Payplug\Exception\UndefinedAttributeException('The parameter $data is not set.');
-        }
-
-        $httpClient = new Payplug\Core\HttpClient($payplug);
-        if ($is_hosted_field) {
-            $response = $httpClient->post(
-                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE,
-                $data,
-                false
-            );
-
-			$hostedField_resource = new Payplug\Responses\HostedFieldTransactionResource($response['httpResponse']);
-			$response['httpResponse'] = get_object_vars($hostedField_resource);
-
-        }else{
-	        $response = $httpClient->get(
-	            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $data)
-	        );
-        }
+        $response = $httpClient->get(
+            Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $paymentId)
+        );
 
         return Payment::fromAttributes($response['httpResponse']);
     }
@@ -277,15 +234,6 @@ class Payment extends APIResource implements IVerifiableAPIResource
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
-        if ((isset($data['params']['HFTOKEN']) && $data['params']['HFTOKEN']) || (isset($data['params']['ALIAS']) && $data['params']['ALIAS']))
-        {
-            $response = $httpClient->post(
-                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
-                $data,
-                false
-            );
-            return $response['httpResponse'];
-        }
         $response = $httpClient->post(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE),
             $data
@@ -293,7 +241,6 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
         return Payment::fromAttributes($response['httpResponse']);
     }
-
 
     /**
      * Update a Payment.

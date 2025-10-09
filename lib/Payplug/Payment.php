@@ -9,19 +9,16 @@ class Payment
 	/**
      * Retrieves a Payment.
      *
-     * @param   $data
+     * @param   string                      $paymentId      the payment ID
      * @param   Payplug $payplug  the client configuration
-     * @param $isHostedField
      *
      * @return  null|Resource\Payment the retrieved payment or null on error
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-
-
-    public static function retrieve($data, Payplug $payplug = null, $isHostedField = false)
+    public static function retrieve($paymentId, $payplug = null)
     {
-        return Resource\Payment::retrieve($data, $payplug, $isHostedField);
+    	return Resource\Payment::retrieve($paymentId, $payplug);
     }
 
 	/**
@@ -50,32 +47,10 @@ class Payment
      *
      * @throws  Exception\ConfigurationNotSetException
      */
-
-    /**
-     * Capture a payment by its ID or data array.
-     *
-     * @param string|array $paymentId The payment ID as a string, or an array of payment data.
-     * @param Payplug|null $payplug The client configuration (optional).
-     * @return Resource\Payment|null The captured payment or null on error.
-     * @throws Exception\ConfigurationNotSetException
-     */
-    public static function capture($paymentId, Payplug $payplug = null)
+    public static function capture($paymentId, $payplug = null)
     {
         $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
         return $payment->capture($payplug);
-    }
-
-    /**
-     * @description Authorize a Payment.
-     * @param $data
-     * @param Payplug|null $payplug
-     * @param $is_hosted_field
-     * @return mixed
-     */
-    public static  function authorize($data, Payplug $payplug = null, $is_hosted_field = false)
-    {
-        return Resource\Payment::authorize($data, $payplug, $is_hosted_field);
-
     }
 
     /**
@@ -90,8 +65,7 @@ class Payment
      */
     public static function create(array $data, $payplug = null)
     {
-        return Resource\Payment::create($data, $payplug);
-
+    	return Resource\Payment::create($data, $payplug);
     }
 
     /**

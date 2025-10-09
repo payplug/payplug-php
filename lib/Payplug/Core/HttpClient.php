@@ -247,21 +247,19 @@ class HttpClient
         }
 
         $userAgent = self::getUserAgent();
-        if (is_array($data) && isset($data['params']['OPERATIONTYPE']) && $data['params']['OPERATIONTYPE'] === "getTransaction")
-        {
-            $headers = array();
-        }
-        elseif (is_array($data) && isset($data['params'])) {
-            $headers = array(
-                'Content-Type: Content-Type: application/x-www-form-urlencoded',
-            );
+
+        $headers = array();
+
+        if ($headersParams) {
+            foreach ($headersParams as $header) {
+                $headers[] = $header;
+            }
         } else {
-            $headers = array(
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'User-Agent: ' . $userAgent
-            );
+            $headers[] = 'Accept: application/json';
+            $headers[] = 'Content-Type: application/json';
         }
+
+        $headers[] = 'User-Agent: ' . $userAgent;
         if ($authenticated) {
             $headers[] = 'Authorization: Bearer ' . $this->_configuration->getToken();
             $headers[] = 'PayPlug-Version: ' . $this->_configuration->getApiVersion();
@@ -281,7 +279,7 @@ class HttpClient
         $request->setopt(CURLOPT_CAINFO, self::$CACERT_PATH);
         $request->setopt(CURLOPT_FOLLOWLOCATION, true);
         if (!empty($data)) {
-            if (in_array('Content-Type: application/json', $headers)) {
+            if ('json' == $data_type) {
                 $request->setopt(CURLOPT_POSTFIELDS, json_encode($data));
             } else {
                 $request->setopt(CURLOPT_POSTFIELDS, http_build_query($data));
