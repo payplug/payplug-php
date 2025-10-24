@@ -39,18 +39,21 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetKeysByLogin()
     {
-        $email = 'test@fakemail.com';
-        $password = 'passwordIsOverrated';
-        $response = array(
-            'secret_keys' => array(
-                'test' => 'sk_test_everythingIsUnderControl',
-                'live' => 'sk_live_allYourBasesAreBelongToUs',
+        $email = 'test@example.com';
+        $password = 'password_example';
+        $expected_response = array(
+            'httpResponse' => array(
+                'secret_keys' => array(
+                    'test' => 'test_key_example',
+                    'live' => 'live_key_example',
+                )
             ),
+            'httpStatus' => 201,
         );
         $this->_requestMock
             ->expects($this->once())
             ->method('exec')
-            ->will($this->returnValue(json_encode($response)));
+            ->will($this->returnValue(json_encode($expected_response['httpResponse'])));
 
         $this->_requestMock
             ->expects($this->any())
@@ -64,10 +67,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             }));
 
         $authentication = Authentication::getKeysByLogin($email, $password);
-
-        $this->assertEquals(201, $authentication['httpStatus']);
-        $this->assertEquals('sk_test_everythingIsUnderControl', $authentication['httpResponse']['secret_keys']['test']);
-        $this->assertEquals('sk_live_allYourBasesAreBelongToUs', $authentication['httpResponse']['secret_keys']['live']);
+        $this->assertSame($expected_response, $authentication);
     }
 
     public function testGetAccount()
@@ -189,7 +189,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     public function testPublishableKeys()
     {
         $response = array(
-            'publishable_key' => 'pk_test_everythingIsUnderControl'
+            'publishable_key' => 'test_pk_example'
         );
 
         $this->_requestMock
@@ -211,7 +211,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $publishable_keys = Authentication::getPublishableKeys($this->_configuration);
 
         $this->assertEquals(200, $publishable_keys['httpStatus']);
-        $this->assertEquals('pk_test_everythingIsUnderControl', $publishable_keys['httpResponse']['publishable_key']);
+        $this->assertEquals('test_pk_example', $publishable_keys['httpResponse']['publishable_key']);
     }
 
     /**
@@ -336,7 +336,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'expires_in' => 300,
             'scope' => 'sandbox',
             'token_type' => 'bearer',
-            'expires_date' => time() + 300
+            'expires_date' => time() + 270
         );
 
         $this->_requestMock

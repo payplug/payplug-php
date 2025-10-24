@@ -166,7 +166,7 @@ class Authentication
                 return array();
             }
 
-            $response['httpResponse']['expires_date'] = time() + $response['httpResponse']['expires_in'];
+            $response['httpResponse']['expires_date'] = time() + $response['httpResponse']['expires_in'] - 30;
 
             return $response;
         } catch (Exception $e) {

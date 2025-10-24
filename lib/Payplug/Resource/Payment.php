@@ -125,7 +125,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
 
     /**
      * Captures a Payment.
-     * 
+     *
      * @param   Payplug\Payplug    $payplug    the client configuration
      *
      * @return  null|Payment the captured payment or null on error
