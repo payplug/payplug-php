@@ -121,7 +121,7 @@ class APIRoutes
      * @return void
      */
     public static function setHostedFieldsResourceRetrieve($hostedFieldsRetrieveUrl){
-        self::$HOSTED_FIELDS_RESOURCE = $hostedFieldsRetrieveUrl;
+        self::$HOSTED_FIELDS_RESOURCE_RETRIEVE = $hostedFieldsRetrieveUrl;
     }
 
     /**
