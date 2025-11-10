@@ -52,6 +52,13 @@ class HostedFieldTransactionResource
 
 	public function __construct($data = [])
 	{
+		// Accept raw JSON string
+		if (is_string($data)) {
+			$decoded = json_decode($data, true);
+			if (json_last_error() === JSON_ERROR_NONE) {
+				$data = $decoded;
+			}
+		}
 		if (empty($data) || !is_array($data)) {
 			return;
 		}
@@ -63,10 +70,11 @@ class HostedFieldTransactionResource
 		$this->currency = !empty($payment_data['CURRENCY']) ? $payment_data['CURRENCY'] : 'EUR';
 		$this->created_at = !empty($payment_data['DATE']) ? $payment_data['DATE'] : null;
 		$this->description = !empty($payment_data['DESCRIPTION']) ? $payment_data['DESCRIPTION'] : '';
-		$this->is_paid = !empty($payment_data['DATE']) ? $payment_data['DATE'] : false;
+		$this->is_paid = $data['EXECCODE']=='0000';
 		$this->paid_at = !empty($payment_data['DATE']) ? $payment_data['DATE'] : null;
 		$this->is_3ds = !empty($payment_data['3DSECURE']) ? $payment_data['3DSECURE'] : false;
 		$this->card = [
+            'id'=> null,
 			'last4' => null,
 			'exp_month' => null,
 			'exp_year' => null,
