@@ -43,8 +43,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $password = 'passwordIsOverrated';
         $response = array(
             'secret_keys' => array(
-                'test' => 'sk_test_everythingIsUnderControl',
-                'live' => 'sk_live_allYourBasesAreBelongToUs',
+                'test' => 'test_secret_test',
+                'live' => 'test_secret_live',
             ),
         );
         $this->_requestMock
@@ -66,8 +66,8 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $authentication = Authentication::getKeysByLogin($email, $password);
 
         $this->assertEquals(201, $authentication['httpStatus']);
-        $this->assertEquals('sk_test_everythingIsUnderControl', $authentication['httpResponse']['secret_keys']['test']);
-        $this->assertEquals('sk_live_allYourBasesAreBelongToUs', $authentication['httpResponse']['secret_keys']['live']);
+        $this->assertEquals('test_secret_test', $authentication['httpResponse']['secret_keys']['test']);
+        $this->assertEquals('test_secret_live', $authentication['httpResponse']['secret_keys']['live']);
     }
 
     public function testGetAccount()
@@ -274,7 +274,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'expires_in' => 300,
             'scope' => 'sandbox',
             'token_type' => 'bearer',
-            'expires_date' => time() + 300
+            'expires_date' => time() + 270
         );
 
         $this->_requestMock
@@ -305,7 +305,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'expires_in' => 300,
             'scope' => 'sandbox',
             'token_type' => 'bearer',
-            'expires_date' => time() + 300
+            'expires_date' => time() + 270
         );
 
         $this->_requestMock
@@ -336,7 +336,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             'expires_in' => 300,
             'scope' => 'sandbox',
             'token_type' => 'bearer',
-            'expires_date' => time() + 300
+            'expires_date' => time() + 270
         );
 
         $this->_requestMock
