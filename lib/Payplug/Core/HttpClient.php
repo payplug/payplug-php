@@ -253,7 +253,7 @@ class HttpClient
         }
         elseif (is_array($data) && isset($data['params'])) {
             $headers = array(
-                'Content-Type: Content-Type: application/x-www-form-urlencoded',
+                'Content-Type: application/x-www-form-urlencoded',
             );
         } else {
             $headers = array(
