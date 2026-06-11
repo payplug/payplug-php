@@ -9,7 +9,7 @@ return Rector\Config\RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/lib',
     ])
-    ->withPhpVersion(Rector\ValueObject\PhpVersion::PHP_84)
+    ->withPhpVersion(Rector\ValueObject\PhpVersion::PHP_85)
     ->withRules([
         ExplicitNullableParamTypeRector::class,
         CompleteDynamicPropertiesRector::class,
