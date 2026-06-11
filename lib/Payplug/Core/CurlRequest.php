@@ -49,7 +49,11 @@ class CurlRequest implements IHttpRequest
      */
     public function close()
     {
-        curl_close($this->_curl);
+        // curl_close() is a no-op since PHP 8.0 and deprecated in PHP 8.5.
+        // Calling it under PHP 8.5 with developer mode throws (deprecations -> exceptions).
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($this->_curl);
+        }
     }
 
     /**
