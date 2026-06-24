@@ -247,7 +247,9 @@ class HttpClient
         }
 
         $userAgent = self::getUserAgent();
-        if (is_array($data) && isset($data['params']['OPERATIONTYPE']) && $data['params']['OPERATIONTYPE'] === "getTransaction")
+        if ($headersParams) {
+            $headers = $headersParams;
+        } elseif (is_array($data) && isset($data['params']['OPERATIONTYPE']) && $data['params']['OPERATIONTYPE'] === "getTransaction")
         {
             $headers = array();
         }

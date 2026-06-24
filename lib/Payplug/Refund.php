@@ -8,7 +8,7 @@ class Refund {
 	/**
      * Creates a refund on a payment.
      *
-     * @param   string|Payment      $payment        the payment id or the payment object
+     * @param   string|Payment|array      $payment        the payment id or the payment object
      * @param   array                       $data           API data for refund
      * @param   Payplug $payplug  the client configuration
      * @param $is_hosted_field indicates if the payment is using hosted fields
@@ -16,7 +16,7 @@ class Refund {
      * @return  null|Refund the refund object
      * @throws  Exception\ConfigurationNotSetException
      */
-    public static function create($payment, array $data = null, Payplug $payplug = null,  $is_hosted_field = false)
+    public static function create($payment, $data = null, $payplug = null,  $is_hosted_field = false)
     {
         return Resource\Refund::create($payment, $data, $payplug,  $is_hosted_field);
     }
