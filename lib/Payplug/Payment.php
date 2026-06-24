@@ -19,7 +19,7 @@ class Payment
      */
 
 
-    public static function retrieve($data, Payplug $payplug = null, $isHostedField = false)
+    public static function retrieve($data, $payplug = null, $isHostedField = false)
     {
         return Resource\Payment::retrieve($data, $payplug, $isHostedField);
     }
@@ -59,7 +59,7 @@ class Payment
      * @return Resource\Payment|null The captured payment or null on error.
      * @throws Exception\ConfigurationNotSetException
      */
-    public static function capture($paymentId, Payplug $payplug = null)
+    public static function capture($paymentId, $payplug = null)
     {
         $payment = Resource\Payment::fromAttributes(array('id' => $paymentId));
         return $payment->capture($payplug);
@@ -72,7 +72,7 @@ class Payment
      * @param $is_hosted_field
      * @return mixed
      */
-    public static  function authorize($data, Payplug $payplug = null, $is_hosted_field = false)
+    public static  function authorize($data, $payplug = null, $is_hosted_field = false)
     {
         return Resource\Payment::authorize($data, $payplug, $is_hosted_field);
 
@@ -100,7 +100,7 @@ class Payment
      * @param   int                 $perPage  number of results per page
      * @param   int                 $page     the page number
      * @param   Payplug             $payplug  the client configuration
-     * 
+     *
      * @return  null|Resource\Payment[]   the array of payments
      *
      * @throws  Exception\InvalidPaymentException
@@ -109,5 +109,5 @@ class Payment
     public static function listPayments($perPage = null, $page = null, $payplug = null)
     {
     	return Resource\Payment::listPayments($perPage, $page, $payplug);
-    }    
+    }
 };
