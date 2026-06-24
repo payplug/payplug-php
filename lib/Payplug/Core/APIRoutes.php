@@ -136,5 +136,5 @@ class APIRoutes
 }
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
 APIRoutes::$SERVICE_BASE_URL = 'https://retail.service.payplug.com';
-APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://payment.dalenys.com/';
+APIRoutes::$HOSTED_FIELDS_RESOURCE = 'https://secure-magenta.dalenys.com/front/service/rest/process';
 APIRoutes::$HOSTED_FIELDS_RESOURCE_RETRIEVE = 'https://secure-magenta.dalenys.com/front/service/rest/export';

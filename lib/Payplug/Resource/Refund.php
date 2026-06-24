@@ -24,15 +24,15 @@ class Refund extends APIResource implements IVerifiableAPIResource
     /**
      * Creates a refund on a payment.
      *
-     * @param   string|Payment      $refund_data        the payment id or the payment object
+     * @param   string|Payment|array      $refund_data        the payment id or the payment object
      * @param   array                       $data           API data for refund
      * @param   Payplug\Payplug $payplug  the client configuration
-     * @param $is_hosted_field
+     * @param bool $is_hosted_field
      *
      * @return  null|Refund the refund object
      * @throws  Payplug\Exception\ConfigurationNotSetException
      */
-    public static function create($refund_data, array $data = null, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    public static function create($refund_data, $data = null, $payplug = null, $is_hosted_field = false)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();

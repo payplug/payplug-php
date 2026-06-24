@@ -126,19 +126,31 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * Captures a Payment.
      *
-     * @param   Payplug\Payplug    $payplug    the client configuration
+     * @param Payplug\Payplug|null $payplug the client configuration
+     * @param array|null $hostFieldsPayload
      *
-     * @return  null|Payment the captured payment or null on error
+     * @return null|Payment the captured payment or null on error
      *
-     * @throws  Payplug\Exception\ConfigurationNotSetException
+     * @throws Payplug\Exception\ConfigurationNotSetException
      */
-    public function capture(Payplug\Payplug $payplug = null)
+    public function capture($payplug = null, $hostFieldsPayload = null)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
         }
 
         $httpClient = new Payplug\Core\HttpClient($payplug);
+
+        if ($hostFieldsPayload !== null) {
+            $response = $httpClient->post(
+                Payplug\Core\APIRoutes::$HOSTED_FIELDS_RESOURCE,
+                $hostFieldsPayload,
+                false
+            );
+
+            return $response['httpResponse'];
+        }
+
         $response = $httpClient->patch(
             Payplug\Core\APIRoutes::getRoute(Payplug\Core\APIRoutes::PAYMENT_RESOURCE, $this->id),
             array('captured' => true)
@@ -151,7 +163,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @description Authorize a Payment.
      * @param $data
      * @param Payplug\Payplug|null $payplug
-     * @param $is_hosted_field
+     * @param bool $is_hosted_field
      * @return mixed|void
      * @throws Payplug\Exception\ConfigurationNotSetException
      * @throws Payplug\Exception\ConnectionException
@@ -159,7 +171,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws Payplug\Exception\UndefinedAttributeException
      * @throws Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function authorize($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    public static function authorize($data, $payplug = null, $is_hosted_field = false)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
@@ -182,7 +194,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
     /**
      * @param $data
      * @param Payplug\Payplug|null $payplug
-     * @param $is_hosted_field
+     * @param bool $is_hosted_field
      * @return array|Payment
      * @throws Payplug\Exception\ConfigurationNotSetException
      * @throws Payplug\Exception\ConnectionException
@@ -190,7 +202,7 @@ class Payment extends APIResource implements IVerifiableAPIResource
      * @throws Payplug\Exception\UndefinedAttributeException
      * @throws Payplug\Exception\UnexpectedAPIResponseException
      */
-    public static function retrieve($data, Payplug\Payplug $payplug = null, $is_hosted_field = false)
+    public static function retrieve($data, $payplug = null, $is_hosted_field = false)
     {
         if ($payplug === null) {
             $payplug = Payplug\Payplug::getDefaultConfiguration();
