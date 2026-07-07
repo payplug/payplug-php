@@ -1,0 +1,17 @@
+<phpunit bootstrap="config.php">
+    <testsuites>
+        <testsuite name="phpunit experimental">
+            <directory suffix=".php">..</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <exclude>
+            <directory suffix=".php">../lib</directory>
+        </exclude>
+    </source>
+
+    <php>
+        <server name="SERVER_NAME" value="http://localhost"/>
+    </php>
+</phpunit>
